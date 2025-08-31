@@ -4,7 +4,9 @@ import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './components/dashboards/Dashboard';
+import Profile from './components/profile/Profile';
+import UpdateMarks from './components/teacher/UpdateMarks';
 import { useAuth } from './hooks/useAuth';
 import './App.css';
 
@@ -38,6 +40,24 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/profile" 
+        element={
+          <ProtectedRoute>
+            <Profile />
+          </ProtectedRoute>
+        } 
+      />
+      
+      <Route 
+        path="/update-marks" 
+        element={
+          <ProtectedRoute>
+            <UpdateMarks />
           </ProtectedRoute>
         } 
       />
