@@ -1,99 +1,80 @@
-import React, { createContext, useState, useEffect, useMemo } from 'react';
-import PropTypes from 'prop-types';
-import authService from '../services/authService';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import * as authService from '../services/authService';
+import { ROLE_ROUTES } from '../constants/roles';
 
-const AuthContext = createContext();
+const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState(null);      // { id, username, email, role }
+  const [token, setToken] = useState(null);
+  const [loading, setLoading] = useState(true); // true while rehydrating from localStorage
 
+  // ── Rehydrate from localStorage on mount ───────────────────────────────────
   useEffect(() => {
-    // Check if user is already authenticated on app start
-    const checkAuth = async () => {
-      try {
-        if (authService.isAuthenticated()) {
-          const userData = authService.getCurrentUserFromStorage();
-          setUser(userData);
-          setIsAuthenticated(true);
-          
-          // Validate token to ensure it's still valid
-          await authService.validateToken();
-        }
-      } catch (error) {
-        console.error('Authentication check failed:', error);
-        authService.logout();
-        setUser(null);
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
-    };
+    const storedUser = authService.getStoredUser();
+    const storedToken = authService.getStoredToken();
 
-    checkAuth();
+    if (storedUser && storedToken) {
+      setUser(storedUser);
+      setToken(storedToken);
+    }
+    setLoading(false);
   }, []);
 
-  const login = async (credentials) => {
-    try {
-      const response = await authService.login(credentials);
-      setUser(response.user);
-      setIsAuthenticated(true);
-      return { success: true, data: response };
-    } catch (error) {
-      console.error('Login failed:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Login failed. Please try again.' 
-      };
-    }
-  };
+  // ── Login ──────────────────────────────────────────────────────────────────
+  const login = useCallback(async (credentials) => {
+    const data = await authService.login(credentials);
+    setUser(data.user);
+    setToken(data.token);
+    return data;
+  }, []);
 
-  const register = async (userData) => {
-    try {
-      const response = await authService.register(userData);
-      setUser(response.user);
-      setIsAuthenticated(true);
-      return { success: true, data: response };
-    } catch (error) {
-      console.error('Registration failed:', error);
-      return { 
-        success: false, 
-        error: error.response?.data?.message || 'Registration failed. Please try again.' 
-      };
-    }
-  };
-
-  const logout = () => {
-    authService.logout();
+  // ── Logout ─────────────────────────────────────────────────────────────────
+  const logout = useCallback(async () => {
+    await authService.logout();
     setUser(null);
-    setIsAuthenticated(false);
-  };
+    setToken(null);
+  }, []);
 
-  const updateUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
-  };
+  // ── Register Student ───────────────────────────────────────────────────────
+  const registerStudent = useCallback(async (data) => {
+    return authService.registerStudent(data);
+  }, []);
 
-  const value = useMemo(() => ({
+  // ── Register Application Admin ─────────────────────────────────────────────
+  const registerApplicationAdmin = useCallback(async (data) => {
+    return authService.registerApplicationAdmin(data);
+  }, []);
+
+  const isAuthenticated = !!user && !!token;
+
+  const getDashboardRoute = useCallback(() => {
+    if (!user?.role) return '/';
+    return ROLE_ROUTES[user.role] ?? '/';
+  }, [user]);
+
+  const value = {
     user,
+    token,
     loading,
     isAuthenticated,
     login,
-    register,
     logout,
-    updateUser,
-  }), [user, loading, isAuthenticated]);
+    registerStudent,
+    registerApplicationAdmin,
+    getDashboardRoute,
+  };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired,
+// eslint-disable-next-line react-refresh/only-export-components
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
 };
 
 export default AuthContext;
