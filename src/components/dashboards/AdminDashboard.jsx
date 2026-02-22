@@ -6,6 +6,8 @@ import AdminAccountsPage      from '../../pages/admin/AdminAccountsPage';
 import PackagesPage            from '../../pages/admin/PackagesPage';
 import PaymentsPage            from '../../pages/admin/PaymentsPage';
 import UsersPage               from '../../pages/admin/UsersPage';
+import GpaGradingPage          from '../../pages/admin/GpaGradingPage';
+import SubjectGradingPage      from '../../pages/admin/SubjectGradingPage';
 
 const AdminDashboard = () => (
   <DashboardLayout title="Admin Dashboard">
@@ -17,6 +19,8 @@ const AdminDashboard = () => (
       <Route path="packages"            element={<PackagesPage />} />
       <Route path="payments"            element={<PaymentsPage />} />
       <Route path="users"               element={<UsersPage />} />
+      <Route path="gpa-grading"         element={<GpaGradingPage />} />
+      <Route path="subject-grading"     element={<SubjectGradingPage />} />
     </Routes>
   </DashboardLayout>
 );

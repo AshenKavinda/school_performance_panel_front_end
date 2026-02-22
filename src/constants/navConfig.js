@@ -12,6 +12,8 @@ export const NAV_CONFIG = {
     { path: '/admin/packages',              label: 'Packages',           icon: 'package' },
     { path: '/admin/payments',              label: 'Payments',           icon: 'credit-card' },
     { path: '/admin/users',                 label: 'Users',              icon: 'users' },
+    { path: '/admin/gpa-grading',           label: 'GPA Grading',        icon: 'chart' },
+    { path: '/admin/subject-grading',       label: 'Subject Grading',    icon: 'star' },
   ],
 
   APPLICATION_ADMIN: [
@@ -19,8 +21,6 @@ export const NAV_CONFIG = {
     { path: '/app-admin/subscription',      label: 'Subscription',       icon: 'credit-card' },
     { path: '/app-admin/managers',          label: 'Managers',           icon: 'users' },
     { path: '/app-admin/operators',         label: 'Operators',          icon: 'briefcase' },
-    { path: '/app-admin/gpa-grading',       label: 'GPA Grading',        icon: 'chart' },
-    { path: '/app-admin/subject-grading',   label: 'Subject Grading',    icon: 'star' },
     { path: '/app-admin/profile',           label: 'Profile',            icon: 'user' },
   ],
 
