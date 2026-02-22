@@ -1,17 +1,8 @@
 import DashboardLayout from '../layout/DashboardLayout';
 
-const NAV = [
-  { path: '/manager/dashboard', label: 'Overview' },
-  { path: '/manager/operators', label: 'Operators' },
-  { path: '/manager/teachers', label: 'Teachers' },
-  { path: '/manager/students', label: 'Students' },
-  { path: '/manager/classes', label: 'Classes & Sections' },
-  { path: '/manager/profile', label: 'Profile' },
-];
-
 const ManagerDashboard = () => {
   return (
-    <DashboardLayout title="Manager Dashboard" navItems={NAV}>
+    <DashboardLayout title="Manager Dashboard">
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {[

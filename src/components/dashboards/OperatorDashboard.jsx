@@ -1,23 +1,8 @@
 import DashboardLayout from '../layout/DashboardLayout';
 
-const NAV = [
-  { path: '/operator/dashboard', label: 'Overview' },
-  { path: '/operator/clusters', label: 'Clusters' },
-  { path: '/operator/sections', label: 'Sections' },
-  { path: '/operator/classes', label: 'Classes' },
-  { path: '/operator/subjects', label: 'Subjects' },
-  { path: '/operator/modules', label: 'Modules' },
-  { path: '/operator/teachers', label: 'Teachers' },
-  { path: '/operator/students', label: 'Students' },
-  { path: '/operator/enrollments', label: 'Enrollments' },
-  { path: '/operator/timetable', label: 'Timetable' },
-  { path: '/operator/timeslots', label: 'Time Slots' },
-  { path: '/operator/profile', label: 'Profile' },
-];
-
 const OperatorDashboard = () => {
   return (
-    <DashboardLayout title="Operator Dashboard" navItems={NAV}>
+    <DashboardLayout title="Operator Dashboard">
       <div className="space-y-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-4">
           {[

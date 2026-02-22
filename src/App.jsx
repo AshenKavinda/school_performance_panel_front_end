@@ -1,6 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ToastProvider } from './context/ToastContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
+import NotFound from './components/NotFound';
 
 // Auth pages
 import Login from './components/auth/Login';
@@ -103,7 +106,7 @@ const AppRoutes = () => (
 
       {/* ── Error pages ──────────────────────────────────── */}
       <Route path="/unauthorized" element={<Unauthorized />} />
-      <Route path="*" element={<RootRedirect />} />
+      <Route path="*" element={<NotFound />} />
     </Routes>
   </AuthGate>
 );
@@ -112,7 +115,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <AppRoutes />
+        <ToastProvider>
+          <ErrorBoundary>
+            <AppRoutes />
+          </ErrorBoundary>
+        </ToastProvider>
       </AuthProvider>
     </Router>
   );

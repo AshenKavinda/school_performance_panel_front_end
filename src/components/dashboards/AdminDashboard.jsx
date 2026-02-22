@@ -1,17 +1,8 @@
 import DashboardLayout from '../layout/DashboardLayout';
 
-const NAV = [
-  { path: '/admin/dashboard', label: 'Overview' },
-  { path: '/admin/app-admins', label: 'Application Admins' },
-  { path: '/admin/admins', label: 'Admin Accounts' },
-  { path: '/admin/packages', label: 'Package Management' },
-  { path: '/admin/payments', label: 'Payments & Subscriptions' },
-  { path: '/admin/users', label: 'User Management' },
-];
-
 const AdminDashboard = () => {
   return (
-    <DashboardLayout title="Admin Dashboard" navItems={NAV}>
+    <DashboardLayout title="Admin Dashboard">
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {[

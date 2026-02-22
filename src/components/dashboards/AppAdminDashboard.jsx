@@ -1,18 +1,8 @@
 import DashboardLayout from '../layout/DashboardLayout';
 
-const NAV = [
-  { path: '/app-admin/dashboard', label: 'Overview' },
-  { path: '/app-admin/subscription', label: 'Subscription' },
-  { path: '/app-admin/managers', label: 'Managers' },
-  { path: '/app-admin/operators', label: 'Operators' },
-  { path: '/app-admin/gpa-grading', label: 'GPA Grading Config' },
-  { path: '/app-admin/subject-grading', label: 'Subject Grading Config' },
-  { path: '/app-admin/profile', label: 'Profile' },
-];
-
 const AppAdminDashboard = () => {
   return (
-    <DashboardLayout title="School Admin Dashboard" navItems={NAV}>
+    <DashboardLayout title="School Admin Dashboard">
       <div className="space-y-6">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
           {[
