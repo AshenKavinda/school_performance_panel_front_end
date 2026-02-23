@@ -272,7 +272,7 @@ const SectionsPage = () => {
       )}
 
       {/* Create modal */}
-      <Modal isOpen={createOpen} onClose={closeCreate} title="Add Section"
+      <Modal open={createOpen} onClose={closeCreate} title="Add Section"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -287,7 +287,7 @@ const SectionsPage = () => {
       </Modal>
 
       {/* Edit modal */}
-      <Modal isOpen={!!editTarget} onClose={closeEdit} title="Edit Section"
+      <Modal open={!!editTarget} onClose={closeEdit} title="Edit Section"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -303,8 +303,8 @@ const SectionsPage = () => {
 
       {/* Delete confirm */}
       <ConfirmDialog
-        isOpen={!!deleteTarget}
-        onCancel={closeDelete}
+        open={!!deleteTarget}
+        onClose={closeDelete}
         onConfirm={handleDelete}
         loading={deleting}
         title="Delete Section"

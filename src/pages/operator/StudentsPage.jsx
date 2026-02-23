@@ -253,7 +253,7 @@ const StudentsPage = () => {
         </div>
       )}
 
-      <Modal isOpen={createOpen} onClose={closeCreate} title="Register Student"
+      <Modal open={createOpen} onClose={closeCreate} title="Register Student"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -267,7 +267,7 @@ const StudentsPage = () => {
         <CreateFormFields form={createForm} errors={createErrors} onChange={setField(setCreateForm)} />
       </Modal>
 
-      <Modal isOpen={!!editTarget} onClose={closeEdit} title="Edit Student"
+      <Modal open={!!editTarget} onClose={closeEdit} title="Edit Student"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -287,8 +287,8 @@ const StudentsPage = () => {
       </Modal>
 
       <ConfirmDialog
-        isOpen={!!deleteTarget}
-        onCancel={closeDelete}
+        open={!!deleteTarget}
+        onClose={closeDelete}
         onConfirm={handleDelete}
         loading={deleting}
         title="Remove Student"

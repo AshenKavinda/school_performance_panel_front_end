@@ -11,7 +11,6 @@ import TeachersPage              from '../../pages/operator/TeachersPage';
 import StudentsPage              from '../../pages/operator/StudentsPage';
 import EnrollmentsPage           from '../../pages/operator/EnrollmentsPage';
 import TeacherAssignmentsPage    from '../../pages/operator/TeacherAssignmentsPage';
-import TimeSlotsPage             from '../../pages/operator/TimeSlotsPage';
 import TimetablePage             from '../../pages/operator/TimetablePage';
 import OperatorProfilePage       from '../../pages/operator/OperatorProfilePage';
 
@@ -30,7 +29,6 @@ const OperatorDashboard = () => (
         <Route path="students"          element={<StudentsPage />} />
         <Route path="enrollments"       element={<EnrollmentsPage />} />
         <Route path="teacher-assignments" element={<TeacherAssignmentsPage />} />
-        <Route path="timeslots"         element={<TimeSlotsPage />} />
         <Route path="timetable"         element={<TimetablePage />} />
         <Route path="profile"           element={<OperatorProfilePage />} />
       </Routes>

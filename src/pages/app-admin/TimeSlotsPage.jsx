@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getTimeSlots, createTimeSlot, updateTimeSlot, deleteTimeSlot } from '../../services/timetableService';
+import { getTimeSlotsByAdmin, createTimeSlot, updateTimeSlot, deleteTimeSlot } from '../../services/timetableService';
+import { getApplicationAdminByUser } from '../../services/managementService';
+import { useAuth }       from '../../context/AuthContext';
 import { useToast }      from '../../context/ToastContext';
 import { parseApiError } from '../../utils/validation';
 import {
@@ -20,13 +22,11 @@ const validate = (f) => {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-// Convert HH:mm to HH:mm:ss for the API (timespan format)
 const toTimeSpan = (t) => t ? `${t}:00` : '';
-// Convert HH:mm:ss or HH:mm:ss.fff back to HH:mm for the input
 const fromTimeSpan = (t) => {
   if (!t) return '';
   const parts = t.split(':');
-  return parts.length >= 2 ? `${parts[0].padStart(2,'0')}:${parts[1].padStart(2,'0')}` : t;
+  return parts.length >= 2 ? `${parts[0].padStart(2, '0')}:${parts[1].padStart(2, '0')}` : t;
 };
 
 // ── Form field components — MODULE LEVEL ──────────────────────────────────────
@@ -37,7 +37,7 @@ const TimeSlotFormFields = ({ form, errors, onChange }) => (
         Slot Name <span className="text-red-500">*</span>
       </label>
       <select name="name" value={form.name} onChange={onChange}
-        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.name ? 'border-red-400' : 'border-gray-200'}`}>
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent ${errors.name ? 'border-red-400' : 'border-gray-200'}`}>
         <option value="">Select slot name…</option>
         {SLOT_NAMES.map((n) => <option key={n} value={n}>{n}</option>)}
       </select>
@@ -48,7 +48,7 @@ const TimeSlotFormFields = ({ form, errors, onChange }) => (
         Start Time <span className="text-red-500">*</span>
       </label>
       <input type="time" name="startTime" value={form.startTime} onChange={onChange}
-        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.startTime ? 'border-red-400' : 'border-gray-200'}`}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent ${errors.startTime ? 'border-red-400' : 'border-gray-200'}`}
       />
       {errors.startTime && <p className="mt-1 text-xs text-red-500">{errors.startTime}</p>}
     </div>
@@ -57,7 +57,7 @@ const TimeSlotFormFields = ({ form, errors, onChange }) => (
         End Time <span className="text-red-500">*</span>
       </label>
       <input type="time" name="endTime" value={form.endTime} onChange={onChange}
-        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.endTime ? 'border-red-400' : 'border-gray-200'}`}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 focus:border-transparent ${errors.endTime ? 'border-red-400' : 'border-gray-200'}`}
       />
       {errors.endTime && <p className="mt-1 text-xs text-red-500">{errors.endTime}</p>}
     </div>
@@ -73,7 +73,7 @@ const buildColumns = (onEdit, onDelete) => [
     key: 'name',
     header: 'Slot Name',
     render: (row) => (
-      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-teal-100 text-teal-700">
+      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
         {row.name ?? '—'}
       </span>
     ),
@@ -113,6 +113,7 @@ const buildColumns = (onEdit, onDelete) => [
 
 // ── Main component ────────────────────────────────────────────────────────────
 const TimeSlotsPage = () => {
+  const { user }                       = useAuth();
   const { success, error: toastError } = useToast();
 
   const [rows,     setRows]     = useState([]);
@@ -134,17 +135,19 @@ const TimeSlotsPage = () => {
 
   // ── Fetch ─────────────────────────────────────────────────────────────────
   const fetchList = useCallback(async () => {
+    if (!user?.id) return;
     setLoading(true);
     setFetchErr(null);
     try {
-      const data = await getTimeSlots();
+      const appAdmin = await getApplicationAdminByUser(user.id);
+      const data     = await getTimeSlotsByAdmin(appAdmin.id);
       setRows(Array.isArray(data) ? data.filter(r => !r.isDeleted) : []);
     } catch (e) {
       setFetchErr(parseApiError(e));
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [user?.id]);
 
   useEffect(() => { fetchList(); }, [fetchList]);
 
@@ -236,7 +239,7 @@ const TimeSlotsPage = () => {
         subtitle="Define school period time slots"
         action={
           <button onClick={openCreate}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 transition">
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-xl hover:bg-purple-700 transition shadow-sm">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
             </svg>
@@ -258,7 +261,7 @@ const TimeSlotsPage = () => {
           <div className="flex justify-end gap-3">
             <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating}
-              className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition">
+              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {creating ? 'Creating…' : 'Create Time Slot'}
             </button>
           </div>
@@ -272,7 +275,7 @@ const TimeSlotsPage = () => {
           <div className="flex justify-end gap-3">
             <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
             <button onClick={handleSave} disabled={saving}
-              className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition">
+              className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
           </div>

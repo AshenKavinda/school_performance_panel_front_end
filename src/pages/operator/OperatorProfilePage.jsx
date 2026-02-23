@@ -143,7 +143,7 @@ const OperatorProfilePage = () => {
 
       {/* Edit modal */}
       <Modal
-        isOpen={editOpen}
+        open={editOpen}
         onClose={closeEdit}
         title="Edit Profile"
         footer={

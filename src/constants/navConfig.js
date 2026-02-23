@@ -21,6 +21,7 @@ export const NAV_CONFIG = {
     { path: '/app-admin/subscription',      label: 'Subscription',       icon: 'credit-card' },
     { path: '/app-admin/managers',          label: 'Managers',           icon: 'users' },
     { path: '/app-admin/operators',         label: 'Operators',          icon: 'briefcase' },
+    { path: '/app-admin/timeslots',         label: 'Time Slots',         icon: 'clock' },
     { path: '/app-admin/profile',           label: 'Profile',            icon: 'user' },
   ],
 
@@ -44,7 +45,6 @@ export const NAV_CONFIG = {
     { path: '/operator/students',           label: 'Students',           icon: 'group' },
     { path: '/operator/enrollments',        label: 'Enrollments',        icon: 'clipboard' },
     { path: '/operator/teacher-assignments',label: 'Teacher Assignments',icon: 'assignment' },
-    { path: '/operator/timeslots',          label: 'Time Slots',         icon: 'clock' },
     { path: '/operator/timetable',          label: 'Timetable',          icon: 'calendar' },
     { path: '/operator/profile',            label: 'Profile',            icon: 'user' },
   ],

@@ -216,7 +216,7 @@ const SubjectsPage = () => {
         </div>
       )}
 
-      <Modal isOpen={createOpen} onClose={closeCreate} title="Add Subject"
+      <Modal open={createOpen} onClose={closeCreate} title="Add Subject"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -230,7 +230,7 @@ const SubjectsPage = () => {
         <SubjectFormFields form={createForm} errors={createErrors} onChange={setField(setCreateForm)} />
       </Modal>
 
-      <Modal isOpen={!!editTarget} onClose={closeEdit} title="Edit Subject"
+      <Modal open={!!editTarget} onClose={closeEdit} title="Edit Subject"
         footer={
           <div className="flex justify-end gap-3">
             <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
@@ -245,8 +245,8 @@ const SubjectsPage = () => {
       </Modal>
 
       <ConfirmDialog
-        isOpen={!!deleteTarget}
-        onCancel={closeDelete}
+        open={!!deleteTarget}
+        onClose={closeDelete}
         onConfirm={handleDelete}
         loading={deleting}
         title="Delete Subject"

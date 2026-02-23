@@ -211,7 +211,7 @@ const ClustersPage = () => {
 
       {/* Create modal */}
       <Modal
-        isOpen={createOpen}
+        open={createOpen}
         onClose={closeCreate}
         title="Add Cluster"
         footer={
@@ -229,7 +229,7 @@ const ClustersPage = () => {
 
       {/* Edit modal */}
       <Modal
-        isOpen={!!editTarget}
+        open={!!editTarget}
         onClose={closeEdit}
         title="Edit Cluster"
         footer={
@@ -247,8 +247,8 @@ const ClustersPage = () => {
 
       {/* Delete confirm */}
       <ConfirmDialog
-        isOpen={!!deleteTarget}
-        onCancel={closeDelete}
+        open={!!deleteTarget}
+        onClose={closeDelete}
         onConfirm={handleDelete}
         loading={deleting}
         title="Delete Cluster"

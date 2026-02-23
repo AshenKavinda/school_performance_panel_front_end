@@ -5,6 +5,7 @@ import SubscriptionPage    from '../../pages/app-admin/SubscriptionPage';
 import ManagersPage        from '../../pages/app-admin/ManagersPage';
 import OperatorsPage       from '../../pages/app-admin/OperatorsPage';
 import AppAdminProfilePage from '../../pages/app-admin/AppAdminProfilePage';
+import TimeSlotsPage       from '../../pages/app-admin/TimeSlotsPage';
 
 const AppAdminDashboard = () => (
   <DashboardLayout title="School Admin Dashboard">
@@ -14,6 +15,7 @@ const AppAdminDashboard = () => (
       <Route path="subscription" element={<SubscriptionPage />} />
       <Route path="managers"     element={<ManagersPage />} />
       <Route path="operators"    element={<OperatorsPage />} />
+      <Route path="timeslots"    element={<TimeSlotsPage />} />
       <Route path="profile"      element={<AppAdminProfilePage />} />
     </Routes>
   </DashboardLayout>
