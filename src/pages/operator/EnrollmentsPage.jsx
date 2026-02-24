@@ -72,8 +72,7 @@ const EnrollmentsPage = () => {
   // Elective enrollment state
   const [electStudentId,  setElectStudentId]  = useState('');
   const [electSubjectId,  setElectSubjectId]  = useState('');
-  const [electSectionId,  setElectSectionId]  = useState('');
-  const [electSections,   setElectSections]   = useState([]);
+  const [electClassId,    setElectClassId]    = useState('');
   const [enrollingElect,  setEnrollingElect]  = useState(false);
 
   // ── Base data fetch ───────────────────────────────────────────────────────
@@ -101,7 +100,7 @@ const EnrollmentsPage = () => {
     setClassLoading(true);
     try {
       const data = await getClassStudents(cId);
-      setEnrolled(Array.isArray(data) ? data : []);
+      setEnrolled(Array.isArray(data?.students) ? data.students : []);
     } catch (e) {
       toastError(parseApiError(e));
       setEnrolled([]);
@@ -166,21 +165,21 @@ const EnrollmentsPage = () => {
 
   // ── Enroll elective subject ───────────────────────────────────────────────
   const handleEnrollElective = async () => {
-    if (!electStudentId || !electSubjectId || !electSectionId) {
+    if (!electStudentId || !electSubjectId || !electClassId) {
       toastError('Please fill in all elective enrollment fields');
       return;
     }
     setEnrollingElect(true);
     try {
       await enrollElectiveSubject({
-        studentId: electStudentId,
+        classId: electClassId,
         subjectId: electSubjectId,
-        sectionId: electSectionId,
+        studentIds: [electStudentId],
       });
       success('Student enrolled in elective subject');
       setElectStudentId('');
       setElectSubjectId('');
-      setElectSectionId('');
+      setElectClassId('');
     } catch (e) {
       toastError(parseApiError(e));
     } finally {
@@ -259,11 +258,11 @@ const EnrollmentsPage = () => {
                 ) : (
                   <ul className="divide-y divide-gray-100">
                     {enrolled.map((stu) => {
-                      const stuId = stu.id ?? stu.studentId;
+                      const stuId = stu.studentId ?? stu.id;
                       return (
                         <li key={stuId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition">
                           <div>
-                            <span className="font-mono text-sm font-semibold text-teal-700">{stu.globalStudentCode ?? stuId}</span>
+                            <span className="font-medium text-sm text-gray-800">{stu.studentName ?? stuId}</span>
                             {stu.indexNumber && <span className="ml-2 text-xs text-gray-400">({stu.indexNumber})</span>}
                           </div>
                           <button
@@ -359,16 +358,17 @@ const EnrollmentsPage = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Section ID</label>
-                <input type="text" value={electSectionId} onChange={(e) => setElectSectionId(e.target.value)}
-                  placeholder="Enter section ID"
-                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
-                />
+                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <select value={electClassId} onChange={(e) => setElectClassId(e.target.value)}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
+                  <option value="">Select class…</option>
+                  {classes.map((c) => <option key={c.id} value={c.id}>{c.name}{c.academicYear ? ` (${c.academicYear})` : ''}</option>)}
+                </select>
               </div>
             </div>
             <button
               onClick={handleEnrollElective}
-              disabled={!electStudentId || !electSubjectId || !electSectionId || enrollingElect}
+              disabled={!electStudentId || !electSubjectId || !electClassId || enrollingElect}
               className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition"
             >
               {enrollingElect ? 'Enrolling…' : 'Enroll in Elective'}

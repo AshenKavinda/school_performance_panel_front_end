@@ -25,6 +25,7 @@ const validateEdit = (f) => {
   const errs = {};
   if (!f.name.trim())         errs.name         = 'Class name is required';
   if (!f.academicYear.trim()) errs.academicYear = 'Academic year is required';
+  if (!f.classType)           errs.classType    = 'Please select a class type';
   return errs;
 };
 
@@ -78,12 +79,25 @@ const EditFormFields = ({ form, errors, onChange }) => (
       value={form.academicYear} onChange={onChange} error={errors.academicYear}
       placeholder="e.g. 2024/2025"
     />
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Class Type <span className="text-red-500">*</span>
+      </label>
+      <select name="classType" value={form.classType} onChange={onChange}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.classType ? 'border-red-400' : 'border-gray-200'}`}>
+        <option value="">Select type…</option>
+        {CLASS_TYPES.map((t) => (
+          <option key={t} value={t}>{t.replace('_', ' ')}</option>
+        ))}
+      </select>
+      {errors.classType && <p className="mt-1 text-xs text-red-500">{errors.classType}</p>}
+    </div>
   </div>
 );
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const EMPTY_CREATE = { name: '', sectionId: '', academicYear: '', classType: '' };
-const EMPTY_EDIT   = { name: '', academicYear: '' };
+const EMPTY_EDIT   = { name: '', academicYear: '', classType: '' };
 
 // ── Type badge ────────────────────────────────────────────────────────────────
 const TypeBadge = ({ type }) => {
@@ -229,7 +243,7 @@ const ClassesPage = () => {
   };
 
   // ── Edit ──────────────────────────────────────────────────────────────────
-  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', academicYear: row.academicYear ?? '' }); setEditErrors({}); };
+  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', academicYear: row.academicYear ?? '', classType: row.classType ?? '' }); setEditErrors({}); };
   const closeEdit = () => setEditTarget(null);
 
   const handleSave = async () => {
@@ -237,7 +251,7 @@ const ClassesPage = () => {
     if (Object.keys(errs).length) { setEditErrors(errs); return; }
     setSaving(true);
     try {
-      await updateClass(editTarget.id, { name: editForm.name.trim(), academicYear: editForm.academicYear.trim() });
+      await updateClass(editTarget.id, { name: editForm.name.trim(), academicYear: editForm.academicYear.trim(), classType: editForm.classType });
       success('Class updated successfully');
       closeEdit();
       fetchList();

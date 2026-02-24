@@ -66,33 +66,26 @@ export const parseApiError = (err) => {
   const data = err?.response?.data;
 
   if (!data) {
-    return {
-      apiError: err?.message || 'An unexpected error occurred. Please try again.',
-      fieldErrors: {},
-    };
+    return err?.message || 'An unexpected error occurred. Please try again.';
   }
 
   // ASP.NET ModelState: { errors: { Email: ["..."], Password: ["..."] } }
   if (data.errors && typeof data.errors === 'object') {
-    const fieldErrors = {};
+    const messages = [];
     Object.entries(data.errors).forEach(([key, msgs]) => {
-      const normalizedKey = key.charAt(0).toLowerCase() + key.slice(1);
-      fieldErrors[normalizedKey] = Array.isArray(msgs) ? msgs[0] : String(msgs);
+      const msg = Array.isArray(msgs) ? msgs[0] : String(msgs);
+      if (msg) messages.push(msg);
     });
 
-    const apiError =
-      data.title && Object.keys(fieldErrors).length === 0
-        ? data.title
-        : '';
-
-    return { apiError, fieldErrors };
+    if (messages.length) return messages.join(' ');
+    if (data.title) return data.title;
+    return 'Validation failed. Please check your inputs.';
   }
 
   // Simple message or title
-  const apiError =
+  return (
     data.message ||
     data.title ||
-    (typeof data === 'string' ? data : 'Something went wrong. Please try again.');
-
-  return { apiError, fieldErrors: {} };
+    (typeof data === 'string' ? data : 'Something went wrong. Please try again.')
+  );
 };
