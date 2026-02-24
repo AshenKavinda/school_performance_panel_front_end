@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   getClassesByOperator, getStudentsByOperator, getSubjectsByOperator,
+  getStudentsByClassAndSubject,
 } from '../../services/managementService';
 import { useOperator } from '../../context/OperatorContext';
 import {
@@ -86,6 +87,14 @@ const EnrollmentsPage = () => {
   const [loadingElectStudents,   setLoadingElectStudents]   = useState(false);
   const [loadingElectSubjects,   setLoadingElectSubjects]   = useState(false);
   const [electClassCommonSubjectIds, setElectClassCommonSubjectIds] = useState(new Set()); // common subject IDs for elective class
+
+  // Remove subject from student state
+  const [rmvClassId,   setRmvClassId]   = useState('');
+  const [rmvSubjectId, setRmvSubjectId] = useState('');
+  const [rmvStudents,  setRmvStudents]  = useState([]);
+  const [rmvLoading,   setRmvLoading]   = useState(false);
+
+
 
   // ── Base data fetch ───────────────────────────────────────────────────────
   const { operatorId } = useOperator();
@@ -369,6 +378,36 @@ const EnrollmentsPage = () => {
       setElectSelectedStudentIds(new Set());
     } else {
       setElectSelectedStudentIds(new Set(eligible));
+    }
+  };
+
+  // ── Remove Subject: fetch students enrolled in class+subject ──────────────
+  const fetchRmvStudents = useCallback(async (cId, sId) => {
+    if (!cId || !sId) { setRmvStudents([]); return; }
+    setRmvLoading(true);
+    try {
+      const data = await getStudentsByClassAndSubject(cId, sId);
+      setRmvStudents(Array.isArray(data) ? data : []);
+    } catch {
+      setRmvStudents([]);
+    } finally {
+      setRmvLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchRmvStudents(rmvClassId, rmvSubjectId); }, [rmvClassId, rmvSubjectId, fetchRmvStudents]);
+
+  // ── Remove Subject: remove student from subject ───────────────────────────
+  const handleRmvStudent = async (studentId) => {
+    if (!rmvSubjectId || !rmvClassId) return;
+    const cls = classes.find(c => c.id === rmvClassId);
+    if (!cls?.sectionId) { toastError('Class has no associated section'); return; }
+    try {
+      await removeStudentFromSubject(rmvSubjectId, cls.sectionId, studentId);
+      success('Subject removed from student');
+      fetchRmvStudents(rmvClassId, rmvSubjectId);
+    } catch (e) {
+      toastError(parseApiError(e));
     }
   };
 
@@ -826,6 +865,90 @@ const EnrollmentsPage = () => {
                                     ))}
                                   </div>
                                 )}
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* ─── Remove Subject from Student ──────────────────────────────────── */}
+          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-800">Remove Subject from Student</h3>
+              <p className="text-xs text-gray-400 mt-0.5">Select a class and subject to view enrolled students, then remove a subject assignment.</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <select
+                  value={rmvClassId}
+                  onChange={(e) => { setRmvClassId(e.target.value); setRmvSubjectId(''); }}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                >
+                  <option value="">Select class…</option>
+                  {classes.map((c) => <option key={c.id} value={c.id}>{c.name}{c.academicYear ? ` (${c.academicYear})` : ''}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Subject</label>
+                <select
+                  value={rmvSubjectId}
+                  onChange={(e) => setRmvSubjectId(e.target.value)}
+                  disabled={!rmvClassId}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:opacity-50"
+                >
+                  <option value="">Select subject…</option>
+                  {subjects.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+                </select>
+              </div>
+            </div>
+
+            {rmvClassId && rmvSubjectId && (
+              <div className="bg-gray-50 rounded-lg border border-gray-100 p-3">
+                <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
+                  Students Enrolled in This Subject
+                  {!rmvLoading && <span className="ml-1 font-normal text-gray-400">({rmvStudents.length})</span>}
+                </p>
+                {rmvLoading ? (
+                  <div className="flex items-center justify-center py-6"><LoadingSpinner /></div>
+                ) : rmvStudents.length === 0 ? (
+                  <p className="text-xs text-gray-400 italic text-center py-4">No students enrolled in this subject for the selected class.</p>
+                ) : (
+                  <div className="overflow-x-auto max-h-80 overflow-y-auto">
+                    <table className="w-full text-sm border-collapse">
+                      <thead className="sticky top-0 z-10">
+                        <tr className="bg-white border-b border-gray-200">
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index No.</th>
+                          <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rmvStudents.map((stu, idx) => {
+                          const stuId = stu.studentId ?? stu.id;
+                          const name = stu.studentName ?? stu.globalStudentCode
+                            ?? [stu.firstName, stu.lastName].filter(Boolean).join(' ')
+                            ?? stuId;
+                          return (
+                            <tr key={stuId} className="border-b border-gray-100 hover:bg-white transition">
+                              <td className="px-3 py-2.5 text-xs text-gray-400">{idx + 1}</td>
+                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800">{name}</td>
+                              <td className="px-3 py-2.5 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
+                              <td className="px-3 py-2.5 text-right">
+                                <button
+                                  onClick={() => handleRmvStudent(stuId)}
+                                  className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+                                >
+                                  Remove
+                                </button>
                               </td>
                             </tr>
                           );

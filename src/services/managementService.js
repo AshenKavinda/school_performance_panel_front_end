@@ -57,6 +57,7 @@ export const getStudentByGlobal     = (globalId)      => api.get(`/api/students/
 export const createStudent          = (dto)           => api.post('/api/students', dto).then(r => r.data);
 export const updateStudent          = (id, dto)       => api.put(`/api/students/${id}`, dto).then(r => r.data);
 export const deleteStudent          = (id)            => api.delete(`/api/students/${id}`).then(r => r.data);
+export const getStudentsByClassAndSubject = (classId, subjectId) => api.get(`/api/students/by-class/${classId}/subject/${subjectId}`).then(r => r.data);
 
 // ── StudentGlobals ────────────────────────────────────────────────────────────
 export const getStudentGlobals       = ()             => api.get('/api/student-globals').then(r => r.data);
