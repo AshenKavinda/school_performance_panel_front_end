@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   getTeachersByOperator, createTeacher, updateTeacher, deleteTeacher,
+  updateUser,
 } from '../../services/managementService';
 import { useOperator }   from '../../context/OperatorContext';
 import { useToast }      from '../../context/ToastContext';
@@ -52,6 +53,10 @@ const CreateFormFields = ({ form, errors, onChange }) => (
 
 const EditFormFields = ({ form, errors, onChange }) => (
   <div className="space-y-4">
+    <FormInput label="Username" name="username" required
+      value={form.username} onChange={onChange} error={errors.username}
+      placeholder="Enter username"
+    />
     <FormInput label="Teacher ID" name="teacherId"
       value={form.teacherId} onChange={onChange} error={errors.teacherId}
       placeholder="Institutional teacher ID"
@@ -65,7 +70,7 @@ const EditFormFields = ({ form, errors, onChange }) => (
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const EMPTY_CREATE = { username: '', email: '', password: '', teacherId: '', nic: '', phoneNumber: '' };
-const EMPTY_EDIT   = { teacherId: '', nic: '' };
+const EMPTY_EDIT   = { username: '', teacherId: '', nic: '' };
 
 // ── Column definitions ────────────────────────────────────────────────────────
 const buildColumns = (onEdit, onDelete) => [
@@ -195,16 +200,26 @@ const TeachersPage = () => {
   };
 
   // ── Edit ──────────────────────────────────────────────────────────────────
-  const openEdit  = (row) => { setEditTarget(row); setEditForm({ teacherId: row.teacherId ?? '', nic: row.nic ?? '' }); setEditErrors({}); };
+  const openEdit  = (row) => { setEditTarget(row); setEditForm({ username: row.username ?? '', teacherId: row.teacherId ?? '', nic: row.nic ?? '' }); setEditErrors({}); };
   const closeEdit = () => setEditTarget(null);
 
   const handleSave = async () => {
+    const errs = {};
+    if (!editForm.username.trim()) errs.username = 'Username is required';
+    if (Object.keys(errs).length) { setEditErrors(errs); return; }
     setSaving(true);
     try {
+      // Update teacher fields (nic, teacherId)
       await updateTeacher(editTarget.id, {
         teacherId: editForm.teacherId || undefined,
         nic:       editForm.nic       || undefined,
       });
+      // Update username via user API
+      if (editTarget.userId && editForm.username.trim() !== (editTarget.username ?? '')) {
+        await updateUser(editTarget.userId, {
+          username: editForm.username.trim(),
+        });
+      }
       success('Teacher updated successfully');
       closeEdit();
       fetchList();

@@ -6,7 +6,7 @@ import { useOperator } from '../../context/OperatorContext';
 import {
   getClassStudents, enrollStudentToClass, removeStudentFromClass,
   enrollClassCommonSubjects, enrollElectiveSubject, getStudentSubjects,
-  removeStudentFromSubject,
+  removeStudentFromSubject, bulkEnrollClass,
 } from '../../services/enrollmentService';
 import { useToast }      from '../../context/ToastContext';
 import { parseApiError } from '../../utils/validation';
@@ -63,6 +63,11 @@ const EnrollmentsPage = () => {
   const [classLoading,  setClassLoading]  = useState(false);
   const [addStudentId,  setAddStudentId]  = useState('');
   const [enrolling,     setEnrolling]     = useState(false);
+
+  // Bulk class enrollment state
+  const [bulkSearch,      setBulkSearch]      = useState('');
+  const [bulkSelectedIds, setBulkSelectedIds] = useState(new Set());
+  const [bulkEnrolling,   setBulkEnrolling]   = useState(false);
 
   // Subject enrollment state
   const [subjClassId,             setSubjClassId]             = useState('');
@@ -146,9 +151,70 @@ const EnrollmentsPage = () => {
     }
   };
 
-  // Non-enrolled students (for add dropdown)
+  // Non-enrolled students (for add dropdown & bulk)
   const enrolledIds = new Set(enrolled.map(s => String(s.id ?? s.studentId)));
   const notEnrolled = students.filter(s => !enrolledIds.has(String(s.id)));
+
+  // Filtered non-enrolled students based on search
+  const bulkFiltered = notEnrolled.filter(s => {
+    if (!bulkSearch.trim()) return true;
+    const q = bulkSearch.toLowerCase();
+    return (s.globalStudentCode ?? '').toLowerCase().includes(q)
+      || (s.indexNumber ?? '').toLowerCase().includes(q)
+      || (s.firstName ?? '').toLowerCase().includes(q)
+      || (s.lastName ?? '').toLowerCase().includes(q)
+      || (`${s.firstName ?? ''} ${s.lastName ?? ''}`).toLowerCase().includes(q);
+  });
+
+  // Bulk toggle helpers for class enrollment
+  const toggleBulkStudent = (sid) => {
+    setBulkSelectedIds(prev => {
+      const next = new Set(prev);
+      if (next.has(sid)) next.delete(sid); else next.add(sid);
+      return next;
+    });
+  };
+
+  const toggleAllBulkStudents = () => {
+    const filteredIds = bulkFiltered.map(s => String(s.id));
+    const allSelected = filteredIds.length > 0 && filteredIds.every(id => bulkSelectedIds.has(id));
+    if (allSelected) {
+      setBulkSelectedIds(prev => {
+        const next = new Set(prev);
+        filteredIds.forEach(id => next.delete(id));
+        return next;
+      });
+    } else {
+      setBulkSelectedIds(prev => {
+        const next = new Set(prev);
+        filteredIds.forEach(id => next.add(id));
+        return next;
+      });
+    }
+  };
+
+  // Bulk enroll handler
+  const handleBulkEnroll = async () => {
+    if (!classId || bulkSelectedIds.size === 0) return;
+    setBulkEnrolling(true);
+    try {
+      const res = await bulkEnrollClass({
+        classId,
+        studentIds: [...bulkSelectedIds],
+      });
+      const msg = res?.successCount != null
+        ? `Enrolled ${res.successCount} student${res.successCount !== 1 ? 's' : ''} successfully${res.failureCount ? ` (${res.failureCount} failed)` : ''}`
+        : 'Students enrolled successfully';
+      success(msg);
+      setBulkSelectedIds(new Set());
+      setBulkSearch('');
+      fetchEnrolled(classId);
+    } catch (e) {
+      toastError(parseApiError(e));
+    } finally {
+      setBulkEnrolling(false);
+    }
+  };
 
   // ── Enroll class to common subjects ──────────────────────────────────────
   const toggleSubj = (id) => {
@@ -334,7 +400,7 @@ const EnrollmentsPage = () => {
 
           {classId && (
             <>
-              {/* Add student */}
+              {/* Add single student */}
               <div className="bg-white rounded-xl border border-gray-200 p-5">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Enroll a Student</h3>
                 <div className="flex flex-wrap gap-3 items-end">
@@ -360,6 +426,115 @@ const EnrollmentsPage = () => {
                     {enrolling ? 'Enrolling…' : 'Enroll'}
                   </button>
                 </div>
+              </div>
+
+              {/* Bulk enroll students */}
+              <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+                <div>
+                  <h3 className="text-sm font-semibold text-gray-700">Bulk Enroll Students</h3>
+                  <p className="text-xs text-gray-400 mt-0.5">Search and select multiple students to enroll at once.</p>
+                </div>
+
+                {/* Search */}
+                <div className="relative">
+                  <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                  <input
+                    type="text"
+                    value={bulkSearch}
+                    onChange={(e) => setBulkSearch(e.target.value)}
+                    placeholder="Search by name, student code, or index number…"
+                    className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                  />
+                </div>
+
+                {/* Selection info bar */}
+                {bulkSelectedIds.size > 0 && (
+                  <div className="flex items-center justify-between bg-teal-50 border border-teal-200 rounded-lg px-4 py-2">
+                    <span className="text-sm text-teal-700 font-medium">
+                      {bulkSelectedIds.size} student{bulkSelectedIds.size !== 1 ? 's' : ''} selected
+                    </span>
+                    <button
+                      onClick={() => setBulkSelectedIds(new Set())}
+                      className="text-xs text-teal-600 hover:text-teal-800 font-medium"
+                    >
+                      Clear selection
+                    </button>
+                  </div>
+                )}
+
+                {/* Student table */}
+                {notEnrolled.length === 0 ? (
+                  <p className="text-xs text-gray-400 italic text-center py-4">All students are already enrolled in this class.</p>
+                ) : bulkFiltered.length === 0 ? (
+                  <p className="text-xs text-gray-400 italic text-center py-4">No students match your search.</p>
+                ) : (() => {
+                  const filteredIds = bulkFiltered.map(s => String(s.id));
+                  const allVisible = filteredIds.length > 0 && filteredIds.every(id => bulkSelectedIds.has(id));
+                  return (
+                    <div className="overflow-x-auto max-h-72 overflow-y-auto border border-gray-200 rounded-lg">
+                      <table className="w-full text-sm border-collapse">
+                        <thead className="sticky top-0 z-10">
+                          <tr className="bg-gray-50 border-b border-gray-200">
+                            <th className="px-3 py-2 w-10">
+                              <input
+                                type="checkbox"
+                                checked={allVisible}
+                                onChange={toggleAllBulkStudents}
+                                className="rounded text-teal-600 focus:ring-teal-400"
+                                title="Select all visible students"
+                              />
+                            </th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student Code</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index No.</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Name</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {bulkFiltered.map((stu, idx) => {
+                            const sid = String(stu.id);
+                            const checked = bulkSelectedIds.has(sid);
+                            return (
+                              <tr
+                                key={sid}
+                                onClick={() => toggleBulkStudent(sid)}
+                                className={`border-b border-gray-100 cursor-pointer transition ${
+                                  checked ? 'bg-teal-50' : 'hover:bg-gray-50'
+                                }`}
+                              >
+                                <td className="px-3 py-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={checked}
+                                    onChange={() => toggleBulkStudent(sid)}
+                                    onClick={(e) => e.stopPropagation()}
+                                    className="rounded text-teal-600 focus:ring-teal-400"
+                                  />
+                                </td>
+                                <td className="px-3 py-2 text-xs text-gray-400">{idx + 1}</td>
+                                <td className="px-3 py-2 text-sm font-medium text-gray-800">{stu.globalStudentCode ?? '—'}</td>
+                                <td className="px-3 py-2 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
+                                <td className="px-3 py-2 text-sm text-gray-700">
+                                  {[stu.firstName, stu.lastName].filter(Boolean).join(' ') || '—'}
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })()}
+
+                <button
+                  onClick={handleBulkEnroll}
+                  disabled={bulkSelectedIds.size === 0 || bulkEnrolling}
+                  className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition"
+                >
+                  {bulkEnrolling ? 'Enrolling…' : `Enroll ${bulkSelectedIds.size || ''} Student${bulkSelectedIds.size !== 1 ? 's' : ''}`}
+                </button>
               </div>
 
               {/* Enrolled list */}

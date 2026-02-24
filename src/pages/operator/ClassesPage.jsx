@@ -181,6 +181,7 @@ const ClassesPage = () => {
   const [search,        setSearch]        = useState('');
   const [filterSection, setFilterSection] = useState('');
   const [filterType,    setFilterType]    = useState('');
+  const [filterYear,    setFilterYear]    = useState('');
 
   const [createOpen,   setCreateOpen]   = useState(false);
   const [createForm,   setCreateForm]   = useState(EMPTY_CREATE);
@@ -225,11 +226,15 @@ const ClassesPage = () => {
 
   const filteredRows = rows.filter((r) => {
     const q = search.toLowerCase();
-    const matchSearch  = !q || r.name?.toLowerCase().includes(q) || r.academicYear?.toLowerCase().includes(q);
+    const matchSearch  = !q || r.name?.toLowerCase().includes(q);
     const matchSection = !filterSection || String(r.sectionId) === filterSection;
     const matchType    = !filterType    || r.classType === filterType;
-    return matchSearch && matchSection && matchType;
+    const matchYear    = !filterYear    || r.academicYear === filterYear;
+    return matchSearch && matchSection && matchType && matchYear;
   });
+
+  // Unique sorted academic years from all rows
+  const uniqueYears = [...new Set(rows.map(r => r.academicYear).filter(Boolean))].sort();
 
   // ── Create ────────────────────────────────────────────────────────────────
   const openCreate  = () => { setCreateForm(EMPTY_CREATE); setCreateErrors({}); setCreateOpen(true); };
@@ -315,9 +320,14 @@ const ClassesPage = () => {
       {/* Filters */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 flex flex-wrap gap-3">
         <input
-          type="text" placeholder="Search classes…" value={search} onChange={(e) => setSearch(e.target.value)}
+          type="text" placeholder="Search by class name…" value={search} onChange={(e) => setSearch(e.target.value)}
           className="flex-1 min-w-[180px] px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
         />
+        <select value={filterYear} onChange={(e) => setFilterYear(e.target.value)}
+          className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
+          <option value="">All years</option>
+          {uniqueYears.map((y) => <option key={y} value={y}>{y}</option>)}
+        </select>
         <select value={filterSection} onChange={(e) => setFilterSection(e.target.value)}
           className="px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
           <option value="">All sections</option>

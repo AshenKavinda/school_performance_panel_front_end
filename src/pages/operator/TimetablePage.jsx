@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
-import { getClassesByOperator, getSubjectsByOperator } from '../../services/managementService';
+import { getClassesByOperator, getSubjectsByClass } from '../../services/managementService';
 import { useOperator } from '../../context/OperatorContext';
 import {
   getTimeSlots,
@@ -7,7 +7,6 @@ import {
   checkTimetableConflicts, getTeacherWeeklySchedule,
 } from '../../services/timetableService';
 import {
-  getClassStudents, getStudentCurriculum,
   getSectionSubjectTeachers,
 } from '../../services/enrollmentService';
 import { useToast }      from '../../context/ToastContext';
@@ -24,6 +23,13 @@ const UNCHANGEABLE_SLOT_IDS = new Set([
   '4904d281-9f1f-4fff-add1-40aad022de5b', // Interval
   '09c65c8a-b918-40bf-8cee-cecf2af7e40f', // Break
 ]);
+
+// Labels shown in the merged day cells for fixed break/activity slots
+const BLOCK_SLOT_LABELS = {
+  '2d09f0d6-814a-4b22-a2fd-f5f28c8c193b': 'Morning Activities',
+  '4904d281-9f1f-4fff-add1-40aad022de5b': 'Interval',
+  '09c65c8a-b918-40bf-8cee-cecf2af7e40f': 'Break',
+};
 
 const SUBJECT_COLORS = [
   { bg: 'bg-blue-100',    border: 'border-blue-300',    text: 'text-blue-800',    pill: 'bg-blue-500' },
@@ -269,7 +275,7 @@ const TimetablePage = () => {
 
   // ── Base data ─────────────────────────────────────────────────────────────
   const [classes,     setClasses]     = useState([]);
-  const [allSubjects, setAllSubjects] = useState([]);
+
   const [timeSlots,   setTimeSlots]   = useState([]);
   const [baseLoading, setBaseLoading] = useState(true);
 
@@ -300,13 +306,11 @@ const TimetablePage = () => {
   const fetchBase = useCallback(async () => {
     if (!operatorId) { setBaseLoading(false); return; }
     setBaseLoading(true);
-    const [clsRes, subRes, tsRes] = await Promise.allSettled([
+    const [clsRes, tsRes] = await Promise.allSettled([
       getClassesByOperator(operatorId),
-      getSubjectsByOperator(operatorId),
       getTimeSlots(),
     ]);
     if (clsRes.status === 'fulfilled') setClasses(Array.isArray(clsRes.value) ? clsRes.value.filter(r => !r.isDeleted) : []);
-    if (subRes.status === 'fulfilled') setAllSubjects(Array.isArray(subRes.value) ? subRes.value.filter(r => !r.isDeleted) : []);
     if (tsRes.status  === 'fulfilled') setTimeSlots(Array.isArray(tsRes.value)  ? tsRes.value.filter(r => !r.isDeleted)  : []);
     setBaseLoading(false);
   }, [operatorId]);
@@ -353,38 +357,25 @@ const TimetablePage = () => {
     if (!classId) { setEntries([]); setClassSubjects([]); return; }
     setSchedLoading(true);
     try {
-      // Fetch timetable entries + class students in parallel
-      const [ttRes, stuRes] = await Promise.allSettled([
+      // Fetch timetable entries + enrolled subjects for the class in parallel
+      const [ttRes, subRes] = await Promise.allSettled([
         getTimetablesByClass(classId),
-        getClassStudents(classId),
+        getSubjectsByClass(classId),
       ]);
 
       // Timetable entries
       const ttData = ttRes.status === 'fulfilled' ? ttRes.value : [];
       setEntries(Array.isArray(ttData) ? ttData.filter(r => !r.isDeleted) : []);
 
-      // Try to get class-enrolled subjects via first student's curriculum
-      let subjects = [];
-      if (stuRes.status === 'fulfilled') {
-        const raw = stuRes.value;
-        const students = Array.isArray(raw) ? raw : (raw?.students ?? []);
-        if (students.length > 0) {
-          const firstStudentId = students[0].id ?? students[0].studentId;
-          try {
-            const curriculum = await getStudentCurriculum(classId, firstStudentId);
-            subjects = curriculum?.enrolledSubjects ?? [];
-          } catch { /* ignore */ }
-        }
-      }
-
-      // Fallback: if no enrolled subjects found, use all operator subjects
-      if (subjects.length === 0 && allSubjects.length > 0) {
-        subjects = allSubjects.map(s => ({
-          subjectId:   s.id,
-          subjectName: s.name,
-          creditValue: s.creditValue,
-        }));
-      }
+      // Subjects enrolled in this class
+      const subData = subRes.status === 'fulfilled' ? subRes.value : [];
+      console.log('getSubjectsByClass response:', subData);
+      const subjects = (Array.isArray(subData) ? subData : []).map(s => ({
+        subjectId:   s.id ?? s.subjectId,
+        subjectName: s.name ?? s.subjectName,
+        creditValue: s.creditValue,
+      }));
+      console.log('Mapped classSubjects:', subjects);
       setClassSubjects(subjects);
     } catch (e) {
       toastError(parseApiError(e));
@@ -393,7 +384,7 @@ const TimetablePage = () => {
     } finally {
       setSchedLoading(false);
     }
-  }, [toastError, allSubjects]);
+  }, [toastError]);
 
   useEffect(() => { fetchClassData(selectedClassId); }, [selectedClassId, fetchClassData]);
 
@@ -656,28 +647,40 @@ const TimetablePage = () => {
                     <tbody>
                       {sortedTimeSlots.map((slot) => {
                         const fixed = isUnchangeable(slot.id);
+                        const blockLabel = BLOCK_SLOT_LABELS[(slot.id ?? '').toLowerCase()];
                         return (
                           <tr key={slot.id} className={fixed ? 'bg-gray-50' : ''}>
                             {/* Time slot label */}
                             <td className={`px-3 py-2 text-xs border border-gray-200 whitespace-nowrap align-middle ${fixed ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 text-gray-600 font-medium'}`}>
-                              <div>{slot.name}</div>
-                              <div className="text-[10px] text-gray-400">
-                                {fromTimeSpan(slot.startTime)} – {fromTimeSpan(slot.endTime)}
-                              </div>
+                              <div>{fromTimeSpan(slot.startTime)} – {fromTimeSpan(slot.endTime)}</div>
                             </td>
-                            {/* Day cells */}
-                            {DAYS.map((day) => (
-                              <TimetableCell
-                                key={day}
-                                entries={getEntries(slot.id, day)}
-                                slot={slot}
-                                day={day}
-                                isFixed={fixed}
-                                onDrop={handleSubjectDrop}
-                                onClick={handleEntryClick}
-                                subjectIds={subjectIds}
-                              />
-                            ))}
+                            {/* Merged cell for fixed break/activity slots */}
+                            {blockLabel ? (
+                              <td
+                                colSpan={DAYS.length}
+                                className="border border-gray-200 bg-gray-100 px-4 py-2 text-center"
+                              >
+                                <span className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-widest">
+                                  <span className="block w-8 h-px bg-gray-300" />
+                                  {blockLabel}
+                                  <span className="block w-8 h-px bg-gray-300" />
+                                </span>
+                              </td>
+                            ) : (
+                              /* Normal day cells */
+                              DAYS.map((day) => (
+                                <TimetableCell
+                                  key={day}
+                                  entries={getEntries(slot.id, day)}
+                                  slot={slot}
+                                  day={day}
+                                  isFixed={fixed}
+                                  onDrop={handleSubjectDrop}
+                                  onClick={handleEntryClick}
+                                  subjectIds={subjectIds}
+                                />
+                              ))
+                            )}
                           </tr>
                         );
                       })}
