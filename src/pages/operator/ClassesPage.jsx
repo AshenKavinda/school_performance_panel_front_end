@@ -24,6 +24,7 @@ const validateCreate = (f) => {
 const validateEdit = (f) => {
   const errs = {};
   if (!f.name.trim())         errs.name         = 'Class name is required';
+  if (!f.sectionId)           errs.sectionId    = 'Please select a section';
   if (!f.academicYear.trim()) errs.academicYear = 'Academic year is required';
   if (!f.classType)           errs.classType    = 'Please select a class type';
   return errs;
@@ -69,12 +70,25 @@ const CreateFormFields = ({ form, errors, onChange, sections }) => (
   </div>
 );
 
-const EditFormFields = ({ form, errors, onChange }) => (
+const EditFormFields = ({ form, errors, onChange, sections }) => (
   <div className="space-y-4">
     <FormInput label="Class Name" name="name" required
       value={form.name} onChange={onChange} error={errors.name}
       placeholder="e.g. Grade 10 — A"
     />
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Section <span className="text-red-500">*</span>
+      </label>
+      <select name="sectionId" value={form.sectionId} onChange={onChange}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.sectionId ? 'border-red-400' : 'border-gray-200'}`}>
+        <option value="">Select a section…</option>
+        {sections.map((s) => (
+          <option key={s.id} value={s.id}>{s.name}</option>
+        ))}
+      </select>
+      {errors.sectionId && <p className="mt-1 text-xs text-red-500">{errors.sectionId}</p>}
+    </div>
     <FormInput label="Academic Year" name="academicYear" required
       value={form.academicYear} onChange={onChange} error={errors.academicYear}
       placeholder="e.g. 2024/2025"
@@ -97,7 +111,7 @@ const EditFormFields = ({ form, errors, onChange }) => (
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const EMPTY_CREATE = { name: '', sectionId: '', academicYear: '', classType: '' };
-const EMPTY_EDIT   = { name: '', academicYear: '', classType: '' };
+const EMPTY_EDIT   = { name: '', sectionId: '', academicYear: '', classType: '' };
 
 // ── Type badge ────────────────────────────────────────────────────────────────
 const TypeBadge = ({ type }) => {
@@ -243,7 +257,7 @@ const ClassesPage = () => {
   };
 
   // ── Edit ──────────────────────────────────────────────────────────────────
-  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', academicYear: row.academicYear ?? '', classType: row.classType ?? '' }); setEditErrors({}); };
+  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', sectionId: row.sectionId ?? '', academicYear: row.academicYear ?? '', classType: row.classType ?? '' }); setEditErrors({}); };
   const closeEdit = () => setEditTarget(null);
 
   const handleSave = async () => {
@@ -251,7 +265,7 @@ const ClassesPage = () => {
     if (Object.keys(errs).length) { setEditErrors(errs); return; }
     setSaving(true);
     try {
-      await updateClass(editTarget.id, { name: editForm.name.trim(), academicYear: editForm.academicYear.trim(), classType: editForm.classType });
+      await updateClass(editTarget.id, { name: editForm.name.trim(), sectionId: editForm.sectionId, academicYear: editForm.academicYear.trim(), classType: editForm.classType });
       success('Class updated successfully');
       closeEdit();
       fetchList();
@@ -352,13 +366,7 @@ const ClassesPage = () => {
           </div>
         }
       >
-        {editTarget && (
-          <p className="text-xs text-gray-500 mb-4 bg-gray-50 px-3 py-2 rounded-lg">
-            Section: <span className="font-medium text-gray-700">{sections.find(s => s.id === editTarget.sectionId)?.name ?? '—'}</span>
-            {' · '}Type: <span className="font-medium text-gray-700">{editTarget.classType?.replace('_', ' ') ?? '—'}</span>
-          </p>
-        )}
-        <EditFormFields form={editForm} errors={editErrors} onChange={setField(setEditForm)} />
+        <EditFormFields form={editForm} errors={editErrors} onChange={setField(setEditForm)} sections={sections} />
       </Modal>
 
       {/* Delete confirm */}

@@ -104,6 +104,7 @@ export const deleteClass            = (id)            => api.delete(`/api/classe
 export const getSubjects            = ()              => api.get('/api/subjects').then(r => r.data);
 export const getSubject             = (id)            => api.get(`/api/subjects/${id}`).then(r => r.data);
 export const getSubjectsByOperator  = (operatorId)    => api.get(`/api/subjects/by-operator/${operatorId}`).then(r => r.data);
+export const getSubjectsByClass     = (classId)       => api.get(`/api/subjects/by-class/${classId}`).then(r => r.data);
 export const createSubject          = (dto)           => api.post('/api/subjects', dto).then(r => r.data);
 export const updateSubject          = (id, dto)       => api.put(`/api/subjects/${id}`, dto).then(r => r.data);
 export const deleteSubject          = (id)            => api.delete(`/api/subjects/${id}`).then(r => r.data);

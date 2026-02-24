@@ -23,7 +23,9 @@ const validateCreate = (f) => {
 };
 const validateEdit = (f) => {
   const errs = {};
-  if (!f.name.trim()) errs.name = 'Module name is required';
+  if (!f.name.trim())   errs.name      = 'Module name is required';
+  if (!f.subjectId)     errs.subjectId = 'Please select a subject';
+  if (!f.sectionId)     errs.sectionId = 'Please select a section';
   const w = parseFloat(f.moduleWeight);
   if (f.moduleWeight === '' || isNaN(w)) errs.moduleWeight = 'Module weight is required';
   else if (w < 1 || w > 100)            errs.moduleWeight = 'Weight must be between 1 and 100';
@@ -66,12 +68,34 @@ const CreateFormFields = ({ form, errors, onChange, subjects, sections }) => (
   </div>
 );
 
-const EditFormFields = ({ form, errors, onChange }) => (
+const EditFormFields = ({ form, errors, onChange, subjects, sections }) => (
   <div className="space-y-4">
     <FormInput label="Module Name" name="name" required
       value={form.name} onChange={onChange} error={errors.name}
       placeholder="e.g. Introduction to Algebra"
     />
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Subject <span className="text-red-500">*</span>
+      </label>
+      <select name="subjectId" value={form.subjectId} onChange={onChange}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.subjectId ? 'border-red-400' : 'border-gray-200'}`}>
+        <option value="">Select a subject…</option>
+        {subjects.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+      </select>
+      {errors.subjectId && <p className="mt-1 text-xs text-red-500">{errors.subjectId}</p>}
+    </div>
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-1">
+        Section <span className="text-red-500">*</span>
+      </label>
+      <select name="sectionId" value={form.sectionId} onChange={onChange}
+        className={`w-full px-3 py-2 text-sm border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent ${errors.sectionId ? 'border-red-400' : 'border-gray-200'}`}>
+        <option value="">Select a section…</option>
+        {sections.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
+      </select>
+      {errors.sectionId && <p className="mt-1 text-xs text-red-500">{errors.sectionId}</p>}
+    </div>
     <FormInput label="Module Weight (1–100)" name="moduleWeight" type="number" required
       value={form.moduleWeight} onChange={onChange} error={errors.moduleWeight}
       placeholder="e.g. 30"
@@ -81,7 +105,7 @@ const EditFormFields = ({ form, errors, onChange }) => (
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 const EMPTY_CREATE = { name: '', subjectId: '', sectionId: '', moduleWeight: '' };
-const EMPTY_EDIT   = { name: '', moduleWeight: '' };
+const EMPTY_EDIT   = { name: '', subjectId: '', sectionId: '', moduleWeight: '' };
 
 // ── Column definitions ────────────────────────────────────────────────────────
 const buildColumns = (subjects, sections, onEdit, onDelete) => [
@@ -221,7 +245,7 @@ const ModulesPage = () => {
   };
 
   // ── Edit ──────────────────────────────────────────────────────────────────
-  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', moduleWeight: String(row.moduleWeight ?? '') }); setEditErrors({}); };
+  const openEdit  = (row) => { setEditTarget(row); setEditForm({ name: row.name ?? '', subjectId: row.subjectId ?? '', sectionId: row.sectionId ?? '', moduleWeight: String(row.moduleWeight ?? '') }); setEditErrors({}); };
   const closeEdit = () => setEditTarget(null);
 
   const handleSave = async () => {
@@ -229,7 +253,7 @@ const ModulesPage = () => {
     if (Object.keys(errs).length) { setEditErrors(errs); return; }
     setSaving(true);
     try {
-      await updateModule(editTarget.id, { name: editForm.name.trim(), moduleWeight: parseFloat(editForm.moduleWeight) });
+      await updateModule(editTarget.id, { name: editForm.name.trim(), subjectId: editForm.subjectId, sectionId: editForm.sectionId, moduleWeight: parseFloat(editForm.moduleWeight) });
       success('Module updated successfully');
       closeEdit();
       fetchList();
@@ -321,12 +345,8 @@ const ModulesPage = () => {
         }
       >
         {editTarget && (
-          <p className="text-xs text-gray-500 mb-4 bg-gray-50 px-3 py-2 rounded-lg">
-            Subject: <span className="font-medium text-gray-700">{subjects.find(s => s.id === editTarget.subjectId)?.name ?? '—'}</span>
-            {' · '}Section: <span className="font-medium text-gray-700">{sections.find(s => s.id === editTarget.sectionId)?.name ?? '—'}</span>
-          </p>
+          <EditFormFields form={editForm} errors={editErrors} onChange={setField(setEditForm)} subjects={subjects} sections={sections} />
         )}
-        <EditFormFields form={editForm} errors={editErrors} onChange={setField(setEditForm)} />
       </Modal>
 
       <ConfirmDialog

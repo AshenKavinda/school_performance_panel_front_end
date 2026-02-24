@@ -80,12 +80,13 @@ const SubjectPill = ({ subject, color, count }) => {
 };
 
 // ── Timetable Cell (MODULE-LEVEL) ─────────────────────────────────────────────
-const TimetableCell = ({ entry, slot, day, isFixed, onDrop, onClick, subjectIds }) => {
+const TimetableCell = ({ entries = [], slot, day, isFixed, onDrop, onClick, subjectIds }) => {
   const [dragOver, setDragOver] = useState(false);
   const cellRef = useRef(null);
+  const hasEntries = entries.length > 0;
 
   const handleDragOver = (e) => {
-    if (isFixed || entry) return;
+    if (isFixed) return;
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
     setDragOver(true);
@@ -96,7 +97,7 @@ const TimetableCell = ({ entry, slot, day, isFixed, onDrop, onClick, subjectIds 
   const handleDrop = (e) => {
     e.preventDefault();
     setDragOver(false);
-    if (isFixed || entry) return;
+    if (isFixed) return;
     try {
       const data = JSON.parse(e.dataTransfer.getData('application/json'));
       onDrop?.(data, slot, day);
@@ -112,21 +113,35 @@ const TimetableCell = ({ entry, slot, day, isFixed, onDrop, onClick, subjectIds 
     );
   }
 
-  // Occupied cell
-  if (entry) {
-    const color = getSubjectColor(entry.subjectId, subjectIds);
+  // Cell with entries (still droppable for additional optional subjects)
+  if (hasEntries) {
     return (
       <td
-        className={`px-1 py-1 border border-gray-200 align-middle min-w-[130px] cursor-pointer`}
-        onClick={() => onClick?.(entry)}
+        ref={cellRef}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`px-1 py-1 border border-gray-200 align-middle min-w-[130px] transition-colors
+          ${dragOver ? 'ring-2 ring-inset ring-teal-400 bg-teal-50' : ''}`}
       >
-        <div className={`rounded-lg p-1.5 ${color.bg} ${color.border} border group relative`}>
-          <p className={`text-[11px] font-semibold leading-tight truncate ${color.text}`}>
-            {entry.subjectName ?? 'Subject'}
-          </p>
-          <p className={`text-[10px] mt-0.5 truncate ${color.text} opacity-70`}>
-            {entry.teacherName ?? entry.teacherUsername ?? '—'}
-          </p>
+        <div className="space-y-1">
+          {entries.map((entry) => {
+            const color = getSubjectColor(entry.subjectId, subjectIds);
+            return (
+              <div key={entry.id}
+                onClick={() => onClick?.(entry)}
+                className={`rounded-lg p-1.5 ${color.bg} ${color.border} border cursor-pointer group relative`}
+              >
+                <p className={`text-[11px] font-semibold leading-tight truncate ${color.text}`}>
+                  {entry.subjectName ?? 'Subject'}
+                  {entry.isOptional && <span className="ml-1 text-[9px] opacity-60">(Opt)</span>}
+                </p>
+                <p className={`text-[10px] mt-0.5 truncate ${color.text} opacity-70`}>
+                  {entry.teacherName ?? entry.teacherUsername ?? '—'}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </td>
     );
@@ -320,14 +335,18 @@ const TimetablePage = () => {
     return map;
   }, [entries]);
 
-  // Build lookup: (timeSlotId, day) → TimetableDto
+  // Build lookup: (timeSlotId, day) → TimetableDto[]
   const entryMap = useMemo(() => {
     const map = {};
-    entries.forEach(e => { map[`${e.timeSlotId}__${e.dayOfWeek}`] = e; });
+    entries.forEach(e => {
+      const key = `${e.timeSlotId}__${e.dayOfWeek}`;
+      if (!map[key]) map[key] = [];
+      map[key].push(e);
+    });
     return map;
   }, [entries]);
 
-  const getEntry = (timeSlotId, day) => entryMap[`${timeSlotId}__${day}`];
+  const getEntries = (timeSlotId, day) => entryMap[`${timeSlotId}__${day}`] ?? [];
 
   // ── Fetch class data when selection changes ───────────────────────────────
   const fetchClassData = useCallback(async (classId) => {
@@ -381,7 +400,8 @@ const TimetablePage = () => {
   // ── Handle subject drop on cell ───────────────────────────────────────────
   const handleSubjectDrop = (subjectData, slot, day) => {
     if (!selectedClassId || !selectedClass) return;
-    // Open teacher assignment modal
+    const existing = getEntries(slot.id, day);
+    // Open teacher assignment modal — default to optional when slot already has entries
     setAssignModal({
       subjectId:   subjectData.subjectId,
       subjectName: subjectData.subjectName,
@@ -390,6 +410,7 @@ const TimetablePage = () => {
       dayOfWeek:   day,
       startTime:   slot.startTime,
       endTime:     slot.endTime,
+      isOptional:  existing.length > 0,
     });
   };
 
@@ -418,6 +439,7 @@ const TimetablePage = () => {
                 teacherId:  t.teacherId,
                 timeSlotId: assignModal.timeSlotId,
                 dayOfWeek:  assignModal.dayOfWeek,
+                isOptional: assignModal.isOptional ?? false,
               }).then(result => ({ teacherId: t.teacherId, result }))
             ),
           );
@@ -431,6 +453,7 @@ const TimetablePage = () => {
           setTeacherConflicts(conflicts);
         }
       } catch (e) {
+        console.error('[fetchTeachers/conflictCheck] Error:', e?.response?.data ?? e);
         toastError(parseApiError(e));
       } finally {
         setLoadingTeachers(false);
@@ -451,11 +474,13 @@ const TimetablePage = () => {
         teacherId:  teacher.teacherId,
         timeSlotId: assignModal.timeSlotId,
         dayOfWeek:  assignModal.dayOfWeek,
+        isOptional: assignModal.isOptional ?? false,
       });
       success('Timetable entry created');
       setAssignModal(null);
       fetchClassData(selectedClassId);
     } catch (e) {
+      console.error('[handleAssignTeacher] Error creating timetable entry:', e?.response?.data ?? e);
       toastError(parseApiError(e));
     } finally {
       setAssigningTeacherId(null);
@@ -497,6 +522,7 @@ const TimetablePage = () => {
       dayOfWeek:    detailEntry.dayOfWeek,
       startTime:    detailEntry.startTime,
       endTime:      detailEntry.endTime,
+      isOptional:   detailEntry.isOptional ?? false,
       replacingEntryId: detailEntry.id, // flag: we're replacing, not creating new
     });
     setDetailEntry(null);
@@ -517,6 +543,7 @@ const TimetablePage = () => {
       setAssignModal(null);
       fetchClassData(selectedClassId);
     } catch (e) {
+      console.error('[handleAssignTeacherForReplace] Error updating teacher:', e?.response?.data ?? e);
       toastError(parseApiError(e));
     } finally {
       setAssigningTeacherId(null);
@@ -642,7 +669,7 @@ const TimetablePage = () => {
                             {DAYS.map((day) => (
                               <TimetableCell
                                 key={day}
-                                entry={getEntry(slot.id, day)}
+                                entries={getEntries(slot.id, day)}
                                 slot={slot}
                                 day={day}
                                 isFixed={fixed}
@@ -698,6 +725,22 @@ const TimetablePage = () => {
                 <span className="text-amber-600 font-medium">Changing teacher</span>
               )}
             </div>
+
+            {/* Optional subject toggle */}
+            {!assignModal.replacingEntryId && (
+              <label className="flex items-center gap-3 px-3 py-2.5 bg-amber-50 rounded-lg border border-amber-200 cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={assignModal.isOptional ?? false}
+                  onChange={() => setAssignModal(prev => prev ? { ...prev, isOptional: !prev.isOptional } : null)}
+                  className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-amber-800">Optional subject</span>
+                  <p className="text-xs text-amber-600">Optional subjects can share a time slot with other optional subjects</p>
+                </div>
+              </label>
+            )}
 
             {/* Teachers list */}
             {loadingTeachers ? (
@@ -809,6 +852,12 @@ const TimetablePage = () => {
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Section</p>
                 <p className="text-gray-900">{detailEntry.sectionName ?? '—'}</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium text-gray-400 uppercase">Type</p>
+                <p className={`font-medium ${detailEntry.isOptional ? 'text-amber-600' : 'text-gray-900'}`}>
+                  {detailEntry.isOptional ? 'Optional' : 'Mandatory'}
+                </p>
               </div>
             </div>
           </div>
