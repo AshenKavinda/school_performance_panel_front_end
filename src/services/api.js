@@ -1,11 +1,14 @@
 import axios from 'axios';
 
-// Always use '/api' as the baseURL for both development and production.
-// Vercel will proxy /api/* to your backend, even if it's HTTP.
+// In development the Vite proxy forwards /api/* → http://spp.runasp.net/api/*
+// so we use an empty baseURL (same-origin) to avoid CORS.
+// In production set VITE_API_BASE_URL to the deployed API origin.
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
