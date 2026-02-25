@@ -8,6 +8,7 @@ import {
   getClassStudents, enrollStudentToClass, removeStudentFromClass,
   enrollClassCommonSubjects, removeClassCommonSubjects, enrollElectiveSubject,
   getStudentSubjects, removeStudentFromSubject, bulkEnrollClass,
+  getStudentCurriculum,
 } from '../../services/enrollmentService';
 import { useToast }      from '../../context/ToastContext';
 import { parseApiError } from '../../utils/validation';
@@ -52,7 +53,7 @@ const ClassSelector = ({ classes, selectedId, onChange, loading }) => (
 const EnrollmentsPage = () => {
   const { success, error: toastError } = useToast();
 
-  const [tab,      setTab]      = useState('class');   // 'class' | 'subject'
+  const [tab,      setTab]      = useState('class');   // 'class' | 'subject' | 'curriculum'
   const [classes,  setClasses]  = useState([]);
   const [students, setStudents] = useState([]);   // all school students
   const [subjects, setSubjects] = useState([]);
@@ -89,6 +90,14 @@ const EnrollmentsPage = () => {
   const [loadingElectStudents,   setLoadingElectStudents]   = useState(false);
   const [loadingElectSubjects,   setLoadingElectSubjects]   = useState(false);
   const [electClassCommonSubjectIds, setElectClassCommonSubjectIds] = useState(new Set()); // common subject IDs for elective class
+
+  // Student Enrolled Subjects (curriculum) state
+  const [curClassId,          setCurClassId]          = useState('');
+  const [curClassStudents,    setCurClassStudents]    = useState([]);
+  const [curStudentId,        setCurStudentId]        = useState('');
+  const [curLoading,          setCurLoading]          = useState(false);
+  const [curLoadingStudents,  setCurLoadingStudents]  = useState(false);
+  const [curData,             setCurData]             = useState(null);
 
   // Remove subject from student state
   const [rmvClassId,   setRmvClassId]   = useState('');
@@ -441,6 +450,40 @@ const EnrollmentsPage = () => {
     }
   };
 
+  // ── Fetch students for curriculum class ─────────────────────────────────
+  const fetchCurClassStudents = useCallback(async (cId) => {
+    if (!cId) { setCurClassStudents([]); setCurStudentId(''); setCurData(null); return; }
+    setCurLoadingStudents(true);
+    try {
+      const data = await getClassStudents(cId);
+      setCurClassStudents(Array.isArray(data?.students) ? data.students : []);
+    } catch (e) {
+      toastError(parseApiError(e));
+      setCurClassStudents([]);
+    } finally {
+      setCurLoadingStudents(false);
+    }
+  }, [toastError]);
+
+  useEffect(() => { fetchCurClassStudents(curClassId); }, [curClassId, fetchCurClassStudents]);
+
+  // ── Fetch curriculum for selected student ─────────────────────────────────
+  const fetchCurriculum = useCallback(async (cId, sId) => {
+    if (!cId || !sId) { setCurData(null); return; }
+    setCurLoading(true);
+    try {
+      const data = await getStudentCurriculum(cId, sId);
+      setCurData(data ?? null);
+    } catch (e) {
+      toastError(parseApiError(e));
+      setCurData(null);
+    } finally {
+      setCurLoading(false);
+    }
+  }, [toastError]);
+
+  useEffect(() => { fetchCurriculum(curClassId, curStudentId); }, [curClassId, curStudentId, fetchCurriculum]);
+
   if (baseLoading) {
     return (
       <div className="flex items-center justify-center py-20">
@@ -458,8 +501,9 @@ const EnrollmentsPage = () => {
 
       {/* Tab switcher */}
       <div className="flex gap-2 bg-white rounded-xl border border-gray-200 p-2 w-fit">
-        <Tab label="Class Enrollments"   active={tab === 'class'}   onClick={() => setTab('class')} />
-        <Tab label="Subject Enrollments" active={tab === 'subject'} onClick={() => setTab('subject')} />
+        <Tab label="Class Enrollments"   active={tab === 'class'}      onClick={() => setTab('class')} />
+        <Tab label="Subject Enrollments" active={tab === 'subject'}    onClick={() => setTab('subject')} />
+        <Tab label="Student Enrolled Subjects" active={tab === 'curriculum'} onClick={() => setTab('curriculum')} />
       </div>
 
       {/* ── CLASS ENROLLMENTS ─────────────────────────────────────────────── */}
@@ -989,6 +1033,167 @@ const EnrollmentsPage = () => {
                     </table>
                   </div>
                 )}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+      {/* ── STUDENT ENROLLED SUBJECTS (CURRICULUM) ────────────────────────── */}
+      {tab === 'curriculum' && (
+        <div className="space-y-4">
+          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+            <div>
+              <h3 className="text-sm font-semibold text-gray-800">Student Enrolled Subjects</h3>
+              <p className="text-xs text-gray-400 mt-0.5">Select a class and student to view all subjects the student is enrolled in.</p>
+            </div>
+
+            {/* Class & Student selectors */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <select
+                  value={curClassId}
+                  onChange={(e) => { setCurClassId(e.target.value); setCurStudentId(''); setCurData(null); }}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
+                >
+                  <option value="">Select class…</option>
+                  {classes.map((c) => <option key={c.id} value={c.id}>{c.name}{c.academicYear ? ` (${c.academicYear})` : ''}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-600 mb-1">Student</label>
+                <select
+                  value={curStudentId}
+                  onChange={(e) => { setCurStudentId(e.target.value); setCurData(null); }}
+                  disabled={!curClassId || curLoadingStudents}
+                  className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:opacity-50"
+                >
+                  <option value="">{curLoadingStudents ? 'Loading…' : 'Select student…'}</option>
+                  {curClassStudents.map((s) => {
+                    const sid = s.studentId ?? s.id;
+                    return <option key={sid} value={sid}>{s.studentName ?? s.globalStudentCode ?? sid}{s.indexNumber ? ` (${s.indexNumber})` : ''}</option>;
+                  })}
+                </select>
+              </div>
+            </div>
+
+            {/* Curriculum result */}
+            {curLoading ? (
+              <div className="flex items-center justify-center py-10"><LoadingSpinner /></div>
+            ) : curData ? (
+              <div className="space-y-4">
+                {/* Info header */}
+                <div className="bg-gray-50 rounded-lg border border-gray-100 p-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
+                    <div>
+                      <span className="text-xs text-gray-500">Student</span>
+                      <p className="font-medium text-gray-800">{curData.studentName ?? '—'}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500">Index No.</span>
+                      <p className="font-medium text-gray-800">{curData.indexNumber ?? '—'}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500">Class</span>
+                      <p className="font-medium text-gray-800">{curData.className ?? '—'}</p>
+                    </div>
+                    <div>
+                      <span className="text-xs text-gray-500">Type</span>
+                      <p className="font-medium text-gray-800">
+                        <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
+                          curData.classType === 'MODULE_BASE'
+                            ? 'bg-purple-100 text-purple-700'
+                            : 'bg-blue-100 text-blue-700'
+                        }`}>
+                          {curData.classType === 'MODULE_BASE' ? 'Module Based' : 'Subject Based'}
+                        </span>
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Enrolled subjects */}
+                {curData.enrolledSubjects && curData.enrolledSubjects.length > 0 && (
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">Enrolled Subjects</p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-sm border-collapse">
+                        <thead>
+                          <tr className="border-b border-gray-200 bg-gray-50">
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Subject</th>
+                            <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Credits</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Enrolled At</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {curData.enrolledSubjects.map((sub, idx) => (
+                            <tr key={sub.subjectId} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                              <td className="px-3 py-2.5 text-xs text-gray-400">{idx + 1}</td>
+                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800">{sub.subjectName ?? '—'}</td>
+                              <td className="px-3 py-2.5 text-center">
+                                <span className="inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 text-[11px] font-medium">
+                                  {sub.creditValue}cr
+                                </span>
+                              </td>
+                              <td className="px-3 py-2.5 text-xs text-gray-500">
+                                {sub.enrolledAt ? new Date(sub.enrolledAt).toLocaleDateString() : '—'}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
+                {/* Subjects with modules (for MODULE_BASE classes) */}
+                {curData.subjectsWithModules && curData.subjectsWithModules.length > 0 && (
+                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                    <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">Subjects &amp; Modules</p>
+                    <div className="space-y-3">
+                      {curData.subjectsWithModules.map((swm) => (
+                        <div key={swm.subjectId} className="rounded-lg border border-gray-100 p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-sm font-semibold text-gray-800">{swm.subjectName ?? '—'}</span>
+                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-medium">
+                              {swm.creditValue}cr
+                            </span>
+                          </div>
+                          {swm.modules && swm.modules.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                              {swm.modules.map((mod) => (
+                                <span
+                                  key={mod.moduleId}
+                                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 text-[11px] font-medium border border-indigo-200"
+                                >
+                                  {mod.moduleName ?? '—'}
+                                  <span className="text-indigo-400 text-[9px]">{mod.moduleWeight}%</span>
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-xs text-gray-400 italic">No modules</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Empty state if both arrays are empty */}
+                {(!curData.enrolledSubjects || curData.enrolledSubjects.length === 0) &&
+                 (!curData.subjectsWithModules || curData.subjectsWithModules.length === 0) && (
+                  <div className="text-center py-8 text-sm text-gray-400">
+                    No subjects enrolled for this student in this class.
+                  </div>
+                )}
+              </div>
+            ) : curClassId && curStudentId ? (
+              <div className="text-center py-8 text-sm text-gray-400">No curriculum data found.</div>
+            ) : (
+              <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-8 text-center text-sm text-gray-400">
+                Select a class and student above to view enrolled subjects.
               </div>
             )}
           </div>
