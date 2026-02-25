@@ -21,10 +21,15 @@ import TeacherDashboard from './components/dashboards/TeacherDashboard';
 import StudentDashboard from './components/dashboards/StudentDashboard';
 import Unauthorized from './components/Unauthorized';
 
+// Public pages
+import LandingPage from './pages/public/LandingPage';
+import StudentLookup from './pages/public/StudentLookup';
+
 // ── Root redirect: send authenticated users to their dashboard ───────────────
 const RootRedirect = () => {
   const { isAuthenticated, getDashboardRoute } = useAuth();
-  return <Navigate to={isAuthenticated ? getDashboardRoute() : '/login'} replace />;
+  if (isAuthenticated) return <Navigate to={getDashboardRoute()} replace />;
+  return <LandingPage />;
 };
 
 // ── Loading spinner shown during initial auth rehydration ────────────────────
@@ -54,6 +59,9 @@ const AppRoutes = () => (
     <Routes>
       {/* ── Root ─────────────────────────────────────────── */}
       <Route path="/" element={<RootRedirect />} />
+
+      {/* ── Public pages ─────────────────────────────────── */}
+      <Route path="/student-lookup" element={<StudentLookup />} />
 
       {/* ── Auth (public only) ───────────────────────────── */}
       <Route path="/login"          element={<PublicRoute><Login /></PublicRoute>} />

@@ -1,5 +1,5 @@
 ﻿import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import {
   isValidEmail,
@@ -59,9 +59,11 @@ const validateAdminForm = (f) => ({
 
 const Register = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { registerStudent, registerApplicationAdmin } = useAuth();
 
-  const [tab, setTab] = useState('student');
+  const initialTab = searchParams.get('tab') === 'school' ? 'school' : 'student';
+  const [tab, setTab] = useState(initialTab);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
   const [success, setSuccess] = useState('');
