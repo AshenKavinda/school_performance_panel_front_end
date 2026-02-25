@@ -65,5 +65,6 @@ export const NAV_CONFIG = {
     { path: '/student/enrollments',         label: 'My Enrollments',     icon: 'clipboard' },
     { path: '/student/marks',               label: 'My Marks',           icon: 'chart' },
     { path: '/student/timetable',           label: 'My Timetable',       icon: 'calendar' },
+    { path: '/student/analytics',           label: 'Analytics',          icon: 'chart' },
   ],
 };
