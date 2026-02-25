@@ -428,6 +428,1125 @@
         }
       }
     },
+    "/api/analytics/manager/school-overview": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SchoolOverviewDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SchoolOverviewDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SchoolOverviewDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/performance-by-cluster": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClusterPerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClusterPerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClusterPerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/performance-by-section": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SectionPerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SectionPerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SectionPerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/performance-by-subject": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SubjectPerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SubjectPerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.SubjectPerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/class-rankings": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassRankingDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassRankingDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassRankingDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/term-trend": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TermTrendDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TermTrendDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TermTrendDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/gpa-distribution": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.GPADistributionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.GPADistributionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.GPADistributionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/top-students": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TopStudentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TopStudentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TopStudentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/teacher-performance": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassPerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassPerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassPerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/manager/academic-year-comparison": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AcademicYearComparisonDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AcademicYearComparisonDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AcademicYearComparisonDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/my-classes": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassOverviewDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassOverviewDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherClassOverviewDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/subject-averages": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherSubjectAverageDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherSubjectAverageDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherSubjectAverageDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/grade-distribution/{classId}/{subjectId}/{term}": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "term",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherGradeDistributionDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherGradeDistributionDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherGradeDistributionDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/student-rankings/{classId}/{subjectId}/{term}": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "term",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherStudentRankDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherStudentRankDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherStudentRankDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/at-risk-students": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "threshold",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 35
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AtRiskStudentDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AtRiskStudentDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.AtRiskStudentDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/class-comparison/{subjectId}": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "subjectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassComparisonDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassComparisonDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.ClassComparisonDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/teacher/module-performance/{classId}": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "classId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherModulePerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherModulePerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.TeacherModulePerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/dashboard": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentDashboardDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentDashboardDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentDashboardDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/term-trend": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentTermTrendDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentTermTrendDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentTermTrendDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/gpa-report": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentGPAReportDto"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentGPAReportDto"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentGPAReportDto"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/module-performance": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentModulePerformanceDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentModulePerformanceDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentModulePerformanceDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/class-ranks": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentClassRankDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentClassRankDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentClassRankDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/analytics/student/vs-class-average": {
+      "get": {
+        "tags": [
+          "Analytics"
+        ],
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "schema": {
+              "enum": [
+                "FIRST_TERM",
+                "SECOND_TERM",
+                "FINAL_TERM"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentVsClassAverageDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentVsClassAverageDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentVsClassAverageDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/application-admins": {
       "get": {
         "tags": [
@@ -12734,6 +13853,849 @@
           "employeeNumber": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.AcademicYearComparisonDto": {
+        "type": "object",
+        "properties": {
+          "academicYear": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.AtRiskStudentDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "mark": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classAverage": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.ClassComparisonDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "passRate": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.ClassRankingDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "academicYear": {
+            "type": "string",
+            "nullable": true
+          },
+          "classType": {
+            "enum": [
+              "SUBJECT_BASE",
+              "MODULE_BASE"
+            ],
+            "type": "string"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.ClusterPerformanceDto": {
+        "type": "object",
+        "properties": {
+          "clusterId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "clusterName": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.GPADistributionDto": {
+        "type": "object",
+        "properties": {
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "gradePoint": {
+            "type": "number",
+            "format": "float"
+          },
+          "studentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.SchoolOverviewDto": {
+        "type": "object",
+        "properties": {
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalTeachers": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalClasses": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSubjects": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalClusters": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalSections": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "overallAverageMark": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.SectionPerformanceDto": {
+        "type": "object",
+        "properties": {
+          "sectionId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "clusterName": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentClassRankDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "mark": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classAverage": {
+            "type": "number",
+            "format": "double"
+          },
+          "rankInClass": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "totalInClass": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentDashboardDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "overallAverage": {
+            "type": "number",
+            "format": "double"
+          },
+          "gpa": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalSubjects": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "subjectMarks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentSubjectMarkDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentGPAReportDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "overallGPA": {
+            "type": "number",
+            "format": "double"
+          },
+          "subjectGPAs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentSubjectGPADto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentModulePerformanceDto": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "moduleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mark": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentSubjectGPADto": {
+        "type": "object",
+        "properties": {
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "creditValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "gradePoint": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentSubjectMarkDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "creditValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "termMarks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/school_performance_panel.API.Dtos.Analytics.StudentTermMarkDto"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentTermMarkDto": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "mark": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "gradePoint": {
+            "type": "number",
+            "format": "float"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentTermTrendDto": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "gpa": {
+            "type": "number",
+            "format": "double"
+          },
+          "subjectsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.StudentVsClassAverageDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "studentMark": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "classAverage": {
+            "type": "number",
+            "format": "double"
+          },
+          "difference": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.SubjectPerformanceDto": {
+        "type": "object",
+        "properties": {
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "creditValue": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "highestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "lowestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passRate": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherClassOverviewDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "academicYear": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classType": {
+            "enum": [
+              "SUBJECT_BASE",
+              "MODULE_BASE"
+            ],
+            "type": "string"
+          },
+          "totalStudents": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherClassPerformanceDto": {
+        "type": "object",
+        "properties": {
+          "teacherId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "teacherName": {
+            "type": "string",
+            "nullable": true
+          },
+          "classesTaught": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "subjectsTaught": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageClassMark": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherGradeDistributionDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "studentCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "percentage": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherModulePerformanceDto": {
+        "type": "object",
+        "properties": {
+          "moduleId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "moduleName": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "moduleWeight": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "highestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "lowestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherStudentRankDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "mark": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "grade": {
+            "type": "string",
+            "nullable": true
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TeacherSubjectAverageDto": {
+        "type": "object",
+        "properties": {
+          "classId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "subjectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "subjectName": {
+            "type": "string",
+            "nullable": true
+          },
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "highestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "lowestMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TermTrendDto": {
+        "type": "object",
+        "properties": {
+          "term": {
+            "enum": [
+              "FIRST_TERM",
+              "SECOND_TERM",
+              "FINAL_TERM"
+            ],
+            "type": "string"
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "totalMarksRecorded": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "school_performance_panel.API.Dtos.Analytics.TopStudentDto": {
+        "type": "object",
+        "properties": {
+          "studentId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "studentName": {
+            "type": "string",
+            "nullable": true
+          },
+          "indexNumber": {
+            "type": "string",
+            "nullable": true
+          },
+          "className": {
+            "type": "string",
+            "nullable": true
+          },
+          "sectionName": {
+            "type": "string",
+            "nullable": true
+          },
+          "averageMark": {
+            "type": "number",
+            "format": "double"
+          },
+          "gpa": {
+            "type": "number",
+            "format": "double"
+          },
+          "rank": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
