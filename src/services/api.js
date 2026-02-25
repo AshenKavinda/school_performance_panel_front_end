@@ -3,11 +3,13 @@ import axios from 'axios';
 // In development the Vite proxy forwards /api/* → http://spp.runasp.net/api/*
 // so we use an empty baseURL (same-origin) to avoid CORS.
 // In production set VITE_API_BASE_URL to the deployed API origin.
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? '';
 
 const api = axios.create({
-  baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
+  baseURL: "/api",
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // ─── Request Interceptor — attach JWT ───────────────────────────────────────
