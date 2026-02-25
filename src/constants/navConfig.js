@@ -31,6 +31,7 @@ export const NAV_CONFIG = {
     { path: '/manager/teachers',            label: 'Teachers',           icon: 'academic' },
     { path: '/manager/students',            label: 'Students',           icon: 'users' },
     { path: '/manager/classes',             label: 'Classes & Sections', icon: 'grid' },
+    { path: '/manager/analytics',           label: 'Analytics',          icon: 'chart' },
     { path: '/manager/profile',             label: 'Profile',            icon: 'user' },
   ],
 

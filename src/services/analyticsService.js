@@ -20,3 +20,15 @@ export const getStudentGPAReport         = ()                            => api.
 export const getStudentModulePerformance = ()                            => api.get('/api/analytics/student/module-performance').then(r => r.data);
 export const getStudentClassRanks        = (term)                        => api.get('/api/analytics/student/class-ranks', { params: { term } }).then(r => r.data);
 export const getStudentVsClassAverage    = (term)                        => api.get('/api/analytics/student/vs-class-average', { params: { term } }).then(r => r.data);
+
+// ── Manager Analytics ─────────────────────────────────────────────────────────
+export const getManagerSchoolOverview        = ()                            => api.get('/api/analytics/manager/school-overview').then(r => r.data);
+export const getManagerPerformanceByCluster  = (term)                        => api.get('/api/analytics/manager/performance-by-cluster', { params: { term } }).then(r => r.data);
+export const getManagerPerformanceBySection  = (term)                        => api.get('/api/analytics/manager/performance-by-section', { params: { term } }).then(r => r.data);
+export const getManagerPerformanceBySubject  = (term)                        => api.get('/api/analytics/manager/performance-by-subject', { params: { term } }).then(r => r.data);
+export const getManagerClassRankings         = (term)                        => api.get('/api/analytics/manager/class-rankings', { params: { term } }).then(r => r.data);
+export const getManagerTermTrend             = ()                            => api.get('/api/analytics/manager/term-trend').then(r => r.data);
+export const getManagerGPADistribution       = (term)                        => api.get('/api/analytics/manager/gpa-distribution', { params: { term } }).then(r => r.data);
+export const getManagerTopStudents           = (term, count = 10)            => api.get('/api/analytics/manager/top-students', { params: { term, count } }).then(r => r.data);
+export const getManagerTeacherPerformance    = (term)                        => api.get('/api/analytics/manager/teacher-performance', { params: { term } }).then(r => r.data);
+export const getManagerAcademicYearComparison = ()                           => api.get('/api/analytics/manager/academic-year-comparison').then(r => r.data);
