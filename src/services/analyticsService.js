@@ -32,3 +32,4 @@ export const getManagerGPADistribution       = (term)                        => 
 export const getManagerTopStudents           = (term, count = 10)            => api.get('/api/analytics/manager/top-students', { params: { term, count } }).then(r => r.data);
 export const getManagerTeacherPerformance    = (term)                        => api.get('/api/analytics/manager/teacher-performance', { params: { term } }).then(r => r.data);
 export const getManagerAcademicYearComparison = ()                           => api.get('/api/analytics/manager/academic-year-comparison').then(r => r.data);
+export const getManagerModulePerformance     = ()                           => api.get('/api/analytics/manager/module-performance').then(r => r.data);
