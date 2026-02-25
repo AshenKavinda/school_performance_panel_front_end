@@ -55,6 +55,7 @@ export const NAV_CONFIG = {
     { path: '/teacher/assignments',         label: 'My Assignments',     icon: 'assignment' },
     { path: '/teacher/students',            label: 'Class Students',     icon: 'users' },
     { path: '/teacher/mark-entry',          label: 'Mark Entry',         icon: 'edit' },
+    { path: '/teacher/analytics',           label: 'Analytics',          icon: 'chart' },
     { path: '/teacher/profile',             label: 'Profile',            icon: 'user' },
   ],
 

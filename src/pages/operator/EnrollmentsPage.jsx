@@ -317,14 +317,14 @@ const EnrollmentsPage = () => {
 
   useEffect(() => { fetchElectClassStudents(electClassId); }, [electClassId, fetchElectClassStudents]);
 
-  const handleEnrollCommonSubjects = async () => {
+  const handleSyncCommonSubjects = async () => {
     if (!subjClassId || !selectedSubjIds.length) return;
     setEnrollingSubjects(true);
     try {
       await enrollClassCommonSubjects({ classId: subjClassId, subjectIds: selectedSubjIds });
-      success('Class enrolled to common subjects');
+      success('Common subjects synced successfully');
       setSelectedSubjIds([]);
-      fetchClassSubjects(subjClassId); // refresh currently-enrolled list
+      fetchClassSubjects(subjClassId);
     } catch (e) {
       toastError(parseApiError(e));
     } finally {
@@ -657,8 +657,8 @@ const EnrollmentsPage = () => {
           {/* Common subjects */}
           <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-800">Enroll Class to Common Subjects</h3>
-              <p className="text-xs text-gray-400 mt-0.5">All enrolled students in the class will be added to the selected subjects.</p>
+              <h3 className="text-sm font-semibold text-gray-800">Sync Common Subjects</h3>
+              <p className="text-xs text-gray-400 mt-0.5">Select all subjects that should be common for this class, then sync. Students will be added to new subjects and removed from deselected ones.</p>
             </div>
             <div className="flex flex-wrap gap-3 items-end">
               <select value={subjClassId} onChange={(e) => { setSubjClassId(e.target.value); setSelectedSubjIds([]); setRmvCommonSubjIds(new Set()); }}
@@ -676,94 +676,46 @@ const EnrollmentsPage = () => {
                   {loadingClassSubjects ? (
                     <div className="flex items-center justify-center py-4"><LoadingSpinner /></div>
                   ) : currentClassSubjects.length === 0 ? (
-                    <p className="text-xs text-gray-400 italic">No subjects enrolled for this class yet.</p>
+                    <p className="text-xs text-gray-400 italic">No common subjects enrolled for this class yet.</p>
                   ) : (
-                    <>
-                      <div className="flex flex-wrap gap-2">
-                        {currentClassSubjects.map((sub) => {
-                          const selected = rmvCommonSubjIds.has(String(sub.subjectId));
-                          return (
-                            <button
-                              key={sub.subjectId}
-                              type="button"
-                              onClick={() => toggleRmvCommonSubj(sub.subjectId)}
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition cursor-pointer ${
-                                selected
-                                  ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
-                                  : 'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200'
-                              }`}
-                            >
-                              <span className={`w-1.5 h-1.5 rounded-full ${selected ? 'bg-red-500' : 'bg-teal-500'}`} />
-                              {sub.subjectName}
-                              <span className={`text-[10px] ${selected ? 'text-red-500' : 'text-teal-500'}`}>{sub.creditValue}cr</span>
-                              {selected && (
-                                <svg className="w-3 h-3 text-red-500 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                              )}
-                            </button>
-                          );
-                        })}
-                      </div>
-                      {rmvCommonSubjIds.size > 0 && (
-                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
-                          <span className="text-xs text-red-600 font-medium">
-                            {rmvCommonSubjIds.size} subject{rmvCommonSubjIds.size !== 1 ? 's' : ''} selected for removal
-                          </span>
-                          <div className="flex gap-2">
-                            <button
-                              onClick={() => setRmvCommonSubjIds(new Set())}
-                              className="text-xs text-gray-500 hover:text-gray-700 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              onClick={handleRemoveCommonSubjects}
-                              disabled={removingCommonSubjects}
-                              className="text-xs text-white bg-red-600 hover:bg-red-700 font-medium px-3 py-1 rounded-lg disabled:opacity-50 transition"
-                            >
-                              {removingCommonSubjects ? 'Removing…' : 'Remove Selected'}
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                      <p className="text-[10px] text-gray-400 mt-2">Click on a subject to select it for removal.</p>
-                    </>
+                    <div className="flex flex-wrap gap-2">
+                      {currentClassSubjects.map((sub) => (
+                        <span
+                          key={sub.subjectId}
+                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-teal-100 text-teal-800 border-teal-200"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
+                          {sub.subjectName}
+                          <span className="text-[10px] text-teal-500">{sub.creditValue}cr</span>
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
 
                 <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">Select subjects to enroll:</p>
+                  <p className="text-xs font-medium text-gray-600 mb-2">Select subjects to sync as common:</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
-                    {subjects.map((sub) => {
-                      const alreadyEnrolled = currentClassSubjects.some(cs => cs.subjectId === sub.id);
-                      return (
-                        <label key={sub.id} className={`flex items-center gap-2 p-2 rounded-lg border transition ${
-                          alreadyEnrolled
-                            ? 'border-teal-200 bg-teal-50 opacity-60 cursor-not-allowed'
-                            : 'border-gray-100 hover:bg-teal-50 cursor-pointer'
-                        }`}>
-                          <input
-                            type="checkbox"
-                            checked={selectedSubjIds.includes(String(sub.id)) || alreadyEnrolled}
-                            onChange={() => !alreadyEnrolled && toggleSubj(sub.id)}
-                            disabled={alreadyEnrolled}
-                            className="rounded text-teal-600 focus:ring-teal-400 disabled:opacity-50"
-                          />
-                          <span className="text-sm text-gray-700">{sub.name}</span>
-                          {alreadyEnrolled && <span className="ml-auto text-[10px] text-teal-600 font-medium">Enrolled</span>}
-                          {!alreadyEnrolled && <span className="ml-auto text-xs text-gray-400">{sub.creditValue}cr</span>}
-                        </label>
-                      );
-                    })}
+                    {subjects.map((sub) => (
+                      <label key={sub.id} className="flex items-center gap-2 p-2 rounded-lg border border-gray-100 hover:bg-teal-50 cursor-pointer transition">
+                        <input
+                          type="checkbox"
+                          checked={selectedSubjIds.includes(String(sub.id))}
+                          onChange={() => toggleSubj(sub.id)}
+                          className="rounded text-teal-600 focus:ring-teal-400"
+                        />
+                        <span className="text-sm text-gray-700">{sub.name}</span>
+                        <span className="ml-auto text-xs text-gray-400">{sub.creditValue}cr</span>
+                      </label>
+                    ))}
                   </div>
                 </div>
                 <button
-                  onClick={handleEnrollCommonSubjects}
+                  onClick={handleSyncCommonSubjects}
                   disabled={!selectedSubjIds.length || enrollingSubjects}
                   className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition"
                 >
-                  {enrollingSubjects ? 'Enrolling…' : `Enroll to ${selectedSubjIds.length} Subject${selectedSubjIds.length !== 1 ? 's' : ''}`}
+                  {enrollingSubjects ? 'Syncing…' : `Sync ${selectedSubjIds.length} Subject${selectedSubjIds.length !== 1 ? 's' : ''}`}
                 </button>
               </>
             )}
@@ -915,8 +867,6 @@ const EnrollmentsPage = () => {
                         {electClassStudents.map((stu, idx) => {
                           const sid = stu.studentId ?? stu.id;
                           const stuSubs = electStudentSubjects[sid] ?? [];
-                          // Filter to elective-only: exclude common subjects
-                          const electiveSubs = stuSubs.filter(s => !electClassCommonSubjectIds.has(s.subjectId));
                           return (
                             <tr key={sid} className="border-b border-gray-100 hover:bg-white transition">
                               <td className="px-3 py-2 text-xs text-gray-400">{idx + 1}</td>
@@ -925,16 +875,26 @@ const EnrollmentsPage = () => {
                               <td className="px-3 py-2">
                                 {loadingElectSubjects ? (
                                   <span className="text-xs text-gray-400">Loading…</span>
-                                ) : electiveSubs.length === 0 ? (
-                                  <span className="text-xs text-gray-400 italic">No elective subjects</span>
+                                ) : stuSubs.length === 0 ? (
+                                  <span className="text-xs text-gray-400 italic">No subjects enrolled</span>
                                 ) : (
                                   <div className="flex flex-wrap gap-1">
-                                    {electiveSubs.map((sub) => (
-                                      <span key={sub.subjectId} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 text-[11px] font-medium border border-indigo-200">
-                                        {sub.subjectName}
-                                        <span className="text-indigo-400 text-[9px]">{sub.creditValue}cr</span>
-                                      </span>
-                                    ))}
+                                    {stuSubs.map((sub) => {
+                                      const isCommon = electClassCommonSubjectIds.has(sub.subjectId);
+                                      return (
+                                        <span
+                                          key={sub.subjectId}
+                                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${
+                                            isCommon
+                                              ? 'bg-gray-100 text-gray-600 border-gray-200'
+                                              : 'bg-indigo-100 text-indigo-700 border-indigo-200'
+                                          }`}
+                                        >
+                                          {sub.subjectName}
+                                          <span className={`text-[9px] ${isCommon ? 'text-gray-400' : 'text-indigo-400'}`}>{sub.creditValue}cr</span>
+                                        </span>
+                                      );
+                                    })}
                                   </div>
                                 )}
                               </td>

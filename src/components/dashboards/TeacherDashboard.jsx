@@ -6,6 +6,7 @@ import TeacherTimetable      from '../../pages/teacher/TeacherTimetable';
 import MyAssignments         from '../../pages/teacher/MyAssignments';
 import ClassStudents         from '../../pages/teacher/ClassStudents';
 import MarkEntry             from '../../pages/teacher/MarkEntry';
+import TeacherAnalytics      from '../../pages/teacher/TeacherAnalytics';
 import TeacherProfilePage    from '../../pages/teacher/TeacherProfilePage';
 
 const TeacherDashboard = () => (
@@ -18,6 +19,7 @@ const TeacherDashboard = () => (
         <Route path="assignments"       element={<MyAssignments />} />
         <Route path="students"          element={<ClassStudents />} />
         <Route path="mark-entry"        element={<MarkEntry />} />
+        <Route path="analytics"         element={<TeacherAnalytics />} />
         <Route path="profile"           element={<TeacherProfilePage />} />
       </Routes>
     </DashboardLayout>
