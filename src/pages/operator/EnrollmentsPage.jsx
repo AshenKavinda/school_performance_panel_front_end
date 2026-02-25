@@ -6,8 +6,8 @@ import {
 import { useOperator } from '../../context/OperatorContext';
 import {
   getClassStudents, enrollStudentToClass, removeStudentFromClass,
-  enrollClassCommonSubjects, enrollElectiveSubject, getStudentSubjects,
-  removeStudentFromSubject, bulkEnrollClass,
+  enrollClassCommonSubjects, removeClassCommonSubjects, enrollElectiveSubject,
+  getStudentSubjects, removeStudentFromSubject, bulkEnrollClass,
 } from '../../services/enrollmentService';
 import { useToast }      from '../../context/ToastContext';
 import { parseApiError } from '../../utils/validation';
@@ -76,6 +76,8 @@ const EnrollmentsPage = () => {
   const [enrollingSubjects,       setEnrollingSubjects]       = useState(false);
   const [currentClassSubjects,    setCurrentClassSubjects]    = useState([]);   // currently enrolled subjects for selected class
   const [loadingClassSubjects,    setLoadingClassSubjects]    = useState(false);
+  const [rmvCommonSubjIds,        setRmvCommonSubjIds]        = useState(new Set());  // selected for removal
+  const [removingCommonSubjects,  setRemovingCommonSubjects]  = useState(false);
 
   // Elective enrollment state
   const [electSubjectId,  setElectSubjectId]  = useState('');
@@ -327,6 +329,34 @@ const EnrollmentsPage = () => {
       toastError(parseApiError(e));
     } finally {
       setEnrollingSubjects(false);
+    }
+  };
+
+  // ── Remove common subjects from class ────────────────────────────────────
+  const toggleRmvCommonSubj = (id) => {
+    const sid = String(id);
+    setRmvCommonSubjIds(prev => {
+      const next = new Set(prev);
+      if (next.has(sid)) next.delete(sid); else next.add(sid);
+      return next;
+    });
+  };
+
+  const handleRemoveCommonSubjects = async () => {
+    if (!subjClassId || rmvCommonSubjIds.size === 0) return;
+    setRemovingCommonSubjects(true);
+    try {
+      const res = await removeClassCommonSubjects({ classId: subjClassId, subjectIds: [...rmvCommonSubjIds] });
+      const msg = res?.successCount != null
+        ? `Removed ${res.successCount} subject${res.successCount !== 1 ? 's' : ''} successfully${res.failureCount ? ` (${res.failureCount} failed)` : ''}`
+        : 'Common subjects removed from class';
+      success(msg);
+      setRmvCommonSubjIds(new Set());
+      fetchClassSubjects(subjClassId);
+    } catch (e) {
+      toastError(parseApiError(e));
+    } finally {
+      setRemovingCommonSubjects(false);
     }
   };
 
@@ -631,7 +661,7 @@ const EnrollmentsPage = () => {
               <p className="text-xs text-gray-400 mt-0.5">All enrolled students in the class will be added to the selected subjects.</p>
             </div>
             <div className="flex flex-wrap gap-3 items-end">
-              <select value={subjClassId} onChange={(e) => { setSubjClassId(e.target.value); setSelectedSubjIds([]); }}
+              <select value={subjClassId} onChange={(e) => { setSubjClassId(e.target.value); setSelectedSubjIds([]); setRmvCommonSubjIds(new Set()); }}
                 className="flex-1 min-w-[220px] px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
                 <option value="">Select a class…</option>
                 {classes.map((c) => <option key={c.id} value={c.id}>{c.name}{c.academicYear ? ` (${c.academicYear})` : ''}</option>)}
@@ -648,15 +678,57 @@ const EnrollmentsPage = () => {
                   ) : currentClassSubjects.length === 0 ? (
                     <p className="text-xs text-gray-400 italic">No subjects enrolled for this class yet.</p>
                   ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {currentClassSubjects.map((sub) => (
-                        <span key={sub.subjectId} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-teal-100 text-teal-800 text-xs font-medium border border-teal-200">
-                          <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
-                          {sub.subjectName}
-                          <span className="text-teal-500 text-[10px]">{sub.creditValue}cr</span>
-                        </span>
-                      ))}
-                    </div>
+                    <>
+                      <div className="flex flex-wrap gap-2">
+                        {currentClassSubjects.map((sub) => {
+                          const selected = rmvCommonSubjIds.has(String(sub.subjectId));
+                          return (
+                            <button
+                              key={sub.subjectId}
+                              type="button"
+                              onClick={() => toggleRmvCommonSubj(sub.subjectId)}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border transition cursor-pointer ${
+                                selected
+                                  ? 'bg-red-100 text-red-800 border-red-300 ring-2 ring-red-200'
+                                  : 'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200'
+                              }`}
+                            >
+                              <span className={`w-1.5 h-1.5 rounded-full ${selected ? 'bg-red-500' : 'bg-teal-500'}`} />
+                              {sub.subjectName}
+                              <span className={`text-[10px] ${selected ? 'text-red-500' : 'text-teal-500'}`}>{sub.creditValue}cr</span>
+                              {selected && (
+                                <svg className="w-3 h-3 text-red-500 ml-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      {rmvCommonSubjIds.size > 0 && (
+                        <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-200">
+                          <span className="text-xs text-red-600 font-medium">
+                            {rmvCommonSubjIds.size} subject{rmvCommonSubjIds.size !== 1 ? 's' : ''} selected for removal
+                          </span>
+                          <div className="flex gap-2">
+                            <button
+                              onClick={() => setRmvCommonSubjIds(new Set())}
+                              className="text-xs text-gray-500 hover:text-gray-700 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              onClick={handleRemoveCommonSubjects}
+                              disabled={removingCommonSubjects}
+                              className="text-xs text-white bg-red-600 hover:bg-red-700 font-medium px-3 py-1 rounded-lg disabled:opacity-50 transition"
+                            >
+                              {removingCommonSubjects ? 'Removing…' : 'Remove Selected'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      <p className="text-[10px] text-gray-400 mt-2">Click on a subject to select it for removal.</p>
+                    </>
                   )}
                 </div>
 
@@ -822,7 +894,7 @@ const EnrollmentsPage = () => {
             {electClassId && (
               <div className="bg-gray-50 rounded-lg border border-gray-100 p-3 mt-2">
                 <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
-                  Students & Their Elective Subjects
+                  Students & Their Subjects
                 </p>
                 {loadingElectStudents ? (
                   <div className="flex items-center justify-center py-6"><LoadingSpinner /></div>
@@ -836,7 +908,7 @@ const EnrollmentsPage = () => {
                           <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
                           <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student</th>
                           <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Elective Subjects</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Subjects</th>
                         </tr>
                       </thead>
                       <tbody>

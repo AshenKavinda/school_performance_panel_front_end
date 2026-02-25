@@ -12,6 +12,7 @@ export const getClassStudents         = (classId)                 => api.get(`/a
 
 // ── Subject Enrollments ──────────────────────────────────────────────────────
 export const enrollClassCommonSubjects  = (dto)                              => api.post('/api/enrollments/subjects/class-common', dto).then(r => r.data);
+export const removeClassCommonSubjects  = (dto)                              => api.delete('/api/enrollments/subjects/class-common', { data: dto }).then(r => r.data);
 export const enrollElectiveSubject      = (dto)                              => api.post('/api/enrollments/subjects/elective', dto).then(r => r.data);
 export const enrollSingleSubject        = ({ studentId, subjectId, sectionId }) => api.post('/api/enrollments/subjects/single', null, { params: { studentId, subjectId, sectionId } }).then(r => r.data);
 export const getSubjectStudents         = (subjectId, sectionId)             => api.get(`/api/enrollments/subject/${subjectId}/section/${sectionId}/students`).then(r => r.data);

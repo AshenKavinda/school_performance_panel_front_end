@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { getTeacherAssignments, getSubjectStudents } from '../../services/enrollmentService';
-import { getClassesBySection } from '../../services/managementService';
+import { getTeacherAssignments } from '../../services/enrollmentService';
+import { getClassesBySection, getStudentsByClassAndSubject } from '../../services/managementService';
 import { useTeacher } from '../../context/TeacherContext';
 import { useToast } from '../../context/ToastContext';
 import { parseApiError } from '../../utils/validation';
@@ -19,7 +19,7 @@ const ClassStudents = () => {
   const [selectedSubject, setSelectedSubject] = useState('');
 
   const [students, setStudents]       = useState([]);
-  const [subjectInfo, setSubjectInfo] = useState(null);
+  const [subjectName, setSubjectName] = useState('');
 
   const [loadingInit, setLoadingInit]       = useState(true);
   const [loadingStudents, setLoadingStudents] = useState(false);
@@ -58,22 +58,17 @@ const ClassStudents = () => {
 
   useEffect(() => { fetchAssignments(); }, [fetchAssignments]);
 
-  // Fetch students when section and subject are selected
-  const fetchStudents = useCallback(async (subjectId, sectionId) => {
-    if (!subjectId || !sectionId) { setStudents([]); setSubjectInfo(null); return; }
+  // Fetch students by classId + subjectId
+  const fetchStudents = useCallback(async (classId, subjectId, subName) => {
+    if (!classId || !subjectId) { setStudents([]); setSubjectName(''); return; }
     setLoadingStudents(true);
     try {
-      const data = await getSubjectStudents(subjectId, sectionId);
-      setStudents(Array.isArray(data?.students) ? data.students : []);
-      setSubjectInfo({
-        subjectName: data?.subjectName,
-        sectionName: data?.sectionName,
-        creditValue: data?.creditValue,
-      });
+      const data = await getStudentsByClassAndSubject(classId, subjectId);
+      setStudents(Array.isArray(data) ? data : []);
+      setSubjectName(subName ?? '');
     } catch (e) {
       if (e?.response?.status === 404) {
         setStudents([]);
-        setSubjectInfo(null);
       } else {
         toastError(parseApiError(e));
       }
@@ -88,7 +83,7 @@ const ClassStudents = () => {
     setSelectedClass('');
     setSelectedSubject('');
     setStudents([]);
-    setSubjectInfo(null);
+    setSubjectName('');
   };
 
   const handleClassChange = (e) => {
@@ -96,17 +91,18 @@ const ClassStudents = () => {
     setSelectedClass(val);
     setSelectedSubject('');
     setStudents([]);
-    setSubjectInfo(null);
+    setSubjectName('');
   };
 
   const handleSubjectChange = (e) => {
     const val = e.target.value;
     setSelectedSubject(val);
-    if (val && selectedSection) {
-      fetchStudents(val, selectedSection);
+    if (val && selectedClass) {
+      const subObj = subjects.find(s => s.subjectId === val);
+      fetchStudents(selectedClass, val, subObj?.subjectName ?? '');
     } else {
       setStudents([]);
-      setSubjectInfo(null);
+      setSubjectName('');
     }
   };
 
@@ -118,9 +114,10 @@ const ClassStudents = () => {
   const selectedClassObj = currentSectionClasses.find(c => c.id === selectedClass) ?? null;
 
   const columns = [
-    { key: 'idx', header: '#', render: (_, __, i) => <span className="text-xs text-gray-400">{i + 1}</span>, className: 'w-12' },
-    { key: 'studentName', header: 'Student Name', render: (_, row) => <span className="font-medium text-gray-800">{row.studentName ?? '—'}</span> },
-    { key: 'indexNumber', header: 'Index Number', render: (_, row) => <span className="text-gray-600">{row.indexNumber ?? '—'}</span> },
+    { key: 'id',          header: '#',             render: (row) => <span className="text-xs text-gray-400">{students.indexOf(row) + 1}</span>, className: 'w-12' },
+    { key: 'firstName',   header: 'Student Name',  render: (row) => <span className="font-medium text-gray-800">{[row.firstName, row.lastName].filter(Boolean).join(' ') || row.studentName || '—'}</span> },
+    { key: 'globalStudentCode', header: 'Student Code', render: (row) => <span className="text-gray-600">{row.globalStudentCode ?? '—'}</span> },
+    { key: 'indexNumber', header: 'Index Number',  render: (row) => <span className="text-gray-600">{row.indexNumber ?? '—'}</span> },
   ];
 
   return (
@@ -190,7 +187,7 @@ const ClassStudents = () => {
       </div>
 
       {/* Info badges */}
-      {(selectedClassObj || subjectInfo) && (
+      {(selectedClassObj || subjectName) && (
         <div className="flex flex-wrap gap-2">
           {selectedClassObj && (
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
@@ -206,14 +203,9 @@ const ClassStudents = () => {
               {selectedClassObj.classType === 'SUBJECT_BASE' ? 'Subject Base' : 'Module Base'}
             </span>
           )}
-          {subjectInfo?.subjectName && (
+          {subjectName && (
             <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
-              {subjectInfo.subjectName}
-            </span>
-          )}
-          {subjectInfo?.sectionName && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
-              {subjectInfo.sectionName}
+              {subjectName}
             </span>
           )}
         </div>
@@ -225,8 +217,8 @@ const ClassStudents = () => {
           columns={columns}
           data={students}
           loading={loadingStudents}
-          emptyMessage="No students enrolled for this subject in the selected section."
-          rowKey={(row) => row.studentId}
+          emptyMessage="No students enrolled for this subject in the selected class."
+          rowKey={(row) => row.id ?? row.studentId}
         />
       )}
     </div>
