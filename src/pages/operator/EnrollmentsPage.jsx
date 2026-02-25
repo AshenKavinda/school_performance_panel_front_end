@@ -716,23 +716,47 @@ const EnrollmentsPage = () => {
             {subjClassId && (
               <>
                 <div className="bg-gray-50 rounded-lg border border-gray-100 p-3">
-                  <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">Currently Enrolled Subjects</p>
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Currently Enrolled Subjects</p>
+                    {currentClassSubjects.length > 0 && rmvCommonSubjIds.size > 0 && (
+                      <button
+                        onClick={handleRemoveCommonSubjects}
+                        disabled={removingCommonSubjects}
+                        className="px-3 py-1 bg-red-500 text-white text-xs font-medium rounded-lg hover:bg-red-600 disabled:opacity-50 transition"
+                      >
+                        {removingCommonSubjects ? 'Removing…' : `Remove ${rmvCommonSubjIds.size} Subject${rmvCommonSubjIds.size !== 1 ? 's' : ''}`}
+                      </button>
+                    )}
+                  </div>
                   {loadingClassSubjects ? (
                     <div className="flex items-center justify-center py-4"><LoadingSpinner /></div>
                   ) : currentClassSubjects.length === 0 ? (
                     <p className="text-xs text-gray-400 italic">No common subjects enrolled for this class yet.</p>
                   ) : (
                     <div className="flex flex-wrap gap-2">
-                      {currentClassSubjects.map((sub) => (
-                        <span
-                          key={sub.subjectId}
-                          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border bg-teal-100 text-teal-800 border-teal-200"
-                        >
-                          <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
-                          {sub.subjectName}
-                          <span className="text-[10px] text-teal-500">{sub.creditValue}cr</span>
-                        </span>
-                      ))}
+                      {currentClassSubjects.map((sub) => {
+                        const isSelected = rmvCommonSubjIds.has(String(sub.subjectId));
+                        return (
+                          <label
+                            key={sub.subjectId}
+                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border cursor-pointer transition
+                              ${isSelected ? 'bg-red-100 text-red-800 border-red-300' : 'bg-teal-100 text-teal-800 border-teal-200 hover:bg-teal-200'}`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onChange={() => toggleRmvCommonSubj(sub.subjectId)}
+                              className="sr-only"
+                            />
+                            {isSelected && (
+                              <svg className="w-3 h-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                            )}
+                            {!isSelected && <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />}
+                            {sub.subjectName}
+                            <span className={`text-[10px] ${isSelected ? 'text-red-500' : 'text-teal-500'}`}>{sub.creditValue}cr</span>
+                          </label>
+                        );
+                      })}
                     </div>
                   )}
                 </div>
