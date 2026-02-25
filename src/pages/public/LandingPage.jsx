@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from '../../components/common/ThemeToggle';
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 const AcademicCapIcon = () => (
@@ -52,11 +53,11 @@ const features = [
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30 dark:from-gray-950 dark:to-gray-900">
       {/* ── Navbar ── */}
-      <nav className="bg-white/80 backdrop-blur border-b border-gray-200 sticky top-0 z-30">
+      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-indigo-600 font-bold text-lg">
+          <Link to="/" className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-lg">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
             </svg>
@@ -65,14 +66,15 @@ const LandingPage = () => {
           <div className="flex items-center gap-3">
             <Link
               to="/student-lookup"
-              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 hover:text-indigo-600 transition"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-gray-600 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
             >
               <SearchIcon />
               Student Lookup
             </Link>
+            <ThemeToggle className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" size="sm" />
             <Link
               to="/login"
-              className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition"
+              className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
             >
               Sign In
             </Link>
@@ -89,11 +91,11 @@ const LandingPage = () => {
       {/* ── Hero Section ── */}
       <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-20 sm:pt-24 sm:pb-28">
         <div className="text-center max-w-3xl mx-auto">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 tracking-tight leading-tight">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-tight">
             Empowering Schools with
-            <span className="text-indigo-600"> Data-Driven Insights</span>
+            <span className="text-indigo-600 dark:text-indigo-400"> Data-Driven Insights</span>
           </h1>
-          <p className="mt-5 text-lg text-gray-500 max-w-2xl mx-auto">
+          <p className="mt-5 text-lg text-gray-500 dark:text-gray-400 max-w-2xl mx-auto">
             A comprehensive school performance management system that connects administrators, 
             teachers, students, and parents through transparent academic tracking and analytics.
           </p>
@@ -124,13 +126,13 @@ const LandingPage = () => {
           {features.map((f, i) => (
             <div
               key={i}
-              className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-md hover:border-indigo-200 transition group"
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 hover:shadow-md hover:border-indigo-200 dark:hover:border-indigo-700 transition group"
             >
-              <div className="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4 group-hover:bg-indigo-100 transition">
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mb-4 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900/60 transition">
                 {f.icon}
               </div>
-              <h3 className="text-base font-semibold text-gray-800 mb-1">{f.title}</h3>
-              <p className="text-sm text-gray-500">{f.desc}</p>
+              <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-1">{f.title}</h3>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{f.desc}</p>
             </div>
           ))}
         </div>
@@ -148,7 +150,7 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Link
               to="/register?tab=school"
-              className="px-6 py-3 text-base font-medium text-indigo-600 bg-white hover:bg-indigo-50 rounded-xl transition shadow"
+              className="px-6 py-3 text-base font-medium text-indigo-600 dark:text-indigo-400 bg-white dark:bg-gray-800 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-xl transition shadow"
             >
               Register as School
             </Link>
@@ -163,7 +165,7 @@ const LandingPage = () => {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-gray-900 text-gray-400 py-8">
+      <footer className="bg-gray-900 dark:bg-gray-950 text-gray-400 py-8">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm">
           <p>&copy; {new Date().getFullYear()} School Performance Panel. All rights reserved.</p>
           <div className="flex items-center gap-4">

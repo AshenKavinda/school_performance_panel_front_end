@@ -17,7 +17,7 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 const Tab = ({ label, active, onClick }) => (
   <button onClick={onClick}
     className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
-      active ? 'bg-teal-600 text-white shadow-sm' : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+      active ? 'bg-teal-600 dark:bg-teal-700 text-white shadow-sm' : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
     }`}
   >
     {label}
@@ -170,7 +170,7 @@ const TeacherAssignmentsPage = () => {
       />
 
       {/* Tab switcher */}
-      <div className="flex gap-2 bg-white rounded-xl border border-gray-200 p-2 w-fit">
+      <div className="flex gap-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-2 w-fit">
         <Tab label="Subject Assignments" active={tab === 'subjects'} onClick={() => setTab('subjects')} />
         <Tab label="Section Assignments" active={tab === 'sections'} onClick={() => setTab('sections')} />
       </div>
@@ -178,7 +178,7 @@ const TeacherAssignmentsPage = () => {
       {/* ── SUBJECT ASSIGNMENTS ───────────────────────────────────────────── */}
       {tab === 'subjects' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Select Teacher</label>
             <select value={tchSubjId} onChange={(e) => { setTchSubjId(e.target.value); setAddSubjectId(''); }}
               className="w-full sm:w-80 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
@@ -190,7 +190,7 @@ const TeacherAssignmentsPage = () => {
           {tchSubjId && (
             <>
               {/* Assign subject */}
-              <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Assign to Subject</h3>
                 <div className="flex flex-wrap gap-3 items-end">
                   <select value={addSubjectId} onChange={(e) => setAddSubjectId(e.target.value)}
@@ -206,8 +206,8 @@ const TeacherAssignmentsPage = () => {
               </div>
 
               {/* Assigned subjects list */}
-              <div className="bg-white rounded-xl border border-gray-200">
-                <div className="px-5 py-4 border-b border-gray-100">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                   <h3 className="text-sm font-semibold text-gray-700">
                     Assigned Subjects
                     {!subjListLoading && <span className="ml-2 text-xs text-gray-400 font-normal">({tchSubjList.length})</span>}
@@ -218,15 +218,15 @@ const TeacherAssignmentsPage = () => {
                 ) : tchSubjList.length === 0 ? (
                   <div className="text-center py-10 text-sm text-gray-400">No subjects assigned to this teacher yet.</div>
                 ) : (
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-gray-100 dark:divide-gray-700">
                     {tchSubjList.map((sub) => {
                       const subId = sub.id ?? sub.subjectId;
                       const subName = sub.name ?? subjects.find(s => String(s.id) === String(subId))?.name ?? subId;
                       return (
-                        <li key={subId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition">
-                          <span className="text-sm font-medium text-gray-800">{subName}</span>
+                        <li key={subId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{subName}</span>
                           <button onClick={() => handleRemoveSubject(subId)}
-                            className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition">
+                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition">
                             Remove
                           </button>
                         </li>
@@ -239,7 +239,7 @@ const TeacherAssignmentsPage = () => {
           )}
 
           {!tchSubjId && (
-            <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-10 text-center text-sm text-gray-400">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 py-10 text-center text-sm text-gray-400">
               Select a teacher above to manage subject assignments.
             </div>
           )}
@@ -249,7 +249,7 @@ const TeacherAssignmentsPage = () => {
       {/* ── SECTION ASSIGNMENTS ───────────────────────────────────────────── */}
       {tab === 'sections' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">Select Teacher</label>
             <select value={tchSectId} onChange={(e) => { setTchSectId(e.target.value); setAddSectionId(''); }}
               className="w-full sm:w-80 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
@@ -260,7 +260,7 @@ const TeacherAssignmentsPage = () => {
 
           {tchSectId && (
             <>
-              <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Assign to Section</h3>
                 <div className="flex flex-wrap gap-3 items-end">
                   <select value={addSectionId} onChange={(e) => setAddSectionId(e.target.value)}
@@ -275,8 +275,8 @@ const TeacherAssignmentsPage = () => {
                 </div>
               </div>
 
-              <div className="bg-white rounded-xl border border-gray-200">
-                <div className="px-5 py-4 border-b border-gray-100">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                   <h3 className="text-sm font-semibold text-gray-700">
                     Assigned Sections
                     {!sectListLoading && <span className="ml-2 text-xs text-gray-400 font-normal">({tchSectList.length})</span>}
@@ -287,15 +287,15 @@ const TeacherAssignmentsPage = () => {
                 ) : tchSectList.length === 0 ? (
                   <div className="text-center py-10 text-sm text-gray-400">No sections assigned to this teacher yet.</div>
                 ) : (
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-gray-100 dark:divide-gray-700">
                     {tchSectList.map((sec) => {
                       const secId = sec.id ?? sec.sectionId;
                       const secName = sec.name ?? sections.find(s => String(s.id) === String(secId))?.name ?? secId;
                       return (
-                        <li key={secId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition">
-                          <span className="text-sm font-medium text-gray-800">{secName}</span>
+                        <li key={secId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                          <span className="text-sm font-medium text-gray-800 dark:text-gray-200">{secName}</span>
                           <button onClick={() => handleRemoveSection(secId)}
-                            className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition">
+                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition">
                             Remove
                           </button>
                         </li>
@@ -308,7 +308,7 @@ const TeacherAssignmentsPage = () => {
           )}
 
           {!tchSectId && (
-            <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-10 text-center text-sm text-gray-400">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 py-10 text-center text-sm text-gray-400">
               Select a teacher above to manage section assignments.
             </div>
           )}

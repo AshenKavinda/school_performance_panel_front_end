@@ -52,7 +52,7 @@ const ViewStudents = () => {
       <PageHeader title="Students" subtitle="All students across your institution" />
 
       {/* Search */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
         <input
           type="text"
           value={search}
@@ -68,15 +68,15 @@ const ViewStudents = () => {
       ) : error ? (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
       ) : filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center text-sm text-gray-400">
           {search ? 'No students match your search.' : 'No students found.'}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="bg-gray-50 border-b border-gray-200 text-left text-gray-500">
+                <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                   <th className="py-3 px-4 font-medium">#</th>
                   <th className="py-3 px-4 font-medium">First Name</th>
                   <th className="py-3 px-4 font-medium">Last Name</th>
@@ -90,8 +90,8 @@ const ViewStudents = () => {
                 {filtered.map((s, i) => (
                   <tr key={s.id} className="border-b border-gray-100 hover:bg-indigo-50/40 transition">
                     <td className="py-3 px-4 text-gray-400">{i + 1}</td>
-                    <td className="py-3 px-4 font-medium text-gray-800">{s.firstName ?? '—'}</td>
-                    <td className="py-3 px-4 font-medium text-gray-800">{s.lastName ?? '—'}</td>
+                    <td className="py-3 px-4 font-medium text-gray-800 dark:text-gray-200">{s.firstName ?? '—'}</td>
+                    <td className="py-3 px-4 font-medium text-gray-800 dark:text-gray-200">{s.lastName ?? '—'}</td>
                     <td className="py-3 px-4 text-gray-600">{s.email ?? '—'}</td>
                     <td className="py-3 px-4 text-gray-600">{s.indexNumber ?? '—'}</td>
                     <td className="py-3 px-4 text-gray-600">{s.phone ?? '—'}</td>

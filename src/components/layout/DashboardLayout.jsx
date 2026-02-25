@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { NAV_CONFIG } from '../../constants/navConfig';
+import ThemeToggle from '../common/ThemeToggle';
 
 // ── SVG icon library ──────────────────────────────────────────────────────────
 const ICONS = {
@@ -175,7 +176,7 @@ const DashboardLayout = ({ children, title }) => {
   const closeSidebar = () => setSidebarOpen(false);
 
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
+    <div className="flex h-screen bg-gray-100 dark:bg-gray-950 overflow-hidden">
       {/* ── Mobile overlay ─────────────────────────────── */}
       {sidebarOpen && (
         <div
@@ -189,7 +190,7 @@ const DashboardLayout = ({ children, title }) => {
         className={`
           fixed lg:static inset-y-0 left-0 z-30
           w-64 flex flex-col
-          bg-gray-900 text-gray-100
+          bg-gray-900 dark:bg-gray-900 text-gray-100
           transform transition-transform duration-300 ease-in-out
           ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         `}
@@ -267,23 +268,24 @@ const DashboardLayout = ({ children, title }) => {
       {/* ── Main content area ───────────────────────────── */}
       <div className="flex-1 flex flex-col overflow-hidden min-w-0">
         {/* Top bar */}
-        <header className="bg-white border-b border-gray-200 px-4 sm:px-6 h-[60px] flex items-center justify-between flex-shrink-0 gap-4">
+        <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-4 sm:px-6 h-[60px] flex items-center justify-between flex-shrink-0 gap-4">
           <div className="flex items-center gap-3 min-w-0">
             <button
               onClick={() => setSidebarOpen((v) => !v)}
-              className="lg:hidden p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition flex-shrink-0"
+              className="lg:hidden p-2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition flex-shrink-0"
               aria-label="Toggle sidebar"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
-            <h1 className="text-base sm:text-lg font-semibold text-gray-800 truncate">
+            <h1 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-gray-100 truncate">
               {title ?? 'Dashboard'}
             </h1>
           </div>
 
           <div className="flex items-center gap-2 flex-shrink-0">
+            <ThemeToggle className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" />
             <span className={`hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${accent.badge}`}>
               {ROLE_LABELS[role] ?? role}
             </span>

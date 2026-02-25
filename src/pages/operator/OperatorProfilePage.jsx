@@ -23,7 +23,7 @@ const ProfileEditFields = ({ form, errors, onChange }) => (
 const Field = ({ label, value }) => (
   <div className="flex flex-col gap-0.5 py-3 border-b border-gray-100 last:border-0">
     <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</span>
-    <span className="text-sm font-semibold text-gray-800">{value ?? '—'}</span>
+    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{value ?? '—'}</span>
   </div>
 );
 
@@ -104,16 +104,16 @@ const OperatorProfilePage = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
         {/* Avatar card */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 flex flex-col items-center text-center gap-3">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 flex flex-col items-center text-center gap-3">
           <div className="w-20 h-20 rounded-full bg-teal-100 flex items-center justify-center text-2xl font-bold text-teal-700 select-none">
             {initials}
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-gray-800">{resolvedProfile?.username ?? '—'}</h2>
-            <p className="text-sm text-gray-500">{resolvedProfile?.email ?? '—'}</p>
+            <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-200">{resolvedProfile?.username ?? '—'}</h2>
+            <p className="text-sm text-gray-500 dark:text-gray-400">{resolvedProfile?.email ?? '—'}</p>
           </div>
           <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ${
-            resolvedProfile?.isDeleted ? 'bg-red-100 text-red-700' : 'bg-teal-100 text-teal-700'
+            resolvedProfile?.isDeleted ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400' : 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400'
           }`}>
             {resolvedProfile?.isDeleted ? 'Inactive' : 'Active'}
           </span>
@@ -126,9 +126,9 @@ const OperatorProfilePage = () => {
         </div>
 
         {/* Details card */}
-        <div className="bg-white rounded-xl border border-gray-200 p-6 lg:col-span-2">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 lg:col-span-2">
           <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Account Information</h3>
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-gray-700">
             <Field label="Username"    value={resolvedProfile?.username}          />
             <Field label="Email"       value={resolvedProfile?.email}             />
             <Field label="Phone"       value={resolvedProfile?.phoneNumber}       />
@@ -148,7 +148,7 @@ const OperatorProfilePage = () => {
         title="Edit Profile"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">
               Cancel
             </button>
             <button onClick={handleSave} disabled={saving}

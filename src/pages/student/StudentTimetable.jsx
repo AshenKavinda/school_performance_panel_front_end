@@ -80,7 +80,7 @@ const StudentTimetable = () => {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                 selectedClassId === cls.classId
                   ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30'
               }`}
             >
               {cls.className}
@@ -117,13 +117,13 @@ const StudentTimetable = () => {
                   <div className="space-y-1.5">
                     {entries.map((entry, i) => (
                       <div key={entry.timetableId ?? i}
-                        className="flex items-center gap-3 p-2.5 rounded-lg bg-white/80 border border-white">
+                        className="flex items-center gap-3 p-2.5 rounded-lg bg-white/80 dark:bg-gray-700/80 border border-white dark:border-gray-600">
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${SLOT_COLORS[key]}`}>
                           {entry.timeSlotName ?? (i + 1)}
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-800">{entry.subjectName ?? '—'}</p>
-                          <p className="text-xs text-gray-500">{entry.teacherName ?? '—'}</p>
+                          <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{entry.subjectName ?? '—'}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400">{entry.teacherName ?? '—'}</p>
                         </div>
                         <span className="text-xs text-gray-400 flex-shrink-0 font-mono">
                           {entry.startTime ?? ''} – {entry.endTime ?? ''}
@@ -137,21 +137,21 @@ const StudentTimetable = () => {
           })}
         </div>
       ) : selectedClassId ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <p className="text-sm text-gray-500">No timetable available for this class.</p>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
+          <p className="text-sm text-gray-500 dark:text-gray-400">No timetable available for this class.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
           <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
-          <p className="text-sm text-gray-500">Select a class to view its timetable.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Select a class to view its timetable.</p>
         </div>
       )}
 
       {/* Class info footer */}
       {selectedClass && (
-        <div className="bg-gray-50 rounded-lg border border-gray-100 p-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 p-3 flex flex-wrap items-center gap-4 text-xs text-gray-500">
           <span><strong>Section:</strong> {selectedClass.sectionName ?? '—'}</span>
           <span><strong>Year:</strong> {selectedClass.academicYear ?? '—'}</span>
           <span><strong>Type:</strong> {selectedClass.classType === 'MODULE_BASE' ? 'Module Based' : 'Subject Based'}</span>

@@ -77,12 +77,12 @@ const buildColumns = (onEdit, onDelete) => [
   {
     key: 'username',
     header: 'Username',
-    render: (row) => <span className="font-semibold text-gray-800">{row.username ?? '—'}</span>,
+    render: (row) => <span className="font-semibold text-gray-800 dark:text-gray-200">{row.username ?? '—'}</span>,
   },
   {
     key: 'email',
     header: 'Email',
-    render: (row) => <span className="text-gray-600 text-sm">{row.email ?? '—'}</span>,
+    render: (row) => <span className="text-gray-600 dark:text-gray-400 text-sm">{row.email ?? '—'}</span>,
   },
   {
     key: 'teacherId',
@@ -105,11 +105,11 @@ const buildColumns = (onEdit, onDelete) => [
     render: (row) => (
       <div className="flex items-center gap-2 justify-end">
         <button onClick={() => onEdit(row)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition">
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition">
           Edit
         </button>
         <button onClick={() => onDelete(row)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition">
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition">
           Delete
         </button>
       </div>
@@ -266,16 +266,16 @@ const TeachersPage = () => {
         }
       />
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
         <input type="text" placeholder="Search by username, email, teacher ID or NIC…" value={search} onChange={(e) => setSearch(e.target.value)}
           className="w-full sm:w-96 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent"
         />
       </div>
 
       {fetchErr ? (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">{fetchErr}</div>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl p-4 text-red-700 dark:text-red-400 text-sm">{fetchErr}</div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <DataTable columns={columns} data={filteredRows} loading={loading} emptyMessage="No teachers found." />
         </div>
       )}
@@ -284,7 +284,7 @@ const TeachersPage = () => {
       <Modal open={createOpen} onClose={closeCreate} title="Add Teacher"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
+            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating}
               className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition">
               {creating ? 'Creating…' : 'Create Teacher'}
@@ -299,7 +299,7 @@ const TeachersPage = () => {
       <Modal open={!!editTarget} onClose={closeEdit} title="Edit Teacher"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">Cancel</button>
             <button onClick={handleSave} disabled={saving}
               className="px-4 py-2 bg-teal-600 text-white text-sm font-medium rounded-lg hover:bg-teal-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
@@ -308,9 +308,9 @@ const TeachersPage = () => {
         }
       >
         {editTarget && (
-          <p className="text-xs text-gray-500 mb-4 bg-gray-50 px-3 py-2 rounded-lg">
-            Username: <span className="font-medium text-gray-700">{editTarget.username}</span>
-            {' · '}Email: <span className="font-medium text-gray-700">{editTarget.email}</span>
+          <p className="text-xs text-gray-500 mb-4 bg-gray-50 dark:bg-gray-700/50 px-3 py-2 rounded-lg">
+            Username: <span className="font-medium text-gray-700 dark:text-gray-300">{editTarget.username}</span>
+            {' · '}Email: <span className="font-medium text-gray-700 dark:text-gray-300">{editTarget.email}</span>
           </p>
         )}
         <EditFormFields form={editForm} errors={editErrors} onChange={setField(setEditForm)} />

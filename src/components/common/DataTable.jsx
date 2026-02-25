@@ -73,10 +73,10 @@ const DataTable = ({
   };
 
   return (
-    <div className={`bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden ${className}`}>
+    <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden ${className}`}>
       {/* Error banner */}
       {error && (
-        <div className="flex items-center gap-2 px-4 py-3 bg-red-50 border-b border-red-200 text-red-700 text-sm">
+        <div className="flex items-center gap-2 px-4 py-3 bg-red-50 dark:bg-red-900/30 border-b border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 text-sm">
           <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
           </svg>
@@ -86,14 +86,14 @@ const DataTable = ({
 
       {/* Scrollable wrapper */}
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+          <thead className="bg-gray-50 dark:bg-gray-900/50">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   onClick={col.sortable && onSort ? () => onSort(col.key) : undefined}
-                  className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider whitespace-nowrap ${col.sortable && onSort ? 'cursor-pointer hover:bg-gray-100 select-none' : ''} ${col.className ?? ''}`}
+                  className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider whitespace-nowrap ${col.sortable && onSort ? 'cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 select-none' : ''} ${col.className ?? ''}`}
                 >
                   <span className="inline-flex items-center gap-1">
                     {col.header}
@@ -102,26 +102,26 @@ const DataTable = ({
                 </th>
               ))}
               {actions && (
-                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {actionHeader}
                 </th>
               )}
             </tr>
           </thead>
 
-          <tbody className="bg-white divide-y divide-gray-100">
+          <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-100 dark:divide-gray-700">
             {loading ? (
               /* Skeleton rows */
               Array.from({ length: SKELETON_ROWS }).map((_, i) => (
                 <tr key={i} className="animate-pulse">
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-3">
-                      <div className="h-4 bg-gray-200 rounded w-3/4" />
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
                     </td>
                   ))}
                   {actions && (
                     <td className="px-4 py-3 text-right">
-                      <div className="h-4 bg-gray-200 rounded w-16 ml-auto" />
+                      <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16 ml-auto" />
                     </td>
                   )}
                 </tr>
@@ -145,10 +145,10 @@ const DataTable = ({
                 <tr
                   key={rowKey(row)}
                   onClick={onRowClick ? () => onRowClick(row) : undefined}
-                  className={`transition ${onRowClick ? 'cursor-pointer hover:bg-gray-50' : 'hover:bg-gray-50/50'}`}
+                  className={`transition ${onRowClick ? 'cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700/50' : 'hover:bg-gray-50/50 dark:hover:bg-gray-700/30'}`}
                 >
                   {columns.map((col) => (
-                    <td key={col.key} className={`px-4 py-3 text-sm text-gray-700 ${col.className ?? ''}`}>
+                    <td key={col.key} className={`px-4 py-3 text-sm text-gray-700 dark:text-gray-300 ${col.className ?? ''}`}>
                       {col.render ? col.render(row, row[col.key]) : (row[col.key] ?? '—')}
                     </td>
                   ))}
@@ -166,7 +166,7 @@ const DataTable = ({
 
       {/* Pagination */}
       {showPagination && (
-        <div className="px-4 py-3 border-t border-gray-100 bg-gray-50">
+        <div className="px-4 py-3 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50">
           <Pagination
             page={page}
             totalPages={totalPages}

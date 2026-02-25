@@ -24,13 +24,13 @@ const buildColumns = (onView, onEdit, onToggle) => [
   {
     key: 'username',
     header: 'Username',
-    render: (r) => <span className="font-medium text-gray-800">{r.username ?? '—'}</span>,
+    render: (r) => <span className="font-medium text-gray-800 dark:text-gray-200">{r.username ?? '—'}</span>,
   },
   { key: 'email', header: 'Email', render: (r) => r.email ?? '—' },
   {
     key: 'nic',
     header: 'NIC',
-    render: (r) => r.nic ?? <span className="text-gray-300">—</span>,
+    render: (r) => r.nic ?? <span className="text-gray-300 dark:text-gray-600">—</span>,
   },
   {
     key: 'applicationType',
@@ -43,7 +43,7 @@ const buildColumns = (onView, onEdit, onToggle) => [
       };
       return r.applicationType
         ? <Badge variant={map[r.applicationType] ?? 'default'}>{r.applicationType}</Badge>
-        : <span className="text-gray-300">—</span>;
+        : <span className="text-gray-300 dark:text-gray-600">—</span>;
     },
   },
   {
@@ -67,13 +67,13 @@ const buildColumns = (onView, onEdit, onToggle) => [
       <div className="flex items-center gap-2 justify-end">
         <button
           onClick={() => onView(r)}
-          className="text-xs text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
+          className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
         >
           View
         </button>
         <button
           onClick={() => onEdit(r)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           Edit
         </button>
@@ -81,8 +81,8 @@ const buildColumns = (onView, onEdit, onToggle) => [
           onClick={() => onToggle(r)}
           className={`text-xs font-medium px-2 py-1 rounded transition ${
             r.isActive
-              ? 'text-red-600 hover:text-red-800 hover:bg-red-50'
-              : 'text-green-600 hover:text-green-800 hover:bg-green-50'
+              ? 'text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 hover:bg-red-50 dark:hover:bg-red-900/30'
+              : 'text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 hover:bg-green-50 dark:hover:bg-green-900/30'
           }`}
         >
           {r.isActive ? 'Disable' : 'Enable'}
@@ -204,7 +204,7 @@ const ApplicationAdminsPage = () => {
           placeholder="Search by username, email or NIC…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-80 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          className="w-full sm:w-80 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
         />
       </div>
 
@@ -236,8 +236,8 @@ const ApplicationAdminsPage = () => {
               ['Last Updated',    viewTarget.updatedAt ? new Date(viewTarget.updatedAt).toLocaleString() : '—'],
             ].map(([label, val]) => (
               <div key={label} className="flex gap-4">
-                <span className="text-gray-400 w-36 flex-shrink-0">{label}</span>
-                <span className="text-gray-800 font-medium break-all">{val}</span>
+                <span className="text-gray-400 dark:text-gray-500 w-36 flex-shrink-0">{label}</span>
+                <span className="text-gray-800 dark:text-gray-200 font-medium break-all">{val}</span>
               </div>
             ))}
           </div>
@@ -254,7 +254,7 @@ const ApplicationAdminsPage = () => {
           <div className="flex justify-end gap-3">
             <button
               onClick={closeEdit}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+              className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             >
               Cancel
             </button>
@@ -299,7 +299,7 @@ const ApplicationAdminsPage = () => {
         title={toggleTarget?.isActive ? 'Disable School Account' : 'Enable School Account'}
         confirmLabel={toggleTarget?.isActive ? 'Disable' : 'Enable'}
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           {toggleTarget?.isActive
             ? `Disabling <strong>${toggleTarget?.username}</strong> will prevent them from accessing the platform.`
             : `Enabling <strong>${toggleTarget?.username}</strong> will restore their platform access.`}

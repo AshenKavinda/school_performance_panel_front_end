@@ -29,11 +29,11 @@ const buildColumns = (onEdit, onDelete) => [
   {
     key: 'username',
     header: 'Username',
-    render: (r) => <span className="font-medium text-gray-800">{r.username ?? '—'}</span>,
+    render: (r) => <span className="font-medium text-gray-800 dark:text-gray-200">{r.username ?? '—'}</span>,
   },
   { key: 'email',          header: 'Email',        render: (r) => r.email          ?? '—' },
-  { key: 'nic',            header: 'NIC',           render: (r) => r.nic            ?? <span className="text-gray-300">—</span> },
-  { key: 'employeeNumber', header: 'Employee #',    render: (r) => r.employeeNumber ?? <span className="text-gray-300">—</span> },
+  { key: 'nic',            header: 'NIC',           render: (r) => r.nic            ?? <span className="text-gray-300 dark:text-gray-600">—</span> },
+  { key: 'employeeNumber', header: 'Employee #',    render: (r) => r.employeeNumber ?? <span className="text-gray-300 dark:text-gray-600">—</span> },
   {
     key: 'createdAt',
     header: 'Created',
@@ -46,13 +46,13 @@ const buildColumns = (onEdit, onDelete) => [
       <div className="flex items-center gap-2 justify-end">
         <button
           onClick={() => onEdit(r)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(r)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
         >
           Delete
         </button>
@@ -204,7 +204,7 @@ const AdminAccountsPage = () => {
           placeholder="Search by username, email or employee #…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-80 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          className="w-full sm:w-80 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
         />
       </div>
 
@@ -227,7 +227,7 @@ const AdminAccountsPage = () => {
           <div className="flex justify-end gap-3">
             <button
               onClick={closeCreate}
-              className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+              className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
             >
               Cancel
             </button>
@@ -283,7 +283,7 @@ const AdminAccountsPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
@@ -316,7 +316,7 @@ const AdminAccountsPage = () => {
         title="Delete Admin Account"
         confirmLabel="Delete"
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Are you sure you want to delete <strong>{deleteTarget?.username}</strong>? This action cannot be undone.
         </p>
       </ConfirmDialog>

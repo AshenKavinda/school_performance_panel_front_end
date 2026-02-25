@@ -31,7 +31,7 @@ const ProfileEditFields = ({ form, errors, onChange }) => (
 const Field = ({ label, value }) => (
   <div className="flex flex-col gap-0.5 py-3 border-b border-gray-100 last:border-0">
     <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</span>
-    <span className="text-sm font-semibold text-gray-800">{value ?? '—'}</span>
+    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{value ?? '—'}</span>
   </div>
 );
 
@@ -130,7 +130,7 @@ const TeacherProfilePage = () => {
       />
 
       {/* Profile Card */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
         {/* Header banner */}
         <div className="bg-gradient-to-r from-orange-600 to-amber-500 px-6 py-8 flex items-center gap-5">
           <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur flex items-center justify-center text-white text-xl font-bold flex-shrink-0">

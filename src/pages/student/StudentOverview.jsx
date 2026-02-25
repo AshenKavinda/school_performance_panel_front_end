@@ -8,13 +8,13 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 // ── Stat card ─────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, icon, accent, loading }) => (
   <div className={`rounded-xl border p-5 flex items-start gap-4 ${accent}`}>
-    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60">
+    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60 dark:bg-white/10">
       {icon}
     </div>
     <div className="min-w-0">
       <p className="text-sm font-medium opacity-75 truncate">{label}</p>
       {loading ? (
-        <div className="h-7 w-16 bg-white/50 rounded animate-pulse mt-1" />
+        <div className="h-7 w-16 bg-white/50 dark:bg-white/10 rounded animate-pulse mt-1" />
       ) : (
         <p className="text-2xl font-bold mt-0.5">{value ?? '—'}</p>
       )}
@@ -26,16 +26,16 @@ const StatCard = ({ label, value, icon, accent, loading }) => (
 const QuickLink = ({ to, label, desc, icon }) => (
   <Link
     to={to}
-    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50 transition group"
+    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-emerald-300 hover:bg-emerald-50 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/30 transition group"
   >
-    <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0 group-hover:bg-emerald-200 transition">
+    <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 flex-shrink-0 group-hover:bg-emerald-200 dark:group-hover:bg-emerald-800/50 transition">
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-sm font-medium text-gray-800 group-hover:text-emerald-700">{label}</p>
-      {desc && <p className="text-xs text-gray-400 truncate">{desc}</p>}
+      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 group-hover:text-emerald-700 dark:group-hover:text-emerald-400">{label}</p>
+      {desc && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{desc}</p>}
     </div>
-    <svg className="w-4 h-4 text-gray-300 ml-auto flex-shrink-0 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 ml-auto flex-shrink-0 group-hover:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   </Link>
@@ -107,67 +107,67 @@ const StudentOverview = () => {
           label="Enrolled Classes"
           value={enrolledClassCount}
           loading={loading}
-          accent="bg-emerald-50 text-emerald-700 border-emerald-200"
+          accent="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700/50"
           icon={<AcademicIcon />}
         />
         <StatCard
           label="Total Subjects"
           value={totalSubjects}
           loading={loading}
-          accent="bg-green-50 text-green-700 border-green-200"
+          accent="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700/50"
           icon={<BookIcon />}
         />
         <StatCard
           label="Overall Average"
           value={dashboard?.overallAverage != null ? `${dashboard.overallAverage.toFixed(1)}%` : '—'}
           loading={loading}
-          accent="bg-teal-50 text-teal-700 border-teal-200"
+          accent="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-700/50"
           icon={<TrendUpIcon />}
         />
         <StatCard
           label="GPA"
           value={dashboard?.gpa != null ? dashboard.gpa.toFixed(2) : '—'}
           loading={loading}
-          accent="bg-cyan-50 text-cyan-700 border-cyan-200"
+          accent="bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700/50"
           icon={<ChartIcon />}
         />
       </div>
 
       {/* Subject Performance Summary */}
       {dashboard?.subjectMarks?.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-base font-semibold text-gray-800 mb-4">Subject Performance</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Subject Performance</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-100">
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Credits</th>
+                <tr className="border-b border-gray-100 dark:border-gray-700">
+                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Credits</th>
                   {['Term 1', 'Term 2', 'Final'].map(t => (
-                    <th key={t} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">{t}</th>
+                    <th key={t} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {dashboard.subjectMarks.map(sub => (
-                  <tr key={sub.subjectId} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-2 px-3 font-medium text-gray-800">{sub.subjectName}</td>
-                    <td className="py-2 px-3 text-center text-gray-500">{sub.creditValue}</td>
+                  <tr key={sub.subjectId} className="border-b border-gray-50 dark:border-gray-700 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="py-2 px-3 font-medium text-gray-800 dark:text-gray-200">{sub.subjectName}</td>
+                    <td className="py-2 px-3 text-center text-gray-500 dark:text-gray-400">{sub.creditValue}</td>
                     {['FIRST_TERM', 'SECOND_TERM', 'FINAL_TERM'].map(term => {
                       const tm = sub.termMarks?.find(t => t.term === term);
                       return (
                         <td key={term} className="py-2 px-3 text-center">
                           {tm ? (
                             <span className="inline-flex items-center gap-1">
-                              <span className="font-medium text-gray-800">{tm.mark}</span>
+                              <span className="font-medium text-gray-800 dark:text-gray-200">{tm.mark}</span>
                               {tm.grade && (
-                                <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-medium">
+                                <span className="text-xs px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 font-medium">
                                   {tm.grade}
                                 </span>
                               )}
                             </span>
                           ) : (
-                            <span className="text-gray-300">—</span>
+                            <span className="text-gray-300 dark:text-gray-600">—</span>
                           )}
                         </td>
                       );
@@ -181,27 +181,27 @@ const StudentOverview = () => {
       )}
 
       {/* Today's Schedule */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-4">Today&apos;s Schedule</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Today&apos;s Schedule</h3>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map(i => <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse" />)}
+            {[1, 2, 3].map(i => <div key={i} className="h-12 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />)}
           </div>
         ) : todayEntries.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No classes scheduled for today.</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 py-4 text-center">No classes scheduled for today.</p>
         ) : (
           <div className="space-y-2">
             {todayEntries.map((entry, i) => (
               <div key={entry.timetableId ?? i}
-                className="flex items-center gap-3 p-3 rounded-lg bg-emerald-50 border border-emerald-100">
-                <div className="w-8 h-8 rounded-lg bg-emerald-200 flex items-center justify-center text-emerald-700 flex-shrink-0 text-xs font-bold">
+                className="flex items-center gap-3 p-3 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50">
+                <div className="w-8 h-8 rounded-lg bg-emerald-200 dark:bg-emerald-800/50 flex items-center justify-center text-emerald-700 dark:text-emerald-300 flex-shrink-0 text-xs font-bold">
                   {entry.timeSlotName ?? (i + 1)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-800">{entry.subjectName ?? '—'}</p>
-                  <p className="text-xs text-gray-500">{entry.teacherName ?? '—'}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{entry.subjectName ?? '—'}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{entry.teacherName ?? '—'}</p>
                 </div>
-                <span className="text-xs text-gray-400 flex-shrink-0">
+                <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">
                   {entry.startTime ?? ''} – {entry.endTime ?? ''}
                 </span>
               </div>
@@ -211,8 +211,8 @@ const StudentOverview = () => {
       </div>
 
       {/* Quick Links */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-4">Quick Actions</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <QuickLink to="/student/profile"      label="My Profile"      desc="View your personal details"   icon={<UserIcon />} />
           <QuickLink to="/student/enrollments"  label="My Enrollments"  desc="Classes & subjects"           icon={<ClipboardIcon />} />

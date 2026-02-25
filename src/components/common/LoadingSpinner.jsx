@@ -28,9 +28,9 @@ const LoadingSpinner = ({
 
   if (overlay) {
     return (
-      <div className="fixed inset-0 bg-white/70 z-50 flex items-center justify-center flex-col gap-3">
+      <div className="fixed inset-0 bg-white/70 dark:bg-gray-900/70 z-50 flex items-center justify-center flex-col gap-3">
         {spinner}
-        {label && <p className="text-sm text-gray-500">{label}</p>}
+        {label && <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>}
       </div>
     );
   }
@@ -39,7 +39,7 @@ const LoadingSpinner = ({
     return (
       <span className="inline-flex items-center gap-2">
         {spinner}
-        {label && <span className="text-sm text-gray-500">{label}</span>}
+        {label && <span className="text-sm text-gray-500 dark:text-gray-400">{label}</span>}
       </span>
     );
   }

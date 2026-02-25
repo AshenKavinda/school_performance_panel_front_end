@@ -8,7 +8,7 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 const DetailRow = ({ label, value, highlight }) => (
   <div className="flex flex-col sm:flex-row sm:items-center gap-1 py-3 border-b border-gray-100 last:border-0">
     <dt className="sm:w-44 text-sm font-medium text-gray-500 flex-shrink-0">{label}</dt>
-    <dd className={`text-sm font-semibold ${highlight ? 'text-purple-700' : 'text-gray-800'}`}>
+    <dd className={`text-sm font-semibold ${highlight ? 'text-purple-700 dark:text-purple-400' : 'text-gray-800 dark:text-gray-200'}`}>
       {value ?? '—'}
     </dd>
   </div>
@@ -64,7 +64,7 @@ const SubscriptionPage = () => {
         action={
           <button
             onClick={fetchSubscription}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-xl hover:bg-gray-50 transition"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:bg-gray-700/50 transition"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
@@ -131,7 +131,7 @@ const SubscriptionPage = () => {
 
           {/* ── Package info ───────────────────────────────────────────────── */}
           {payment && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100 bg-purple-50">
                 <h2 className="text-sm font-semibold text-purple-800">Current Package</h2>
               </div>
@@ -146,7 +146,7 @@ const SubscriptionPage = () => {
 
           {/* ── Payment details ────────────────────────────────────────────── */}
           {payment && (
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-100 bg-purple-50">
                 <h2 className="text-sm font-semibold text-purple-800">Payment Details</h2>
               </div>

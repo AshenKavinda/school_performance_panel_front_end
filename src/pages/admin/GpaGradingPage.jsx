@@ -63,7 +63,7 @@ const buildColumns = (onEdit, onDelete) => [
     key: 'grade',
     header: 'Grade',
     render: (row) => (
-      <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-100 text-purple-800 font-bold text-sm">
+      <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300 font-bold text-sm">
         {row.grade ?? '—'}
       </span>
     ),
@@ -82,7 +82,7 @@ const buildColumns = (onEdit, onDelete) => [
     key: 'gradePoint',
     header: 'Grade Point',
     render: (row) => row.gradePoint != null
-      ? <span className="font-semibold text-purple-700">{Number(row.gradePoint).toFixed(2)}</span>
+      ? <span className="font-semibold text-purple-700 dark:text-purple-300">{Number(row.gradePoint).toFixed(2)}</span>
       : '—',
   },
   {
@@ -90,7 +90,7 @@ const buildColumns = (onEdit, onDelete) => [
     header: 'Mark Range',
     render: (row) =>
       row.minMark != null && row.maxMark != null
-        ? <span className="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{row.minMark} – {row.maxMark}</span>
+        ? <span className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded">{row.minMark} – {row.maxMark}</span>
         : '—',
   },
   {
@@ -100,13 +100,13 @@ const buildColumns = (onEdit, onDelete) => [
       <div className="flex items-center gap-2 justify-end">
         <button
           onClick={() => onEdit(row)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(row)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
         >
           Delete
         </button>
@@ -259,7 +259,7 @@ const GpaGradingPage = () => {
         }
       />
 
-      <div className="mb-4 p-3 bg-purple-50 border border-purple-200 rounded-lg text-xs text-purple-700">
+      <div className="mb-4 p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-700 rounded-lg text-xs text-purple-700 dark:text-purple-300">
         <strong>Note:</strong> GPA grade bands apply to <strong>MODULE_BASE</strong> classes. Each band maps a mark range to a letter grade and GPA point. Bands should cover 0–100 without overlapping.
       </div>
 
@@ -280,7 +280,7 @@ const GpaGradingPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating} className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {creating ? 'Creating…' : 'Create Grade Band'}
             </button>
@@ -298,7 +298,7 @@ const GpaGradingPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
@@ -318,7 +318,7 @@ const GpaGradingPage = () => {
         title="Delete Grade Band"
         confirmLabel="Delete"
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Are you sure you want to delete the grade band <strong>{deleteTarget?.grade}</strong>?
           This may affect module mark display for students.
         </p>

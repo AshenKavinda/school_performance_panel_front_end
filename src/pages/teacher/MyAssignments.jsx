@@ -56,14 +56,14 @@ const MyAssignments = () => {
       <PageHeader title="My Assignments" subtitle="Sections, classes, and subjects assigned to you" />
 
       {sections.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <p className="text-sm text-gray-400 text-center">No assignments found.</p>
         </div>
       ) : (
         sections.map(sec => {
           const classList = sectionClasses[sec.sectionId] ?? [];
           return (
-            <div key={sec.sectionId} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div key={sec.sectionId} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
               {/* ── Section Header ────────────────────────────────────── */}
               <div className="px-5 py-4 border-b border-gray-100 flex items-center gap-3 bg-amber-50/60">
                 <div className="w-9 h-9 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
@@ -73,7 +73,7 @@ const MyAssignments = () => {
                   </svg>
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-base font-semibold text-gray-800">{sec.sectionName ?? '—'}</p>
+                  <p className="text-base font-semibold text-gray-800 dark:text-gray-200">{sec.sectionName ?? '—'}</p>
                   {sec.assignedAt && (
                     <p className="text-xs text-gray-400">
                       Assigned {new Date(sec.assignedAt).toLocaleDateString()}
@@ -89,7 +89,7 @@ const MyAssignments = () => {
               {classList.length === 0 ? (
                 <p className="text-sm text-gray-400 p-5 text-center">No classes in this section.</p>
               ) : (
-                <div className="divide-y divide-gray-100">
+                <div className="divide-y divide-gray-100 dark:divide-gray-700">
                   {classList.map(cls => (
                     <div key={cls.id} className="px-5 py-4">
                       {/* Class row */}
@@ -101,13 +101,13 @@ const MyAssignments = () => {
                           </svg>
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-gray-800">{cls.name ?? '—'}</p>
+                          <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{cls.name ?? '—'}</p>
                           <p className="text-xs text-gray-400">{cls.academicYear ?? ''}</p>
                         </div>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                           cls.classType === 'SUBJECT_BASE'
-                            ? 'bg-blue-100 text-blue-700'
-                            : 'bg-purple-100 text-purple-700'
+                            ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                            : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
                         }`}>
                           {cls.classType === 'SUBJECT_BASE' ? 'Subject Base' : cls.classType === 'MODULE_BASE' ? 'Module Base' : cls.classType ?? '—'}
                         </span>
@@ -123,7 +123,7 @@ const MyAssignments = () => {
                               key={sub.subjectId}
                               className="flex items-center gap-2 px-3 py-2 rounded-lg bg-orange-50/70 border border-orange-100"
                             >
-                              <div className="w-6 h-6 rounded bg-orange-100 text-orange-700 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
+                              <div className="w-6 h-6 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400 flex items-center justify-center text-[10px] font-bold flex-shrink-0">
                                 {sub.creditValue ?? '—'}
                               </div>
                               <div className="min-w-0 flex-1">

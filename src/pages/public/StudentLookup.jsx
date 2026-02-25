@@ -4,16 +4,17 @@ import { getStudentGlobalByCode, getStudentByGlobal } from '../../services/manag
 import { getStudentEnrollment } from '../../services/enrollmentService';
 import { getSubjectMarksByStudent, getModuleMarksByStudent } from '../../services/marksService';
 import { getSubjectGradings, getGPAGradings } from '../../services/gradingService';
+import ThemeToggle from '../../components/common/ThemeToggle';
 
 // ── Tiny UI primitives ────────────────────────────────────────────────────────
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-xl border border-gray-200 p-6 ${className}`}>{children}</div>
+  <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 ${className}`}>{children}</div>
 );
 
 const Field = ({ label, value }) => (
   <div className="flex flex-col gap-0.5">
-    <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</span>
-    <span className="text-sm font-semibold text-gray-800">{value ?? '—'}</span>
+    <span className="text-xs font-medium text-gray-400 dark:text-gray-500 uppercase tracking-wide">{label}</span>
+    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{value ?? '—'}</span>
   </div>
 );
 
@@ -120,18 +121,19 @@ const StudentLookup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-indigo-50/30 dark:from-gray-950 dark:to-gray-900">
       {/* ── Navbar ── */}
-      <nav className="bg-white/80 backdrop-blur border-b border-gray-200 sticky top-0 z-30">
+      <nav className="bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-200 dark:border-gray-800 sticky top-0 z-30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 text-indigo-600 font-bold text-lg">
+          <Link to="/" className="flex items-center gap-2 text-indigo-600 dark:text-indigo-400 font-bold text-lg">
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
             </svg>
             <span className="hidden sm:inline">School Performance Panel</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-indigo-600 transition">Sign In</Link>
+            <ThemeToggle className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800" size="sm" />
+            <Link to="/login" className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition">Sign In</Link>
             <Link to="/register" className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg transition shadow-sm">Register</Link>
           </div>
         </div>
@@ -140,8 +142,8 @@ const StudentLookup = () => {
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         {/* ── Search Section ── */}
         <div className="text-center">
-          <h1 className="text-3xl font-extrabold text-gray-900 mb-2">Student Academic Lookup</h1>
-          <p className="text-gray-500 mb-6 max-w-lg mx-auto">
+          <h1 className="text-3xl font-extrabold text-gray-900 dark:text-white mb-2">Student Academic Lookup</h1>
+          <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-lg mx-auto">
             Enter a Global Student Code to view academic records. No login required.
           </p>
           <div className="max-w-md mx-auto flex gap-2">
@@ -151,7 +153,7 @@ const StudentLookup = () => {
               onChange={e => setCode(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Enter Global Student Code…"
-              className="flex-1 rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
+              className="flex-1 rounded-xl border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 px-4 py-3 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 outline-none"
               disabled={loading}
             />
             <button
@@ -173,7 +175,7 @@ const StudentLookup = () => {
 
         {/* ── Error ── */}
         {error && (
-          <div className="max-w-md mx-auto bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm text-center">
+          <div className="max-w-md mx-auto bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-xl text-sm text-center">
             {error}
           </div>
         )}
@@ -184,14 +186,14 @@ const StudentLookup = () => {
             {/* ── Student Info Card ── */}
             <Card>
               <div className="flex items-center gap-4 mb-5">
-                <div className="w-14 h-14 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                <div className="w-14 h-14 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl font-bold flex-shrink-0">
                   {(result.studentGlobal.firstName?.[0] ?? 'S').toUpperCase()}
                 </div>
                 <div className="min-w-0">
-                  <h2 className="text-lg font-bold text-gray-900 truncate">
+                  <h2 className="text-lg font-bold text-gray-900 dark:text-white truncate">
                     {[result.studentGlobal.firstName, result.studentGlobal.lastName].filter(Boolean).join(' ') || '—'}
                   </h2>
-                  <p className="text-sm text-gray-400">Global Code: {result.studentGlobal.globalStudentCode ?? '—'}</p>
+                  <p className="text-sm text-gray-400 dark:text-gray-500">Global Code: {result.studentGlobal.globalStudentCode ?? '—'}</p>
                 </div>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
@@ -205,18 +207,18 @@ const StudentLookup = () => {
             {/* ── Enrolled Classes & Subjects ── */}
             {result.enrollment?.enrolledClasses?.length > 0 ? (
               <Card>
-                <h3 className="text-base font-semibold text-gray-800 mb-4">Enrolled Classes &amp; Subjects</h3>
+                <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Enrolled Classes &amp; Subjects</h3>
                 <div className="space-y-4">
                   {result.enrollment.enrolledClasses.map(cls => (
-                    <div key={cls.classId} className="border border-gray-100 rounded-lg p-4">
+                    <div key={cls.classId} className="border border-gray-100 dark:border-gray-700 rounded-lg p-4">
                       <div className="flex items-center gap-2 mb-2 flex-wrap">
-                        <span className="font-semibold text-gray-800">{cls.className ?? '—'}</span>
+                        <span className="font-semibold text-gray-800 dark:text-gray-200">{cls.className ?? '—'}</span>
                         <span className="text-gray-400 text-xs">|</span>
-                        <span className="text-gray-500 text-sm">{cls.sectionName ?? '—'}</span>
+                        <span className="text-gray-500 dark:text-gray-400 text-sm">{cls.sectionName ?? '—'}</span>
                         <span className="text-gray-400 text-xs">|</span>
-                        <span className="text-gray-500 text-sm">{cls.academicYear ?? '—'}</span>
+                        <span className="text-gray-500 dark:text-gray-400 text-sm">{cls.academicYear ?? '—'}</span>
                         <span className={`ml-auto px-2 py-0.5 rounded text-xs font-medium ${
-                          cls.classType === 'MODULE_BASE' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                          cls.classType === 'MODULE_BASE' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 dark:bg-purple-900/40 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 dark:bg-blue-900/40 dark:text-blue-400'
                         }`}>
                           {cls.classType === 'MODULE_BASE' ? 'Module Based' : 'Subject Based'}
                         </span>
@@ -224,7 +226,7 @@ const StudentLookup = () => {
                       {cls.enrolledSubjects?.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
                           {cls.enrolledSubjects.map(sub => (
-                            <span key={sub.subjectId} className="px-2 py-0.5 bg-indigo-50 text-indigo-700 text-xs rounded-full font-medium">
+                            <span key={sub.subjectId} className="px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400 text-xs rounded-full font-medium">
                               {sub.subjectName ?? '—'} {sub.creditValue != null ? `(${sub.creditValue})` : ''}
                             </span>
                           ))}
@@ -236,7 +238,7 @@ const StudentLookup = () => {
               </Card>
             ) : (
               <Card>
-                <p className="text-sm text-gray-400 text-center py-4">No class enrollments found for this student.</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-4">No class enrollments found for this student.</p>
               </Card>
             )}
 
@@ -258,7 +260,7 @@ const StudentLookup = () => {
 
         {/* ── Empty initial state ── */}
         {!result && !error && !loading && (
-          <div className="text-center py-12 text-gray-400 text-sm">
+          <div className="text-center py-12 text-gray-400 dark:text-gray-500 text-sm">
             Enter a Global Student Code above to view academic records.
           </div>
         )}
@@ -284,7 +286,7 @@ const SubjectBaseMarks = ({ enrolledClasses, subjectMarks, gradings }) => {
 
   return (
     <Card>
-      <h3 className="text-base font-semibold text-gray-800 mb-4">Subject Exam Marks</h3>
+      <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Subject Exam Marks</h3>
       {subjectClasses.length === 0 && subjectMarks.length > 0 ? (
         <MarksTableGeneric markMap={markMap} gradings={gradings} type="subject" />
       ) : (
@@ -297,8 +299,8 @@ const SubjectBaseMarks = ({ enrolledClasses, subjectMarks, gradings }) => {
           const hasMarks = Object.keys(classMarks).length > 0;
           return (
             <div key={cls.classId} className="mb-6 last:mb-0">
-              <p className="text-sm font-medium text-gray-600 mb-2">
-                {cls.className ?? '—'} <span className="text-gray-400">({cls.academicYear ?? '—'})</span>
+              <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                {cls.className ?? '—'} <span className="text-gray-400 dark:text-gray-500">({cls.academicYear ?? '—'})</span>
               </p>
               {hasMarks ? (
                 <MarksTableGeneric markMap={classMarks} gradings={gradings} type="subject" />
@@ -322,14 +324,14 @@ const ModuleBaseMarks = ({ enrolledClasses, moduleMarks, gradings }) => {
 
   return (
     <Card>
-      <h3 className="text-base font-semibold text-gray-800 mb-4">Module Exam Marks</h3>
+      <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Module Exam Marks</h3>
       {moduleMarks.length === 0 ? (
-        <p className="text-xs text-gray-400 py-3 text-center">No module marks recorded yet.</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500 py-3 text-center">No module marks recorded yet.</p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 text-left text-gray-500">
+              <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                 <th className="py-2 pr-3 font-medium">Module</th>
                 <th className="py-2 pr-3 font-medium">Subject</th>
                 <th className="py-2 pr-3 font-medium text-right">Mark</th>
@@ -341,16 +343,16 @@ const ModuleBaseMarks = ({ enrolledClasses, moduleMarks, gradings }) => {
               {moduleMarks.map((m, i) => {
                 const { grade, gradePoint } = resolveGPAGrade(m.mark, gradings);
                 return (
-                  <tr key={`${m.moduleId}-${i}`} className="border-b border-gray-100 hover:bg-purple-50/40">
-                    <td className="py-2 pr-3 font-medium text-gray-800">{m.moduleName ?? '—'}</td>
-                    <td className="py-2 pr-3 text-gray-500">{m.subjectName ?? '—'}</td>
-                    <td className="py-2 pr-3 text-right font-semibold">{m.mark ?? '—'}</td>
+                  <tr key={`${m.moduleId}-${i}`} className="border-b border-gray-100 dark:border-gray-700 hover:bg-purple-50/40 dark:hover:bg-purple-900/20">
+                    <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{m.moduleName ?? '—'}</td>
+                    <td className="py-2 pr-3 text-gray-500 dark:text-gray-400">{m.subjectName ?? '—'}</td>
+                    <td className="py-2 pr-3 text-right font-semibold text-gray-900 dark:text-gray-100">{m.mark ?? '—'}</td>
                     <td className="py-2 pr-3 text-center">
-                      <span className="px-2 py-0.5 bg-purple-100 text-purple-700 rounded text-xs font-medium">
+                      <span className="px-2 py-0.5 bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-400 rounded text-xs font-medium">
                         {grade}
                       </span>
                     </td>
-                    <td className="py-2 pr-3 text-right text-gray-600">{gradePoint}</td>
+                    <td className="py-2 pr-3 text-right text-gray-600 dark:text-gray-400">{gradePoint}</td>
                   </tr>
                 );
               })}
@@ -368,14 +370,14 @@ const ModuleBaseMarks = ({ enrolledClasses, moduleMarks, gradings }) => {
 const MarksTableGeneric = ({ markMap, gradings }) => {
   const entries = Object.values(markMap);
   if (entries.length === 0) {
-    return <p className="text-xs text-gray-400 py-3 text-center">No marks recorded yet.</p>;
+    return <p className="text-xs text-gray-400 dark:text-gray-500 py-3 text-center">No marks recorded yet.</p>;
   }
 
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full text-sm">
         <thead>
-          <tr className="border-b border-gray-200 text-left text-gray-500">
+          <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
             <th className="py-2 pr-3 font-medium">Subject</th>
             {TERMS.map(t => (
               <th key={t} className="py-2 pr-3 font-medium text-center" colSpan={2}>
@@ -383,7 +385,7 @@ const MarksTableGeneric = ({ markMap, gradings }) => {
               </th>
             ))}
           </tr>
-          <tr className="border-b border-gray-100 text-gray-400 text-xs">
+          <tr className="border-b border-gray-100 dark:border-gray-700 text-gray-400 dark:text-gray-500 text-xs">
             <th />
             {TERMS.map(t => (
               <React.Fragment key={t}>
@@ -395,17 +397,17 @@ const MarksTableGeneric = ({ markMap, gradings }) => {
         </thead>
         <tbody>
           {entries.map((entry, i) => (
-            <tr key={i} className="border-b border-gray-100 hover:bg-indigo-50/40">
-              <td className="py-2 pr-3 font-medium text-gray-800">{entry.subjectName ?? '—'}</td>
+            <tr key={i} className="border-b border-gray-100 dark:border-gray-700 hover:bg-indigo-50/40 dark:hover:bg-indigo-900/20">
+              <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{entry.subjectName ?? '—'}</td>
               {TERMS.map(t => {
                 const mark = entry.byTerm[t];
                 const grade = resolveSubjectGrade(mark, gradings);
                 return (
                   <React.Fragment key={t}>
-                    <td className="py-2 pr-1 text-center font-semibold">{mark ?? '—'}</td>
+                    <td className="py-2 pr-1 text-center font-semibold text-gray-900 dark:text-gray-100">{mark ?? '—'}</td>
                     <td className="py-2 pr-3 text-center">
                       {mark != null ? (
-                        <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">{grade}</span>
+                        <span className="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 rounded text-xs font-medium">{grade}</span>
                       ) : '—'}
                     </td>
                   </React.Fragment>

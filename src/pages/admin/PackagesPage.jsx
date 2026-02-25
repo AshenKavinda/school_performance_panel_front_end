@@ -67,13 +67,13 @@ const buildColumns = (onEdit, onDelete) => [
   {
     key: 'labal',
     header: 'Package Name',
-    render: (r) => <span className="font-semibold text-gray-800">{r.labal ?? '—'}</span>,
+    render: (r) => <span className="font-semibold text-gray-800 dark:text-gray-200">{r.labal ?? '—'}</span>,
   },
   {
     key: 'discription',
     header: 'Description',
     render: (r) => (
-      <span className="text-gray-500 truncate max-w-xs block" title={r.discription}>
+      <span className="text-gray-500 dark:text-gray-400 truncate max-w-xs block" title={r.discription}>
         {r.discription ?? '—'}
       </span>
     ),
@@ -89,7 +89,7 @@ const buildColumns = (onEdit, onDelete) => [
     header: 'Price',
     render: (r) =>
       r.price != null ? (
-        <span className="font-medium text-gray-800">${Number(r.price).toFixed(2)}</span>
+        <span className="font-medium text-gray-800 dark:text-gray-200">${Number(r.price).toFixed(2)}</span>
       ) : '—',
   },
   {
@@ -104,13 +104,13 @@ const buildColumns = (onEdit, onDelete) => [
       <div className="flex items-center gap-2 justify-end">
         <button
           onClick={() => onEdit(r)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(r)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
         >
           Delete
         </button>
@@ -277,7 +277,7 @@ const PackagesPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition">
               {creating ? 'Creating…' : 'Create Package'}
             </button>
@@ -295,7 +295,7 @@ const PackagesPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
@@ -315,7 +315,7 @@ const PackagesPage = () => {
         title="Delete Package"
         confirmLabel="Delete"
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Are you sure you want to delete the package <strong>{deleteTarget?.labal}</strong>?
           Schools currently subscribed to this plan may be affected.
         </p>

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* ── Tailwind v4 class-based dark mode ─────────────────────────────────────── */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* Base font & rendering settings */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -9,8 +12,17 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Dark mode transition ──────────────────────────────────────────────────── */
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
 /* Thin scrollbar */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 9999px; }
 ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+/* Dark scrollbar */
+.dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #6b7280; }

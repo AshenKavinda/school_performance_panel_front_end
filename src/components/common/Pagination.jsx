@@ -27,16 +27,16 @@ const Pagination = ({ page, totalPages, onPageChange, pageSize, totalItems, clas
   const btnBase =
     'inline-flex items-center justify-center w-9 h-9 text-sm font-medium rounded-lg transition';
   const btnActive  = 'bg-indigo-600 text-white shadow-sm';
-  const btnInactive = 'text-gray-600 hover:bg-gray-100';
-  const btnDisabled = 'text-gray-300 cursor-not-allowed';
+  const btnInactive = 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700';
+  const btnDisabled = 'text-gray-300 dark:text-gray-600 cursor-not-allowed';
 
   return (
     <div className={`flex flex-col sm:flex-row items-center justify-between gap-4 ${className}`}>
       {/* Count info */}
       {totalItems != null && pageSize != null && (
-        <p className="text-sm text-gray-500 order-2 sm:order-1">
-          Showing <span className="font-medium text-gray-700">{from}–{to}</span> of{' '}
-          <span className="font-medium text-gray-700">{totalItems}</span> results
+        <p className="text-sm text-gray-500 dark:text-gray-400 order-2 sm:order-1">
+          Showing <span className="font-medium text-gray-700 dark:text-gray-300">{from}–{to}</span> of{' '}
+          <span className="font-medium text-gray-700 dark:text-gray-300">{totalItems}</span> results
         </p>
       )}
 

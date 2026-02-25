@@ -9,17 +9,17 @@ import { LoadingSpinner }       from '../../components/common';
 
 // ── Stat card ──────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, sub, icon, accent, loading }) => (
-  <div className={`bg-white rounded-2xl border border-gray-100 shadow-sm p-5 flex items-center gap-4`}>
+  <div className={`bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5 flex items-center gap-4`}>
     <div className={`w-12 h-12 rounded-xl ${accent} flex items-center justify-center flex-shrink-0`}>
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
+      <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wide">{label}</p>
       {loading
-        ? <div className="h-7 w-16 bg-gray-200 rounded animate-pulse mt-1" />
-        : <p className="text-2xl font-bold text-gray-800 leading-tight">{value}</p>
+        ? <div className="h-7 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse mt-1" />
+        : <p className="text-2xl font-bold text-gray-800 dark:text-gray-100 leading-tight">{value}</p>
       }
-      {sub && <p className="text-xs text-gray-400 mt-0.5">{sub}</p>}
+      {sub && <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{sub}</p>}
     </div>
   </div>
 );
@@ -28,10 +28,10 @@ const StatCard = ({ label, value, sub, icon, accent, loading }) => (
 const QuickLink = ({ to, label, description, color }) => (
   <Link
     to={to}
-    className="block bg-white rounded-xl border border-gray-100 shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+    className="block bg-white dark:bg-gray-800 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm p-4 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
   >
     <p className={`text-sm font-semibold ${color}`}>{label}</p>
-    <p className="text-xs text-gray-400 mt-0.5">{description}</p>
+    <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{description}</p>
   </Link>
 );
 
@@ -101,8 +101,8 @@ const AdminOverview = () => {
     <div className="space-y-6">
       {/* ── Greeting ── */}
       <div>
-        <h2 className="text-xl font-bold text-gray-800">Platform Overview</h2>
-        <p className="text-sm text-gray-500 mt-0.5">Real-time summary of the school performance platform.</p>
+        <h2 className="text-xl font-bold text-gray-800 dark:text-gray-100">Platform Overview</h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">Real-time summary of the school performance platform.</p>
       </div>
 
       {/* ── Stat cards ── */}
@@ -112,96 +112,96 @@ const AdminOverview = () => {
           value={fmt(stats.schools)}
           sub="Application admin accounts"
           loading={loading}
-          accent="bg-red-100"
-          icon={<svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422A12.083 12.083 0 0121 21H3a12.083 12.083 0 012.84-10.422L12 14z" /></svg>}
+          accent="bg-red-100 dark:bg-red-900/40"
+          icon={<svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422A12.083 12.083 0 0121 21H3a12.083 12.083 0 012.84-10.422L12 14z" /></svg>}
         />
         <StatCard
           label="Active Subscriptions"
           value={fmt(stats.activeSubscriptions)}
           sub={`of ${fmt(stats.payments)} total payments`}
           loading={loading}
-          accent="bg-green-100"
-          icon={<svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          accent="bg-green-100 dark:bg-green-900/40"
+          icon={<svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
         />
         <StatCard
           label="Total Revenue"
           value={fmtCurrency(stats.revenue)}
           sub="Across all payments"
           loading={loading}
-          accent="bg-blue-100"
-          icon={<svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+          accent="bg-blue-100 dark:bg-blue-900/40"
+          icon={<svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
         />
         <StatCard
           label="Subscription Packages"
           value={fmt(stats.packages)}
           sub="Available plans"
           loading={loading}
-          accent="bg-purple-100"
-          icon={<svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>}
+          accent="bg-purple-100 dark:bg-purple-900/40"
+          icon={<svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>}
         />
         <StatCard
           label="Total Payments"
           value={fmt(stats.payments)}
           sub="All-time transactions"
           loading={loading}
-          accent="bg-orange-100"
-          icon={<svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>}
+          accent="bg-orange-100 dark:bg-orange-900/40"
+          icon={<svg className="w-6 h-6 text-orange-600 dark:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>}
         />
         <StatCard
           label="Platform Users"
           value={fmt(stats.users)}
           sub="All roles"
           loading={loading}
-          accent="bg-teal-100"
-          icon={<svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
+          accent="bg-teal-100 dark:bg-teal-900/40"
+          icon={<svg className="w-6 h-6 text-teal-600 dark:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>}
         />
       </div>
 
       {/* ── Two-column lower section ── */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent payments */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
+        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-800">Recent Payments</h3>
+            <h3 className="font-semibold text-gray-800 dark:text-gray-100">Recent Payments</h3>
             <Link to="/admin/payments" className="text-xs text-red-600 hover:underline font-medium">View all</Link>
           </div>
 
           {loading ? (
             <div className="space-y-3">
               {[...Array(4)].map((_, i) => (
-                <div key={i} className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+                <div key={i} className="h-10 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
               ))}
             </div>
           ) : recentPayments.length === 0 ? (
-            <p className="text-sm text-gray-400 text-center py-6">No payments found.</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500 text-center py-6">No payments found.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left text-xs font-medium text-gray-400 pb-2 pr-4">School</th>
-                    <th className="text-left text-xs font-medium text-gray-400 pb-2 pr-4">Package</th>
-                    <th className="text-left text-xs font-medium text-gray-400 pb-2 pr-4">Amount</th>
-                    <th className="text-left text-xs font-medium text-gray-400 pb-2">Status</th>
+                  <tr className="border-b border-gray-100 dark:border-gray-700">
+                    <th className="text-left text-xs font-medium text-gray-400 dark:text-gray-500 pb-2 pr-4">School</th>
+                    <th className="text-left text-xs font-medium text-gray-400 dark:text-gray-500 pb-2 pr-4">Package</th>
+                    <th className="text-left text-xs font-medium text-gray-400 dark:text-gray-500 pb-2 pr-4">Amount</th>
+                    <th className="text-left text-xs font-medium text-gray-400 dark:text-gray-500 pb-2">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50">
+                <tbody className="divide-y divide-gray-50 dark:divide-gray-700 dark:divide-gray-700">
                   {recentPayments.map((p) => (
-                    <tr key={p.id} className="hover:bg-gray-50 transition">
-                      <td className="py-2.5 pr-4 font-medium text-gray-800 truncate max-w-[140px]">
+                    <tr key={p.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                      <td className="py-2.5 pr-4 font-medium text-gray-800 dark:text-gray-100 truncate max-w-[140px]">
                         {p.applicationAdminUsername ?? '—'}
                       </td>
-                      <td className="py-2.5 pr-4 text-gray-500 truncate max-w-[120px]">
+                      <td className="py-2.5 pr-4 text-gray-500 dark:text-gray-400 truncate max-w-[120px]">
                         {p.packageLabal ?? '—'}
                       </td>
-                      <td className="py-2.5 pr-4 text-gray-700 font-medium">
+                      <td className="py-2.5 pr-4 text-gray-700 dark:text-gray-300 font-medium">
                         ${Number(p.amount ?? 0).toFixed(2)}
                       </td>
                       <td className="py-2.5">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${
                           p.isActive
-                            ? 'bg-green-100 text-green-700'
-                            : 'bg-gray-100 text-gray-500'
+                            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 dark:bg-green-900/40 dark:text-green-400'
+                            : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'
                         }`}>
                           {p.isActive ? 'Active' : 'Expired'}
                         </span>
@@ -215,8 +215,8 @@ const AdminOverview = () => {
         </div>
 
         {/* Quick links */}
-        <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-          <h3 className="font-semibold text-gray-800 mb-4">Quick Actions</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 shadow-sm p-5">
+          <h3 className="font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
           <div className="space-y-2">
             <QuickLink to="/admin/application-admins" label="School Accounts" description="Enable/disable school access" color="text-red-600" />
             <QuickLink to="/admin/admins"             label="Admin Accounts"  description="Manage platform admins"     color="text-red-600" />

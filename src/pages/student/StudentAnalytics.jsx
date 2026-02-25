@@ -35,11 +35,11 @@ const LINE_SECONDARY = '#8b5cf6';
 
 // ── reusable components ───────────────────────────────────────────────────────
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-xl border border-gray-200 p-6 ${className}`}>{children}</div>
+  <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 ${className}`}>{children}</div>
 );
 
 const SectionTitle = ({ children }) => (
-  <h3 className="text-base font-semibold text-gray-800 mb-4">{children}</h3>
+  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-4">{children}</h3>
 );
 
 const Select = ({ value, onChange, options, placeholder, className = '' }) => (
@@ -153,7 +153,7 @@ const StudentAnalytics = () => {
 
       {/* Term selector for rank/comparison views */}
       <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-600 font-medium">Term:</span>
+        <span className="text-sm text-gray-600 dark:text-gray-400 font-medium">Term:</span>
         <Select
           value={selectedTerm}
           onChange={setSelectedTerm}
@@ -251,31 +251,31 @@ const StudentAnalytics = () => {
           {classRanks.length > 0 ? (
             <div className="overflow-x-auto max-h-[300px] overflow-y-auto">
               <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-white">
+                <thead className="sticky top-0 bg-white dark:bg-gray-800">
                   <tr className="border-b border-gray-200">
-                    <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Mark</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Class Avg</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Rank</th>
+                    <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
+                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Mark</th>
+                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Class Avg</th>
+                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Rank</th>
                   </tr>
                 </thead>
                 <tbody>
                   {classRanks.map(r => (
-                    <tr key={`${r.subjectId}-${r.term}`} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="py-2 px-3 font-medium text-gray-800">{r.subjectName}</td>
+                    <tr key={`${r.subjectId}-${r.term}`} className="border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                      <td className="py-2 px-3 font-medium text-gray-800 dark:text-gray-200">{r.subjectName}</td>
                       <td className="py-2 px-3 text-center">
-                        <span className={`font-medium ${r.mark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>{r.mark}</span>
+                        <span className={`font-medium ${r.mark >= 50 ? 'text-gray-800 dark:text-gray-200' : 'text-red-600 dark:text-red-400'}`}>{r.mark}</span>
                       </td>
-                      <td className="py-2 px-3 text-center text-gray-500">
+                      <td className="py-2 px-3 text-center text-gray-500 dark:text-gray-400">
                         {r.classAverage != null ? r.classAverage.toFixed(1) : '—'}
                       </td>
                       <td className="py-2 px-3 text-center">
                         <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
                           r.rankInClass === 1
-                            ? 'bg-yellow-100 text-yellow-700'
+                            ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
                             : r.rankInClass <= 3
                             ? 'bg-emerald-100 text-emerald-700'
-                            : 'bg-gray-100 text-gray-600'
+                            : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                         }`}>
                           {r.rankInClass}
                         </span>
@@ -354,33 +354,33 @@ const StudentAnalytics = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Credits</th>
+                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Credits</th>
                   {TERMS.map(t => (
-                    <th key={t.value} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">{t.label}</th>
+                    <th key={t.value} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.label}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {dashboard.subjectMarks.map(sub => (
-                  <tr key={sub.subjectId} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-2 px-3 font-medium text-gray-800">{sub.subjectName}</td>
-                    <td className="py-2 px-3 text-center text-gray-500">{sub.creditValue}</td>
+                  <tr key={sub.subjectId} className="border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="py-2 px-3 font-medium text-gray-800 dark:text-gray-200">{sub.subjectName}</td>
+                    <td className="py-2 px-3 text-center text-gray-500 dark:text-gray-400">{sub.creditValue}</td>
                     {TERMS.map(t => {
                       const tm = sub.termMarks?.find(m => m.term === t.value);
                       return (
                         <td key={t.value} className="py-2 px-3 text-center">
                           {tm ? (
                             <span className="inline-flex items-center gap-1">
-                              <span className={`font-medium ${tm.mark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>{tm.mark}</span>
+                              <span className={`font-medium ${tm.mark >= 50 ? 'text-gray-800 dark:text-gray-200' : 'text-red-600 dark:text-red-400'}`}>{tm.mark}</span>
                               {tm.grade && (
-                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-medium">
+                                <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 font-medium">
                                   {tm.grade}
                                 </span>
                               )}
                             </span>
                           ) : (
-                            <span className="text-gray-300">—</span>
+                            <span className="text-gray-300 dark:text-gray-600">—</span>
                           )}
                         </td>
                       );
@@ -401,20 +401,20 @@ const StudentAnalytics = () => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Credits</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Avg Mark</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Grade</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Grade Point</th>
+                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Credits</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Avg Mark</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Grade</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Grade Point</th>
                 </tr>
               </thead>
               <tbody>
                 {gpaReport.subjectGPAs.map(s => (
-                  <tr key={s.subjectId} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-2 px-3 font-medium text-gray-800">{s.subjectName}</td>
-                    <td className="py-2 px-3 text-center text-gray-500">{s.creditValue}</td>
+                  <tr key={s.subjectId} className="border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="py-2 px-3 font-medium text-gray-800 dark:text-gray-200">{s.subjectName}</td>
+                    <td className="py-2 px-3 text-center text-gray-500 dark:text-gray-400">{s.creditValue}</td>
                     <td className="py-2 px-3 text-center">
-                      <span className={`font-medium ${s.averageMark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>
+                      <span className={`font-medium ${s.averageMark >= 50 ? 'text-gray-800 dark:text-gray-200' : 'text-red-600 dark:text-red-400'}`}>
                         {s.averageMark?.toFixed(1)}
                       </span>
                     </td>
@@ -423,14 +423,14 @@ const StudentAnalytics = () => {
                         {s.grade}
                       </span>
                     </td>
-                    <td className="py-2 px-3 text-center font-medium text-gray-800">
+                    <td className="py-2 px-3 text-center font-medium text-gray-800 dark:text-gray-200">
                       {s.gradePoint?.toFixed(2)}
                     </td>
                   </tr>
                 ))}
               </tbody>
               <tfoot>
-                <tr className="border-t-2 border-gray-200 bg-gray-50">
+                <tr className="border-t-2 border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
                   <td colSpan={4} className="py-2 px-3 text-right font-semibold text-gray-700">Overall GPA</td>
                   <td className="py-2 px-3 text-center">
                     <span className="text-lg font-bold text-emerald-700">{gpaReport.overallGPA?.toFixed(2)}</span>

@@ -10,13 +10,13 @@ import { PageHeader } from '../../components/common';
 // ── Stat card ─────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, icon, accent, loading }) => (
   <div className={`rounded-xl border p-5 flex items-start gap-4 ${accent}`}>
-    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60">
+    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60 dark:bg-white/10">
       {icon}
     </div>
     <div className="min-w-0">
       <p className="text-sm font-medium opacity-75 truncate">{label}</p>
       {loading ? (
-        <div className="h-7 w-16 bg-white/50 rounded animate-pulse mt-1" />
+        <div className="h-7 w-16 bg-white/50 dark:bg-white/10 rounded animate-pulse mt-1" />
       ) : (
         <p className="text-2xl font-bold mt-0.5">{value ?? '—'}</p>
       )}
@@ -28,16 +28,16 @@ const StatCard = ({ label, value, icon, accent, loading }) => (
 const QuickLink = ({ to, label, desc, icon }) => (
   <Link
     to={to}
-    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-teal-300 hover:bg-teal-50 transition group"
+    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-teal-300 hover:bg-teal-50 dark:hover:border-teal-600 dark:hover:bg-teal-900/30 transition group"
   >
-    <div className="w-8 h-8 rounded-lg bg-teal-100 flex items-center justify-center text-teal-600 flex-shrink-0 group-hover:bg-teal-200 transition">
+    <div className="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-900/50 flex items-center justify-center text-teal-600 dark:text-teal-400 flex-shrink-0 group-hover:bg-teal-200 dark:group-hover:bg-teal-800/50 transition">
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-sm font-medium text-gray-800 group-hover:text-teal-700">{label}</p>
-      {desc && <p className="text-xs text-gray-400 truncate">{desc}</p>}
+      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 group-hover:text-teal-700 dark:group-hover:text-teal-400">{label}</p>
+      {desc && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{desc}</p>}
     </div>
-    <svg className="w-4 h-4 text-gray-300 ml-auto flex-shrink-0 group-hover:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 ml-auto flex-shrink-0 group-hover:text-teal-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   </Link>
@@ -98,18 +98,18 @@ const OperatorOverview = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-4">
-        <StatCard loading={loading} label="Clusters"  value={counts.clusters}  accent="bg-teal-50   text-teal-700   border-teal-200"   icon={<FolderIcon />} />
-        <StatCard loading={loading} label="Sections"  value={counts.sections}  accent="bg-emerald-50 text-emerald-700 border-emerald-200" icon={<GridIcon />} />
-        <StatCard loading={loading} label="Classes"   value={counts.classes}   accent="bg-green-50  text-green-700  border-green-200"   icon={<AcademicIcon />} />
-        <StatCard loading={loading} label="Subjects"  value={counts.subjects}  accent="bg-cyan-50   text-cyan-700   border-cyan-200"    icon={<BookIcon />} />
-        <StatCard loading={loading} label="Modules"   value={counts.modules}   accent="bg-sky-50    text-sky-700    border-sky-200"     icon={<PuzzleIcon />} />
-        <StatCard loading={loading} label="Teachers"  value={counts.teachers}  accent="bg-lime-50   text-lime-700   border-lime-200"    icon={<UsersIcon />} />
-        <StatCard loading={loading} label="Students"  value={counts.students}  accent="bg-yellow-50 text-yellow-700 border-yellow-200"  icon={<GroupIcon />} />
+        <StatCard loading={loading} label="Clusters"  value={counts.clusters}  accent="bg-teal-50 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 border-teal-200 dark:border-teal-700/50"   icon={<FolderIcon />} />
+        <StatCard loading={loading} label="Sections"  value={counts.sections}  accent="bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-700/50" icon={<GridIcon />} />
+        <StatCard loading={loading} label="Classes"   value={counts.classes}   accent="bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-700/50"   icon={<AcademicIcon />} />
+        <StatCard loading={loading} label="Subjects"  value={counts.subjects}  accent="bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700/50"    icon={<BookIcon />} />
+        <StatCard loading={loading} label="Modules"   value={counts.modules}   accent="bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-700/50"     icon={<PuzzleIcon />} />
+        <StatCard loading={loading} label="Teachers"  value={counts.teachers}  accent="bg-lime-50 dark:bg-lime-900/30 text-lime-700 dark:text-lime-300 border-lime-200 dark:border-lime-700/50"    icon={<UsersIcon />} />
+        <StatCard loading={loading} label="Students"  value={counts.students}  accent="bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700/50"  icon={<GroupIcon />} />
       </div>
 
       {/* Quick links */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Quick Access</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">Quick Access</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <QuickLink to="../clusters"            label="Clusters"             desc="Manage school clusters"            icon={<FolderIcon />} />
           <QuickLink to="../sections"            label="Sections"             desc="Manage sections within clusters"   icon={<GridIcon />} />

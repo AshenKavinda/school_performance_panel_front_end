@@ -8,13 +8,13 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 // ── Stat card ─────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, icon, accent, loading }) => (
   <div className={`rounded-xl border p-5 flex items-start gap-4 ${accent}`}>
-    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60">
+    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60 dark:bg-white/10">
       {icon}
     </div>
     <div className="min-w-0">
       <p className="text-sm font-medium opacity-75 truncate">{label}</p>
       {loading ? (
-        <div className="h-7 w-16 bg-white/50 rounded animate-pulse mt-1" />
+        <div className="h-7 w-16 bg-white/50 dark:bg-white/10 rounded animate-pulse mt-1" />
       ) : (
         <p className="text-2xl font-bold mt-0.5">{value ?? '—'}</p>
       )}
@@ -26,16 +26,16 @@ const StatCard = ({ label, value, icon, accent, loading }) => (
 const QuickLink = ({ to, label, desc, icon }) => (
   <Link
     to={to}
-    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition group"
+    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-orange-300 hover:bg-orange-50 dark:hover:border-orange-600 dark:hover:bg-orange-900/30 transition group"
   >
-    <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600 flex-shrink-0 group-hover:bg-orange-200 transition">
+    <div className="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/50 flex items-center justify-center text-orange-600 dark:text-orange-400 flex-shrink-0 group-hover:bg-orange-200 dark:group-hover:bg-orange-800/50 transition">
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-sm font-medium text-gray-800 group-hover:text-orange-700">{label}</p>
-      {desc && <p className="text-xs text-gray-400 truncate">{desc}</p>}
+      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 group-hover:text-orange-700 dark:group-hover:text-orange-400">{label}</p>
+      {desc && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{desc}</p>}
     </div>
-    <svg className="w-4 h-4 text-gray-300 ml-auto flex-shrink-0 group-hover:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 ml-auto flex-shrink-0 group-hover:text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   </Link>
@@ -102,47 +102,47 @@ const TeacherOverview = () => {
           label="Assigned Subjects"
           value={stats.subjects}
           loading={loading}
-          accent="bg-orange-50 text-orange-700 border-orange-200"
+          accent="bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-700/50"
           icon={<BookIcon />}
         />
         <StatCard
           label="Assigned Sections"
           value={stats.sections}
           loading={loading}
-          accent="bg-amber-50 text-amber-700 border-amber-200"
+          accent="bg-amber-50 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-700/50"
           icon={<GridIcon />}
         />
         <StatCard
           label="Today's Classes"
           value={stats.todayClasses}
           loading={loading}
-          accent="bg-yellow-50 text-yellow-700 border-yellow-200"
+          accent="bg-yellow-50 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-700/50"
           icon={<CalendarIcon />}
         />
       </div>
 
       {/* Today's Schedule */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-4">Today&apos;s Schedule</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Today&apos;s Schedule</h3>
         {loading ? (
           <div className="space-y-3">
-            {[1, 2, 3].map(i => <div key={i} className="h-12 bg-gray-100 rounded-lg animate-pulse" />)}
+            {[1, 2, 3].map(i => <div key={i} className="h-12 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />)}
           </div>
         ) : todayEntries.length === 0 ? (
-          <p className="text-sm text-gray-400 py-4 text-center">No classes scheduled for today.</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 py-4 text-center">No classes scheduled for today.</p>
         ) : (
           <div className="space-y-2">
             {todayEntries.map((entry, i) => (
               <div key={entry.timetableId ?? i}
-                className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 border border-orange-100">
-                <div className="w-8 h-8 rounded-lg bg-orange-200 flex items-center justify-center text-orange-700 flex-shrink-0 text-xs font-bold">
+                className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20 border border-orange-100 dark:border-orange-800/50">
+                <div className="w-8 h-8 rounded-lg bg-orange-200 dark:bg-orange-800/50 flex items-center justify-center text-orange-700 dark:text-orange-300 flex-shrink-0 text-xs font-bold">
                   {entry.timeSlotName ?? (i + 1)}
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-gray-800">{entry.subjectName ?? '—'}</p>
-                  <p className="text-xs text-gray-500">{entry.className ?? '—'}</p>
+                  <p className="text-sm font-medium text-gray-800 dark:text-gray-200">{entry.subjectName ?? '—'}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">{entry.className ?? '—'}</p>
                 </div>
-                <span className="text-xs text-gray-400 flex-shrink-0">
+                <span className="text-xs text-gray-400 dark:text-gray-500 flex-shrink-0">
                   {entry.startTime ?? ''} – {entry.endTime ?? ''}
                 </span>
               </div>
@@ -152,8 +152,8 @@ const TeacherOverview = () => {
       </div>
 
       {/* Quick Links */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-4">Quick Actions</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <QuickLink to="/teacher/timetable"   label="My Timetable"    desc="View weekly schedule"         icon={<CalendarIcon />} />
           <QuickLink to="/teacher/assignments"  label="My Assignments"  desc="Subjects & sections"          icon={<BookIcon />} />

@@ -7,3 +7,4 @@ export { default as Modal }         from './Modal';
 export { default as PageHeader }    from './PageHeader';
 export { default as Pagination }    from './Pagination';
 export { default as StatusTag }     from './StatusTag';
+export { default as ThemeToggle }   from './ThemeToggle';

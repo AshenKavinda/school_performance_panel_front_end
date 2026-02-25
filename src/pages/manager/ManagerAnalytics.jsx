@@ -41,10 +41,10 @@ const LINE_ACCENT   = '#a78bfa';
 
 // ── Reusable tiny components ──────────────────────────────────────────────────
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-xl border border-gray-200 p-6 ${className}`}>{children}</div>
+  <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 ${className}`}>{children}</div>
 );
 const SectionTitle = ({ children }) => (
-  <h3 className="text-base font-semibold text-gray-800 mb-4">{children}</h3>
+  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-4">{children}</h3>
 );
 const EmptyState = ({ text }) => (
   <p className="text-sm text-gray-400 py-8 text-center">{text}</p>
@@ -145,7 +145,7 @@ const ManagerAnalytics = () => {
 
       {/* ── TERM SELECTOR ── */}
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-gray-600">Term:</span>
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Term:</span>
         {TERMS.map(t => (
           <button
             key={t.value}
@@ -153,7 +153,7 @@ const ManagerAnalytics = () => {
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
               term === t.value
                 ? 'bg-indigo-500 text-white shadow-sm'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             {t.label}
@@ -187,7 +187,7 @@ const ManagerAnalytics = () => {
                 <div className="overflow-x-auto mt-4">
                   <table className="min-w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200 text-left text-gray-500">
+                      <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                         <th className="py-2 pr-4 font-medium">Cluster</th>
                         <th className="py-2 pr-4 font-medium text-right">Average</th>
                         <th className="py-2 pr-4 font-medium text-right">Students</th>
@@ -197,7 +197,7 @@ const ManagerAnalytics = () => {
                     <tbody>
                       {clusterPerf.map(c => (
                         <tr key={c.clusterId} className="border-b border-gray-100 hover:bg-indigo-50/40">
-                          <td className="py-2 pr-4 font-medium text-gray-800">{c.clusterName ?? '—'}</td>
+                          <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{c.clusterName ?? '—'}</td>
                           <td className="py-2 pr-4 text-right font-semibold text-indigo-600">{c.averageMark?.toFixed(1) ?? '—'}</td>
                           <td className="py-2 pr-4 text-right">{c.totalStudents ?? 0}</td>
                           <td className="py-2 pr-4 text-right">{c.totalMarksRecorded ?? 0}</td>
@@ -232,7 +232,7 @@ const ManagerAnalytics = () => {
                 <div className="overflow-x-auto mt-4">
                   <table className="min-w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200 text-left text-gray-500">
+                      <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                         <th className="py-2 pr-4 font-medium">Section</th>
                         <th className="py-2 pr-4 font-medium">Cluster</th>
                         <th className="py-2 pr-4 font-medium text-right">Average</th>
@@ -243,7 +243,7 @@ const ManagerAnalytics = () => {
                     <tbody>
                       {sectionPerf.map(s => (
                         <tr key={s.sectionId} className="border-b border-gray-100 hover:bg-violet-50/40">
-                          <td className="py-2 pr-4 font-medium text-gray-800">{s.sectionName ?? '—'}</td>
+                          <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{s.sectionName ?? '—'}</td>
                           <td className="py-2 pr-4 text-gray-500">{s.clusterName ?? '—'}</td>
                           <td className="py-2 pr-4 text-right font-semibold text-violet-600">{s.averageMark?.toFixed(1) ?? '—'}</td>
                           <td className="py-2 pr-4 text-right">{s.totalStudents ?? 0}</td>
@@ -281,7 +281,7 @@ const ManagerAnalytics = () => {
                 <div className="overflow-x-auto mt-4">
                   <table className="min-w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200 text-left text-gray-500">
+                      <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                         <th className="py-2 pr-3 font-medium">Subject</th>
                         <th className="py-2 pr-3 font-medium text-right">Credit</th>
                         <th className="py-2 pr-3 font-medium text-right">Average</th>
@@ -294,7 +294,7 @@ const ManagerAnalytics = () => {
                     <tbody>
                       {subjectPerf.map(s => (
                         <tr key={s.subjectId} className="border-b border-gray-100 hover:bg-indigo-50/40">
-                          <td className="py-2 pr-3 font-medium text-gray-800">{s.subjectName ?? '—'}</td>
+                          <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{s.subjectName ?? '—'}</td>
                           <td className="py-2 pr-3 text-right">{s.creditValue ?? '—'}</td>
                           <td className="py-2 pr-3 text-right font-semibold text-indigo-600">{s.averageMark?.toFixed(1) ?? '—'}</td>
                           <td className="py-2 pr-3 text-right text-green-600">{s.highestMark?.toFixed(1) ?? '—'}</td>
@@ -319,7 +319,7 @@ const ManagerAnalytics = () => {
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left text-gray-500">
+                    <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                       <th className="py-2 pr-3 font-medium">Rank</th>
                       <th className="py-2 pr-3 font-medium">Class</th>
                       <th className="py-2 pr-3 font-medium">Section</th>
@@ -334,18 +334,18 @@ const ManagerAnalytics = () => {
                       <tr key={c.classId} className="border-b border-gray-100 hover:bg-indigo-50/40">
                         <td className="py-2 pr-3">
                           <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                            c.rank === 1 ? 'bg-yellow-100 text-yellow-700'
-                            : c.rank === 2 ? 'bg-gray-100 text-gray-600'
+                            c.rank === 1 ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                            : c.rank === 2 ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                             : c.rank === 3 ? 'bg-orange-100 text-orange-600'
-                            : 'bg-gray-50 text-gray-500'
+                            : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                           }`}>{c.rank}</span>
                         </td>
-                        <td className="py-2 pr-3 font-medium text-gray-800">{c.className ?? '—'}</td>
+                        <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{c.className ?? '—'}</td>
                         <td className="py-2 pr-3 text-gray-500">{c.sectionName ?? '—'}</td>
                         <td className="py-2 pr-3 text-gray-500">{c.academicYear ?? '—'}</td>
                         <td className="py-2 pr-3">
                           <span className={`px-2 py-0.5 rounded text-xs font-medium ${
-                            c.classType === 'MODULE_BASE' ? 'bg-purple-100 text-purple-700' : 'bg-blue-100 text-blue-700'
+                            c.classType === 'MODULE_BASE' ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                           }`}>{c.classType === 'MODULE_BASE' ? 'Module' : 'Subject'}</span>
                         </td>
                         <td className="py-2 pr-3 text-right font-semibold text-indigo-600">{c.averageMark?.toFixed(1) ?? '—'}</td>
@@ -411,7 +411,7 @@ const ManagerAnalytics = () => {
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left text-gray-500">
+                    <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                       <th className="py-2 pr-3 font-medium">Rank</th>
                       <th className="py-2 pr-3 font-medium">Student</th>
                       <th className="py-2 pr-3 font-medium">Index No.</th>
@@ -426,13 +426,13 @@ const ManagerAnalytics = () => {
                       <tr key={s.studentId} className="border-b border-gray-100 hover:bg-indigo-50/40">
                         <td className="py-2 pr-3">
                           <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                            s.rank === 1 ? 'bg-yellow-100 text-yellow-700'
-                            : s.rank === 2 ? 'bg-gray-100 text-gray-600'
+                            s.rank === 1 ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                            : s.rank === 2 ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                             : s.rank === 3 ? 'bg-orange-100 text-orange-600'
-                            : 'bg-gray-50 text-gray-500'
+                            : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                           }`}>{s.rank}</span>
                         </td>
-                        <td className="py-2 pr-3 font-medium text-gray-800">{s.studentName ?? '—'}</td>
+                        <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{s.studentName ?? '—'}</td>
                         <td className="py-2 pr-3 text-gray-500">{s.indexNumber ?? '—'}</td>
                         <td className="py-2 pr-3 text-gray-500">{s.className ?? '—'}</td>
                         <td className="py-2 pr-3 text-gray-500">{s.sectionName ?? '—'}</td>
@@ -468,7 +468,7 @@ const ManagerAnalytics = () => {
                 <div className="overflow-x-auto">
                   <table className="min-w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200 text-left text-gray-500">
+                      <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                         <th className="py-2 pr-3 font-medium">#</th>
                         <th className="py-2 pr-3 font-medium">Teacher</th>
                         <th className="py-2 pr-3 font-medium text-right">Classes</th>
@@ -480,7 +480,7 @@ const ManagerAnalytics = () => {
                       {teacherPerf.map((t, i) => (
                         <tr key={t.teacherId} className="border-b border-gray-100 hover:bg-indigo-50/40">
                           <td className="py-2 pr-3 text-gray-400">{i + 1}</td>
-                          <td className="py-2 pr-3 font-medium text-gray-800">{t.teacherName ?? '—'}</td>
+                          <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{t.teacherName ?? '—'}</td>
                           <td className="py-2 pr-3 text-right">{t.classesTaught ?? 0}</td>
                           <td className="py-2 pr-3 text-right">{t.subjectsTaught ?? 0}</td>
                           <td className="py-2 pr-3 text-right font-semibold text-indigo-600">{t.averageClassMark?.toFixed(1) ?? '—'}</td>
@@ -539,7 +539,7 @@ const ManagerAnalytics = () => {
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 text-left text-gray-500">
+                  <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                     <th className="py-2 pr-4 font-medium">Year</th>
                     <th className="py-2 pr-4 font-medium text-right">Average</th>
                     <th className="py-2 pr-4 font-medium text-right">Students</th>
@@ -549,7 +549,7 @@ const ManagerAnalytics = () => {
                 <tbody>
                   {yearComp.map(y => (
                     <tr key={y.academicYear} className="border-b border-gray-100 hover:bg-indigo-50/40">
-                      <td className="py-2 pr-4 font-medium text-gray-800">{y.academicYear ?? '—'}</td>
+                      <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{y.academicYear ?? '—'}</td>
                       <td className="py-2 pr-4 text-right font-semibold text-indigo-600">{y.averageMark?.toFixed(1) ?? '—'}</td>
                       <td className="py-2 pr-4 text-right">{y.totalStudents ?? 0}</td>
                       <td className="py-2 pr-4 text-right">{y.totalMarksRecorded ?? 0}</td>

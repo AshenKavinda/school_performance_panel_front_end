@@ -21,7 +21,7 @@ const buildColumns = (onView) => [
   {
     key: 'applicationAdminUsername',
     header: 'School',
-    render: (r) => <span className="font-medium text-gray-800">{r.applicationAdminUsername ?? '—'}</span>,
+    render: (r) => <span className="font-medium text-gray-800 dark:text-gray-200">{r.applicationAdminUsername ?? '—'}</span>,
   },
   {
     key: 'applicationAdminEmail',
@@ -36,7 +36,7 @@ const buildColumns = (onView) => [
   {
     key: 'amount',
     header: 'Amount',
-    render: (r) => <span className="font-semibold text-gray-800">${Number(r.amount ?? 0).toFixed(2)}</span>,
+    render: (r) => <span className="font-semibold text-gray-800 dark:text-gray-200">${Number(r.amount ?? 0).toFixed(2)}</span>,
   },
   {
     key: 'paymentDate',
@@ -52,7 +52,7 @@ const buildColumns = (onView) => [
     key: 'daysRemaining',
     header: 'Days Left',
     render: (r) => {
-      if (!r.isActive) return <span className="text-gray-300">—</span>;
+      if (!r.isActive) return <span className="text-gray-300 dark:text-gray-600">—</span>;
       const d = r.daysRemaining ?? 0;
       return (
         <span className={d <= 14 ? 'text-red-600 font-medium' : 'text-gray-700'}>
@@ -72,7 +72,7 @@ const buildColumns = (onView) => [
     render: (r) => (
       <button
         onClick={() => onView(r)}
-        className="text-xs text-blue-600 hover:text-blue-800 font-medium px-2 py-1 rounded hover:bg-blue-50 transition"
+        className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium px-2 py-1 rounded hover:bg-blue-50 dark:hover:bg-blue-900/30 transition"
       >
         Details
       </button>
@@ -195,15 +195,15 @@ const PaymentsPage = () => {
       {/* ── Summary pills ── */}
       {!loading && (
         <div className="flex flex-wrap gap-3 mb-5">
-          <div className="bg-white border border-gray-100 rounded-xl px-4 py-2 text-sm shadow-sm">
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2 text-sm shadow-sm">
             <span className="text-gray-500">Total: </span>
-            <span className="font-bold text-gray-800">{rows.length}</span>
+            <span className="font-bold text-gray-800 dark:text-gray-200">{rows.length}</span>
           </div>
-          <div className="bg-white border border-gray-100 rounded-xl px-4 py-2 text-sm shadow-sm">
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2 text-sm shadow-sm">
             <span className="text-gray-500">Active: </span>
             <span className="font-bold text-green-600">{activeCount}</span>
           </div>
-          <div className="bg-white border border-gray-100 rounded-xl px-4 py-2 text-sm shadow-sm">
+          <div className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl px-4 py-2 text-sm shadow-sm">
             <span className="text-gray-500">Revenue: </span>
             <span className="font-bold text-blue-600">${totalRevenue.toFixed(2)}</span>
           </div>
@@ -217,9 +217,9 @@ const PaymentsPage = () => {
           placeholder="Search school, email or package…"
           value={searchSchool}
           onChange={(e) => setSearchSchool(e.target.value)}
-          className="w-full sm:w-72 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          className="w-full sm:w-72 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
         />
-        <div className="flex gap-1 bg-gray-100 rounded-xl p-1">
+        <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-xl p-1">
           {[
             { val: 'all',     label: 'All' },
             { val: 'active',  label: 'Active' },
@@ -230,8 +230,8 @@ const PaymentsPage = () => {
               onClick={() => setFilterStatus(val)}
               className={`px-3 py-1.5 text-xs font-medium rounded-lg transition ${
                 filterStatus === val
-                  ? 'bg-white text-gray-800 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white dark:bg-gray-600 text-gray-800 dark:text-gray-200 shadow-sm'
+                  : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
               }`}
             >
               {label}
@@ -274,8 +274,8 @@ const PaymentsPage = () => {
               ['Currency',       viewTarget.currency ?? '—'],
             ].map(([label, val]) => (
               <div key={label} className="flex gap-4">
-                <span className="text-gray-400 w-36 flex-shrink-0">{label}</span>
-                <span className="text-gray-800 font-medium break-all">{val}</span>
+                <span className="text-gray-400 dark:text-gray-500 w-36 flex-shrink-0">{label}</span>
+                <span className="text-gray-800 dark:text-gray-200 font-medium break-all">{val}</span>
               </div>
             ))}
           </div>
@@ -290,7 +290,7 @@ const PaymentsPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition">
               {creating ? 'Recording…' : 'Record Payment'}
             </button>

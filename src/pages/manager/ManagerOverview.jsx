@@ -7,13 +7,13 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 // ── Stat card ─────────────────────────────────────────────────────────────────
 const StatCard = ({ label, value, icon, accent, loading }) => (
   <div className={`rounded-xl border p-5 flex items-start gap-4 ${accent}`}>
-    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60">
+    <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-white/60 dark:bg-white/10">
       {icon}
     </div>
     <div className="min-w-0">
       <p className="text-sm font-medium opacity-75 truncate">{label}</p>
       {loading ? (
-        <div className="h-7 w-16 bg-white/50 rounded animate-pulse mt-1" />
+        <div className="h-7 w-16 bg-white/50 dark:bg-white/10 rounded animate-pulse mt-1" />
       ) : (
         <p className="text-2xl font-bold mt-0.5">{value ?? '—'}</p>
       )}
@@ -25,16 +25,16 @@ const StatCard = ({ label, value, icon, accent, loading }) => (
 const QuickLink = ({ to, label, desc, icon }) => (
   <Link
     to={to}
-    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition group"
+    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:border-indigo-300 hover:bg-indigo-50 dark:hover:border-indigo-600 dark:hover:bg-indigo-900/30 transition group"
   >
-    <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center text-indigo-600 flex-shrink-0 group-hover:bg-indigo-200 transition">
+    <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 flex-shrink-0 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition">
       {icon}
     </div>
     <div className="min-w-0">
-      <p className="text-sm font-medium text-gray-800 group-hover:text-indigo-700">{label}</p>
-      {desc && <p className="text-xs text-gray-400 truncate">{desc}</p>}
+      <p className="text-sm font-medium text-gray-800 dark:text-gray-200 group-hover:text-indigo-700 dark:group-hover:text-indigo-400">{label}</p>
+      {desc && <p className="text-xs text-gray-400 dark:text-gray-500 truncate">{desc}</p>}
     </div>
-    <svg className="w-4 h-4 text-gray-300 ml-auto flex-shrink-0 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg className="w-4 h-4 text-gray-300 dark:text-gray-600 ml-auto flex-shrink-0 group-hover:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
     </svg>
   </Link>
@@ -85,28 +85,28 @@ const ManagerOverview = () => {
           label="Total Students"
           value={overview?.totalStudents}
           loading={loading}
-          accent="bg-indigo-50 text-indigo-700 border-indigo-200"
+          accent="bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-700/50"
           icon={<UsersIcon />}
         />
         <StatCard
           label="Total Teachers"
           value={overview?.totalTeachers}
           loading={loading}
-          accent="bg-violet-50 text-violet-700 border-violet-200"
+          accent="bg-violet-50 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-700/50"
           icon={<AcademicIcon />}
         />
         <StatCard
           label="Total Classes"
           value={overview?.totalClasses}
           loading={loading}
-          accent="bg-purple-50 text-purple-700 border-purple-200"
+          accent="bg-purple-50 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-700/50"
           icon={<GridIcon />}
         />
         <StatCard
           label="Overall Average"
           value={overview?.overallAverageMark != null ? `${overview.overallAverageMark.toFixed(1)}%` : '—'}
           loading={loading}
-          accent="bg-fuchsia-50 text-fuchsia-700 border-fuchsia-200"
+          accent="bg-fuchsia-50 dark:bg-fuchsia-900/30 text-fuchsia-700 dark:text-fuchsia-300 border-fuchsia-200 dark:border-fuchsia-700/50"
           icon={<TrendUpIcon />}
         />
       </div>
@@ -117,28 +117,28 @@ const ManagerOverview = () => {
           label="Clusters"
           value={overview?.totalClusters}
           loading={loading}
-          accent="bg-blue-50 text-blue-700 border-blue-200"
+          accent="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-700/50"
           icon={<FolderIcon />}
         />
         <StatCard
           label="Sections"
           value={overview?.totalSections}
           loading={loading}
-          accent="bg-sky-50 text-sky-700 border-sky-200"
+          accent="bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-700/50"
           icon={<GridIcon />}
         />
         <StatCard
           label="Subjects"
           value={overview?.totalSubjects}
           loading={loading}
-          accent="bg-cyan-50 text-cyan-700 border-cyan-200"
+          accent="bg-cyan-50 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-700/50"
           icon={<BookIcon />}
         />
       </div>
 
       {/* Quick Links */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="text-base font-semibold text-gray-800 mb-4">Quick Actions</h3>
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+        <h3 className="text-base font-semibold text-gray-800 dark:text-gray-100 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           <QuickLink to="/manager/operators"  label="View Operators"    desc="School data operators"         icon={<BriefcaseIcon />} />
           <QuickLink to="/manager/teachers"   label="View Teachers"     desc="All teachers & assignments"    icon={<AcademicIcon />} />

@@ -15,13 +15,13 @@ const GradeBadge = ({ grade, small = false }) => {
   if (!grade) return null;
   const colors = {
     'A+': 'bg-emerald-100 text-emerald-700', 'A': 'bg-emerald-100 text-emerald-700',
-    'A-': 'bg-green-100 text-green-700',
-    'B+': 'bg-teal-100 text-teal-700', 'B': 'bg-teal-100 text-teal-700',
-    'B-': 'bg-cyan-100 text-cyan-700',
+    'A-': 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400',
+    'B+': 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400', 'B': 'bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400',
+    'B-': 'bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400',
     'C+': 'bg-sky-100 text-sky-700', 'C': 'bg-sky-100 text-sky-700',
-    'C-': 'bg-blue-100 text-blue-700',
+    'C-': 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
     'D+': 'bg-amber-100 text-amber-700', 'D': 'bg-amber-100 text-amber-700',
-    'F': 'bg-red-100 text-red-700',
+    'F': 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
   };
   const color = colors[grade] ?? 'bg-gray-100 text-gray-700';
   return (
@@ -36,11 +36,11 @@ const MarkCell = ({ mark, grade }) => (
   <td className="py-2.5 px-3 text-center">
     {mark != null ? (
       <span className="inline-flex items-center gap-1.5">
-        <span className={`font-medium ${mark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>{mark}</span>
+        <span className={`font-medium ${mark >= 50 ? 'text-gray-800 dark:text-gray-200' : 'text-red-600 dark:text-red-400'}`}>{mark}</span>
         <GradeBadge grade={grade} small />
       </span>
     ) : (
-      <span className="text-gray-300">—</span>
+      <span className="text-gray-300 dark:text-gray-600">—</span>
     )}
   </td>
 );
@@ -70,11 +70,11 @@ const SubjectBaseView = ({ marks, className, gradings }) => {
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-gray-200">
-            <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
+            <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
             {TERMS.map(t => (
-              <th key={t.value} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">{t.label}</th>
+              <th key={t.value} className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">{t.label}</th>
             ))}
-            <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Average</th>
+            <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Average</th>
           </tr>
         </thead>
         <tbody>
@@ -85,8 +85,8 @@ const SubjectBaseView = ({ marks, className, gradings }) => {
             const avgGrade = avg != null ? resolveGrade(avg, gradings) : null;
 
             return (
-              <tr key={subjectId} className="border-b border-gray-50 hover:bg-gray-50">
-                <td className="py-2.5 px-3 font-medium text-gray-800">{sub.subjectName}</td>
+              <tr key={subjectId} className="border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <td className="py-2.5 px-3 font-medium text-gray-800 dark:text-gray-200">{sub.subjectName}</td>
                 {TERMS.map(t => {
                   const mark = sub.terms[t.value];
                   const g = mark != null ? resolveGrade(mark, gradings) : null;
@@ -130,19 +130,19 @@ const ModuleBaseView = ({ marks, gradings }) => {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-200">
-                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Module</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Mark</th>
-                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Grade</th>
+                  <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Module</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Mark</th>
+                  <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Grade</th>
                 </tr>
               </thead>
               <tbody>
                 {modules.map(mod => {
                   const g = mod.mark != null ? resolveGrade(mod.mark, gradings) : null;
                   return (
-                    <tr key={mod.moduleId} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="py-2.5 px-3 font-medium text-gray-800">{mod.moduleName}</td>
+                    <tr key={mod.moduleId} className="border-b border-gray-50 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                      <td className="py-2.5 px-3 font-medium text-gray-800 dark:text-gray-200">{mod.moduleName}</td>
                       <td className="py-2.5 px-3 text-center">
-                        <span className={`font-medium ${(mod.mark ?? 0) >= 50 ? 'text-gray-800' : 'text-red-600'}`}>
+                        <span className={`font-medium ${(mod.mark ?? 0) >= 50 ? 'text-gray-800 dark:text-gray-200' : 'text-red-600 dark:text-red-400'}`}>
                           {mod.mark ?? '—'}
                         </span>
                       </td>
@@ -233,7 +233,7 @@ const StudentMarks = () => {
               className={`px-4 py-2 rounded-lg text-sm font-medium transition border ${
                 selectedClassId === cls.classId
                   ? 'bg-emerald-600 text-white border-emerald-600'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-emerald-300 hover:bg-emerald-50'
+                  : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/30'
               }`}
             >
               {cls.className}
@@ -249,17 +249,17 @@ const StudentMarks = () => {
 
       {/* Marks Content */}
       {selectedClass ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h3 className="text-base font-semibold text-gray-800">{selectedClass.className}</h3>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">{selectedClass.className}</h3>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                 {selectedClass.sectionName} · {selectedClass.academicYear}
               </p>
             </div>
             <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
               selectedClass.classType === 'MODULE_BASE'
-                ? 'bg-purple-100 text-purple-700'
+                ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
                 : 'bg-emerald-100 text-emerald-700'
             }`}>
               {selectedClass.classType === 'MODULE_BASE' ? 'Module Based' : 'Subject Based'}
@@ -273,11 +273,11 @@ const StudentMarks = () => {
           )}
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center">
           <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
-          <p className="text-sm text-gray-500">No classes found. Enroll in a class to view marks.</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">No classes found. Enroll in a class to view marks.</p>
         </div>
       )}
     </div>

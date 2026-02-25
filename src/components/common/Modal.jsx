@@ -56,23 +56,23 @@ const Modal = ({ open, onClose, title, size = 'md', footer, hideClose = false, c
 
       {/* Panel */}
       <div
-        className={`relative bg-white rounded-2xl shadow-2xl flex flex-col w-full ${sizeCls} max-h-[90vh] overflow-hidden`}
+        className={`relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col w-full ${sizeCls} max-h-[90vh] overflow-hidden`}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
         {/* Header */}
         {(title || !hideClose) && (
-          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 flex-shrink-0">
+          <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
             {title && (
-              <h2 id="modal-title" className="text-base font-semibold text-gray-900">
+              <h2 id="modal-title" className="text-base font-semibold text-gray-900 dark:text-white">
                 {title}
               </h2>
             )}
             {!hideClose && (
               <button
                 onClick={onClose}
-                className="ml-auto p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                className="ml-auto p-1.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition"
                 aria-label="Close modal"
               >
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -90,7 +90,7 @@ const Modal = ({ open, onClose, title, size = 'md', footer, hideClose = false, c
 
         {/* Footer */}
         {footer && (
-          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 bg-gray-50 flex-shrink-0">
+          <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 flex-shrink-0">
             {footer}
           </div>
         )}

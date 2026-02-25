@@ -33,7 +33,7 @@ const buildColumns = (onEdit, onDelete) => [
   {
     key: 'username',
     header: 'Username',
-    render: (r) => <span className="font-medium text-gray-800">{r.username ?? '—'}</span>,
+    render: (r) => <span className="font-medium text-gray-800 dark:text-gray-200">{r.username ?? '—'}</span>,
   },
   { key: 'email', header: 'Email', render: (r) => r.email ?? '—' },
   {
@@ -73,13 +73,13 @@ const buildColumns = (onEdit, onDelete) => [
       <div className="flex items-center gap-2 justify-end">
         <button
           onClick={() => onEdit(r)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition"
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition"
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(r)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
         >
           Delete
         </button>
@@ -214,12 +214,12 @@ const UsersPage = () => {
           placeholder="Search by username, email or phone…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full sm:w-72 border border-gray-200 rounded-xl px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
+          className="w-full sm:w-72 border border-gray-200 dark:border-gray-600 rounded-xl px-4 py-2 text-sm bg-white dark:bg-gray-800 dark:text-gray-200 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent"
         />
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
-          className="border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent bg-white"
+          className="border border-gray-200 dark:border-gray-600 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent bg-white dark:bg-gray-800 dark:text-gray-200"
         >
           <option value="all">All Roles ({rows.length})</option>
           {ROLE_OPTIONS.map(({ value, label }) => (
@@ -247,7 +247,7 @@ const UsersPage = () => {
         size="sm"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition">Cancel</button>
             <button onClick={handleSave} disabled={saving} className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
@@ -294,7 +294,7 @@ const UsersPage = () => {
         title="Delete User"
         confirmLabel="Delete"
       >
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-gray-400">
           Are you sure you want to permanently delete <strong>{deleteTarget?.username}</strong>?{' '}
           This will remove their account and all associated data.
         </p>

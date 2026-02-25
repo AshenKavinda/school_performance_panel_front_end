@@ -33,7 +33,7 @@ const fromTimeSpan = (t) => {
 const TimeSlotFormFields = ({ form, errors, onChange }) => (
   <div className="space-y-4">
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         Slot Name <span className="text-red-500">*</span>
       </label>
       <select name="name" value={form.name} onChange={onChange}
@@ -44,7 +44,7 @@ const TimeSlotFormFields = ({ form, errors, onChange }) => (
       {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name}</p>}
     </div>
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         Start Time <span className="text-red-500">*</span>
       </label>
       <input type="time" name="startTime" value={form.startTime} onChange={onChange}
@@ -53,7 +53,7 @@ const TimeSlotFormFields = ({ form, errors, onChange }) => (
       {errors.startTime && <p className="mt-1 text-xs text-red-500">{errors.startTime}</p>}
     </div>
     <div>
-      <label className="block text-sm font-medium text-gray-700 mb-1">
+      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
         End Time <span className="text-red-500">*</span>
       </label>
       <input type="time" name="endTime" value={form.endTime} onChange={onChange}
@@ -73,7 +73,7 @@ const buildColumns = (onEdit, onDelete) => [
     key: 'name',
     header: 'Slot Name',
     render: (row) => (
-      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 text-purple-700">
+      <span className="inline-block px-2 py-0.5 rounded-full text-xs font-semibold bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400">
         {row.name ?? '—'}
       </span>
     ),
@@ -81,12 +81,12 @@ const buildColumns = (onEdit, onDelete) => [
   {
     key: 'startTime',
     header: 'Start Time',
-    render: (row) => <span className="text-sm font-medium text-gray-700">{fromTimeSpan(row.startTime) || '—'}</span>,
+    render: (row) => <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{fromTimeSpan(row.startTime) || '—'}</span>,
   },
   {
     key: 'endTime',
     header: 'End Time',
-    render: (row) => <span className="text-sm font-medium text-gray-700">{fromTimeSpan(row.endTime) || '—'}</span>,
+    render: (row) => <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{fromTimeSpan(row.endTime) || '—'}</span>,
   },
   {
     key: 'createdAt',
@@ -99,11 +99,11 @@ const buildColumns = (onEdit, onDelete) => [
     render: (row) => (
       <div className="flex items-center gap-2 justify-end">
         <button onClick={() => onEdit(row)}
-          className="text-xs text-gray-600 hover:text-gray-800 font-medium px-2 py-1 rounded hover:bg-gray-100 transition">
+          className="text-xs text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium px-2 py-1 rounded hover:bg-gray-100 dark:hover:bg-gray-700 transition">
           Edit
         </button>
         <button onClick={() => onDelete(row)}
-          className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition">
+          className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition">
           Delete
         </button>
       </div>
@@ -249,9 +249,9 @@ const TimeSlotsPage = () => {
       />
 
       {fetchErr ? (
-        <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-red-700 text-sm">{fetchErr}</div>
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-700 rounded-xl p-4 text-red-700 dark:text-red-400 text-sm">{fetchErr}</div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
           <DataTable columns={columns} data={rows} loading={loading} emptyMessage="No time slots defined yet." />
         </div>
       )}
@@ -259,7 +259,7 @@ const TimeSlotsPage = () => {
       <Modal open={createOpen} onClose={closeCreate} title="Add Time Slot"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
+            <button onClick={closeCreate} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">Cancel</button>
             <button onClick={handleCreate} disabled={creating}
               className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {creating ? 'Creating…' : 'Create Time Slot'}
@@ -273,7 +273,7 @@ const TimeSlotsPage = () => {
       <Modal open={!!editTarget} onClose={closeEdit} title="Edit Time Slot"
         footer={
           <div className="flex justify-end gap-3">
-            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">Cancel</button>
+            <button onClick={closeEdit} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">Cancel</button>
             <button onClick={handleSave} disabled={saving}
               className="px-4 py-2 text-sm font-medium text-white bg-purple-600 rounded-lg hover:bg-purple-700 disabled:opacity-50 transition">
               {saving ? 'Saving…' : 'Save Changes'}

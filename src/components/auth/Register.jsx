@@ -9,6 +9,7 @@ import {
   isValidDOB,
   parseApiError,
 } from '../../utils/validation';
+import ThemeToggle from '../common/ThemeToggle';
 
 const TABS = [
   { key: 'student', label: 'Student' },
@@ -28,10 +29,10 @@ const FieldError = ({ msg }) =>
 
 const inputCls = (err) =>
   `w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent transition ${
-    err ? 'border-red-400 bg-red-50 focus:ring-red-400' : 'border-gray-300 focus:ring-indigo-500'
+    err ? 'border-red-400 bg-red-50 dark:bg-red-900/20 focus:ring-red-400' : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 focus:ring-indigo-500'
   }`;
 
-const labelCls = 'block text-sm font-medium text-gray-700 mb-1.5';
+const labelCls = 'block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5';
 
 const EyeIcon = () => (
   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -169,7 +170,11 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4 py-12">
+      {/* Theme toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <ThemeToggle className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 bg-white/80 dark:bg-gray-800/80 shadow-sm" />
+      </div>
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="text-center mb-8">
@@ -179,20 +184,20 @@ const Register = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0121 21H3a12.083 12.083 0 012.84-10.422L12 14z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create an Account</h1>
-          <p className="text-gray-500 mt-1 text-sm">School Performance Panel</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Create an Account</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">School Performance Panel</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
           {/* Tabs */}
-          <div className="flex bg-gray-100 rounded-lg p-1 mb-6">
+          <div className="flex bg-gray-100 dark:bg-gray-700 rounded-lg p-1 mb-6">
             {TABS.map((t) => (
               <button
                 key={t.key}
                 type="button"
                 onClick={() => switchTab(t.key)}
                 className={`flex-1 py-2 text-sm font-medium rounded-md transition ${
-                  tab === t.key ? 'bg-white text-indigo-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                  tab === t.key ? 'bg-white dark:bg-gray-600 text-indigo-700 dark:text-indigo-300 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'
                 }`}
               >
                 {t.label}
@@ -202,21 +207,21 @@ const Register = () => {
 
           {/* API error */}
           {apiError && (
-            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+            <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-2">
               <svg className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
               </svg>
-              <p className="text-red-600 text-sm font-medium">{apiError}</p>
+              <p className="text-red-600 dark:text-red-400 text-sm font-medium">{apiError}</p>
             </div>
           )}
 
           {/* Success */}
           {success && (
-            <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg flex items-start gap-2">
+            <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg flex items-start gap-2">
               <svg className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
               </svg>
-              <p className="text-green-600 text-sm font-medium">{success}</p>
+              <p className="text-green-600 dark:text-green-400 text-sm font-medium">{success}</p>
             </div>
           )}
 
@@ -324,7 +329,7 @@ const Register = () => {
                 <label className={labelCls}>School Name <span className="text-gray-400 text-xs">(optional)</span></label>
                 <input name="schoolName" value={af.schoolName} onChange={handleAfChange}
                   placeholder="Springfield Academy"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" />
+                  className="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 dark:text-gray-100 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition" />
               </div>
 
               <button type="submit" disabled={loading}
@@ -336,9 +341,9 @@ const Register = () => {
           )}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
           Already have an account?{' '}
-          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium">
+          <Link to="/login" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 font-medium">
             Sign in
           </Link>
         </p>

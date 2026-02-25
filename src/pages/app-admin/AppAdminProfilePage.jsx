@@ -45,7 +45,7 @@ const ProfileEditFields = ({ form, errors, onChange }) => (
 const Field = ({ label, value }) => (
   <div className="flex flex-col gap-0.5 py-3 border-b border-gray-100 last:border-0">
     <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">{label}</span>
-    <span className="text-sm font-semibold text-gray-800">{value ?? '—'}</span>
+    <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{value ?? '—'}</span>
   </div>
 );
 
@@ -145,12 +145,12 @@ const AppAdminProfilePage = () => {
 
           {/* ── Avatar card ──────────────────────────────────────────────── */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 flex flex-col items-center text-center gap-3">
+            <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm p-6 flex flex-col items-center text-center gap-3">
               <div className="w-20 h-20 rounded-full bg-purple-100 flex items-center justify-center text-3xl font-bold text-purple-600 select-none">
                 {(profile.username ?? user?.username ?? '?')[0].toUpperCase()}
               </div>
               <div>
-                <p className="font-semibold text-gray-800 text-lg">{profile.username ?? user?.username ?? '—'}</p>
+                <p className="font-semibold text-gray-800 dark:text-gray-200 text-lg">{profile.username ?? user?.username ?? '—'}</p>
                 <p className="text-sm text-gray-500 mt-0.5">{profile.email ?? user?.email ?? '—'}</p>
               </div>
               <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-2.5 py-1 rounded-full ${
@@ -170,7 +170,7 @@ const AppAdminProfilePage = () => {
           {/* ── Details card ─────────────────────────────────────────────── */}
           <div className="lg:col-span-2">
             {!editing ? (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-purple-50">
                   <h2 className="text-sm font-semibold text-purple-800">Profile Details</h2>
                   <button
@@ -195,17 +195,17 @@ const AppAdminProfilePage = () => {
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden">
                 <div className="flex items-center justify-between px-5 py-4 border-b border-gray-100 bg-purple-50">
                   <h2 className="text-sm font-semibold text-purple-800">Edit Profile</h2>
                 </div>
                 <div className="px-5 py-5">
                   <ProfileEditFields form={editForm} errors={editErrors} onChange={setField} />
                 </div>
-                <div className="flex justify-end gap-3 px-5 py-4 border-t border-gray-100 bg-gray-50">
+                <div className="flex justify-end gap-3 px-5 py-4 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50">
                   <button
                     onClick={cancelEdit}
-                    className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+                    className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition"
                   >
                     Cancel
                   </button>

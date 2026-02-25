@@ -161,7 +161,7 @@ const TimetableCell = ({ entries = [], slot, day, isFixed, onDrop, onClick, subj
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       className={`px-1 py-1 border border-gray-200 align-middle min-w-[130px] transition-colors
-        ${dragOver ? 'bg-teal-50 ring-2 ring-inset ring-teal-400' : 'bg-white hover:bg-gray-50'}`}
+        ${dragOver ? 'bg-teal-50 ring-2 ring-inset ring-teal-400' : 'bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
     >
       <div className="h-10" />
     </td>
@@ -175,11 +175,11 @@ const TeacherRow = ({ teacher, conflict, onAssign, assigning, onViewSchedule }) 
     <div className={`flex items-start gap-3 p-3 rounded-lg border ${hasConflict ? 'border-red-200 bg-red-50' : 'border-green-200 bg-green-50'}`}>
       <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${hasConflict ? 'bg-red-500' : 'bg-green-500'}`} />
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900 truncate">
+        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
           {teacher.teacherName ?? teacher.teacherUsername ?? 'Teacher'}
         </p>
         {teacher.teacherIdNumber && (
-          <p className="text-xs text-gray-500">{teacher.teacherIdNumber}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">{teacher.teacherIdNumber}</p>
         )}
         {hasConflict && (
           <div className="mt-1.5 space-y-1">
@@ -230,11 +230,11 @@ const TeacherScheduleView = ({ schedule, teacherName }) => {
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-medium text-gray-700">Weekly schedule for <span className="font-bold">{teacherName}</span></p>
+      <p className="text-sm font-medium text-gray-700 dark:text-gray-300">Weekly schedule for <span className="font-bold">{teacherName}</span></p>
       <div className="overflow-x-auto">
         <table className="w-full text-xs border border-gray-200 rounded-lg overflow-hidden">
           <thead>
-            <tr className="bg-gray-50">
+            <tr className="bg-gray-50 dark:bg-gray-700">
               <th className="px-2 py-2 text-left font-semibold text-gray-500">Day</th>
               <th className="px-2 py-2 text-left font-semibold text-gray-500">Time</th>
               <th className="px-2 py-2 text-left font-semibold text-gray-500">Class</th>
@@ -246,15 +246,15 @@ const TeacherScheduleView = ({ schedule, teacherName }) => {
               (dayEntry.classes ?? []).map((cls, i) => (
                 <tr key={`${dayEntry.day}-${i}`} className="border-t border-gray-100">
                   {i === 0 && (
-                    <td className="px-2 py-1.5 font-medium text-gray-700" rowSpan={dayEntry.classes.length}>
+                    <td className="px-2 py-1.5 font-medium text-gray-700 dark:text-gray-300" rowSpan={dayEntry.classes.length}>
                       {DAY_SHORT[dayEntry.day] ?? dayEntry.dayDisplay ?? dayEntry.day}
                     </td>
                   )}
-                  <td className="px-2 py-1.5 text-gray-600 whitespace-nowrap">
+                  <td className="px-2 py-1.5 text-gray-600 dark:text-gray-400 whitespace-nowrap">
                     {fromTimeSpan(cls.startTime)} – {fromTimeSpan(cls.endTime)}
                   </td>
-                  <td className="px-2 py-1.5 text-gray-900 font-medium">{cls.className}</td>
-                  <td className="px-2 py-1.5 text-gray-600">{cls.subjectName}</td>
+                  <td className="px-2 py-1.5 text-gray-900 dark:text-gray-100 font-medium">{cls.className}</td>
+                  <td className="px-2 py-1.5 text-gray-600 dark:text-gray-400">{cls.subjectName}</td>
                 </tr>
               ))
             ))}
@@ -571,7 +571,7 @@ const TimetablePage = () => {
       />
 
       {/* Class selector */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">Select Class</label>
         <select value={selectedClassId} onChange={(e) => setSelectedClassId(e.target.value)}
           className="w-full sm:w-96 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
@@ -586,7 +586,7 @@ const TimetablePage = () => {
 
       {/* No class selected placeholder */}
       {!selectedClassId && (
-        <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-10 text-center text-sm text-gray-400">
+        <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 py-10 text-center text-sm text-gray-400">
           Select a class above to view and build its timetable.
         </div>
       )}
@@ -599,9 +599,9 @@ const TimetablePage = () => {
           <div className="flex gap-4 items-start">
             {/* ── Subject Panel (left sidebar) ────────────────────────────── */}
             <div className="w-56 flex-shrink-0">
-              <div className="bg-white rounded-xl border border-gray-200 sticky top-4">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <h3 className="text-sm font-semibold text-gray-800">Subjects</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 sticky top-4">
+                <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
+                  <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Subjects</h3>
                   <p className="text-xs text-gray-400 mt-0.5">Drag onto the timetable</p>
                 </div>
                 <div className="p-3 space-y-2 max-h-[70vh] overflow-y-auto">
@@ -629,16 +629,16 @@ const TimetablePage = () => {
 
             {/* ── Timetable Grid (main area) ──────────────────────────────── */}
             <div className="flex-1 min-w-0">
-              <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm border-collapse">
                     <thead>
-                      <tr className="bg-gray-50 border-b border-gray-200">
-                        <th className="px-3 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide w-28 border-r border-gray-200">
+                      <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                        <th className="px-3 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide w-28 border-r border-gray-200 dark:border-gray-700">
                           Time
                         </th>
                         {DAYS.map((d) => (
-                          <th key={d} className="px-2 py-3 text-center text-xs font-semibold text-gray-500 uppercase tracking-wide border-r border-gray-200 last:border-r-0">
+                          <th key={d} className="px-2 py-3 text-center text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide border-r border-gray-200 dark:border-gray-700 last:border-r-0">
                             {DAY_SHORT[d]}
                           </th>
                         ))}
@@ -651,7 +651,7 @@ const TimetablePage = () => {
                         return (
                           <tr key={slot.id} className={fixed ? 'bg-gray-50' : ''}>
                             {/* Time slot label */}
-                            <td className={`px-3 py-2 text-xs border border-gray-200 whitespace-nowrap align-middle ${fixed ? 'bg-gray-100 text-gray-400' : 'bg-gray-50 text-gray-600 font-medium'}`}>
+                            <td className={`px-3 py-2 text-xs border border-gray-200 whitespace-nowrap align-middle ${fixed ? 'bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500' : 'bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-400 font-medium'}`}>
                               <div>{fromTimeSpan(slot.startTime)} – {fromTimeSpan(slot.endTime)}</div>
                             </td>
                             {/* Merged cell for fixed break/activity slots */}
@@ -660,7 +660,7 @@ const TimetablePage = () => {
                                 colSpan={DAYS.length}
                                 className="border border-gray-200 bg-gray-100 px-4 py-2 text-center"
                               >
-                                <span className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-widest">
+                                <span className="inline-flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest">
                                   <span className="block w-8 h-px bg-gray-300" />
                                   {blockLabel}
                                   <span className="block w-8 h-px bg-gray-300" />
@@ -720,7 +720,7 @@ const TimetablePage = () => {
         {assignModal && (
           <div className="space-y-4">
             {/* Context info */}
-            <div className="flex flex-wrap gap-3 text-xs text-gray-500 bg-gray-50 rounded-lg px-3 py-2">
+            <div className="flex flex-wrap gap-3 text-xs text-gray-500 bg-gray-50 dark:bg-gray-700/50 rounded-lg px-3 py-2">
               <span><strong>Day:</strong> {DAY_LABELS[assignModal.dayOfWeek]}</span>
               <span><strong>Slot:</strong> {assignModal.timeSlotName} ({fromTimeSpan(assignModal.startTime)} – {fromTimeSpan(assignModal.endTime)})</span>
               <span><strong>Subject:</strong> {assignModal.subjectName}</span>
@@ -813,7 +813,7 @@ const TimetablePage = () => {
               Delete Entry
             </button>
             <div className="flex gap-3">
-              <button onClick={() => setDetailEntry(null)} className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 font-medium transition">
+              <button onClick={() => setDetailEntry(null)} className="px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 font-medium transition">
                 Close
               </button>
               <button
@@ -831,34 +831,34 @@ const TimetablePage = () => {
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Subject</p>
-                <p className="text-gray-900 font-semibold">{detailEntry.subjectName}</p>
+                <p className="text-gray-900 dark:text-gray-100 font-semibold">{detailEntry.subjectName}</p>
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Teacher</p>
-                <p className="text-gray-900 font-semibold">{detailEntry.teacherName ?? detailEntry.teacherUsername ?? '—'}</p>
-                {detailEntry.teacherIdNumber && <p className="text-xs text-gray-500">{detailEntry.teacherIdNumber}</p>}
+                <p className="text-gray-900 dark:text-gray-100 font-semibold">{detailEntry.teacherName ?? detailEntry.teacherUsername ?? '—'}</p>
+                {detailEntry.teacherIdNumber && <p className="text-xs text-gray-500 dark:text-gray-400">{detailEntry.teacherIdNumber}</p>}
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Day</p>
-                <p className="text-gray-900">{DAY_LABELS[detailEntry.dayOfWeek] ?? detailEntry.dayOfWeek}</p>
+                <p className="text-gray-900 dark:text-gray-100">{DAY_LABELS[detailEntry.dayOfWeek] ?? detailEntry.dayOfWeek}</p>
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Time</p>
-                <p className="text-gray-900">
+                <p className="text-gray-900 dark:text-gray-100">
                   {detailEntry.timeSlotName} ({fromTimeSpan(detailEntry.startTime)} – {fromTimeSpan(detailEntry.endTime)})
                 </p>
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Class</p>
-                <p className="text-gray-900">{detailEntry.className}</p>
+                <p className="text-gray-900 dark:text-gray-100">{detailEntry.className}</p>
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Section</p>
-                <p className="text-gray-900">{detailEntry.sectionName ?? '—'}</p>
+                <p className="text-gray-900 dark:text-gray-100">{detailEntry.sectionName ?? '—'}</p>
               </div>
               <div>
                 <p className="text-xs font-medium text-gray-400 uppercase">Type</p>
-                <p className={`font-medium ${detailEntry.isOptional ? 'text-amber-600' : 'text-gray-900'}`}>
+                <p className={`font-medium ${detailEntry.isOptional ? 'text-amber-600 dark:text-amber-400' : 'text-gray-900 dark:text-gray-100'}`}>
                   {detailEntry.isOptional ? 'Optional' : 'Mandatory'}
                 </p>
               </div>

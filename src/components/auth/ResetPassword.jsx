@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import * as authService from '../../services/authService';
 import { isValidEmail, isValidPassword, isValidOtp, passwordsMatch, parseApiError } from '../../utils/validation';
+import ThemeToggle from '../common/ThemeToggle';
 
 const FieldError = ({ msg }) =>
   msg ? (
@@ -14,8 +15,8 @@ const FieldError = ({ msg }) =>
   ) : null;
 
 const inputCls = (err) =>
-  `w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent transition ${
-    err ? 'border-red-400 bg-red-50 focus:ring-red-400' : 'border-gray-300 focus:ring-indigo-500'
+  `w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:border-transparent transition dark:bg-gray-800 dark:text-gray-100 ${
+    err ? 'border-red-400 bg-red-50 dark:bg-red-900/20 focus:ring-red-400' : 'border-gray-300 dark:border-gray-600 focus:ring-indigo-500'
   }`;
 
 const ResetPassword = () => {
@@ -87,7 +88,8 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-950 flex items-center justify-center px-4 py-12">
+      <div className="fixed top-4 right-4 z-50"><ThemeToggle className="text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-800 bg-white/80 dark:bg-gray-800/80 shadow-sm" /></div>
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="text-center mb-8">
@@ -97,11 +99,11 @@ const ResetPassword = () => {
                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Reset Password</h1>
-          <p className="text-gray-500 mt-1 text-sm">Enter the OTP sent to your email</p>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Reset Password</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">Enter the OTP sent to your email</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 p-8">
           {success ? (
             <div className="text-center py-4">
               <div className="inline-flex items-center justify-center w-14 h-14 bg-green-100 rounded-full mb-4">
@@ -109,35 +111,35 @@ const ResetPassword = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <h2 className="text-lg font-semibold text-gray-800 mb-2">Password Reset!</h2>
-              <p className="text-gray-500 text-sm">Redirecting you to sign in…</p>
+              <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">Password Reset!</h2>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">Redirecting you to sign in…</p>
             </div>
           ) : (
             <>
               {apiError && (
-                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg flex items-start gap-2">
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-2">
                   <svg className="w-4 h-4 text-red-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
-                  <p className="text-red-600 text-sm font-medium">{apiError}</p>
+                  <p className="text-red-600 dark:text-red-400 text-sm font-medium">{apiError}</p>
                 </div>
               )}
               <form onSubmit={handleSubmit} className="space-y-4" noValidate>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Email</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
                   <input name="email" type="email" value={form.email} onChange={handleChange} onBlur={handleBlur}
                     placeholder="you@example.com" className={inputCls(fieldErrors.email)} />
                   <FieldError msg={fieldErrors.email} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">OTP Code</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">OTP Code</label>
                   <input name="otp" value={form.otp} onChange={handleChange} onBlur={handleBlur}
                     placeholder="Enter OTP" maxLength={10}
                     className={`${inputCls(fieldErrors.otp)} tracking-widest text-center text-lg font-mono`} />
                   <FieldError msg={fieldErrors.otp} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">New Password</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">New Password</label>
                   <div className="relative">
                     <input name="newPassword" type={showPassword ? 'text' : 'password'}
                       value={form.newPassword} onChange={handleChange} onBlur={handleBlur}
@@ -155,7 +157,7 @@ const ResetPassword = () => {
                   <FieldError msg={fieldErrors.newPassword} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Confirm New Password</label>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Confirm New Password</label>
                   <input name="confirmPassword" type={showPassword ? 'text' : 'password'}
                     value={form.confirmPassword} onChange={handleChange} onBlur={handleBlur}
                     placeholder="••••••••" className={inputCls(fieldErrors.confirmPassword)} />
@@ -171,8 +173,8 @@ const ResetPassword = () => {
           )}
         </div>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
-          <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-medium flex items-center justify-center gap-1">
+        <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-6">
+          <Link to="/login" className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 font-medium flex items-center justify-center gap-1">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>

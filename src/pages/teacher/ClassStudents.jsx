@@ -115,9 +115,9 @@ const ClassStudents = () => {
 
   const columns = [
     { key: 'id',          header: '#',             render: (row) => <span className="text-xs text-gray-400">{students.indexOf(row) + 1}</span>, className: 'w-12' },
-    { key: 'firstName',   header: 'Student Name',  render: (row) => <span className="font-medium text-gray-800">{[row.firstName, row.lastName].filter(Boolean).join(' ') || row.studentName || '—'}</span> },
-    { key: 'globalStudentCode', header: 'Student Code', render: (row) => <span className="text-gray-600">{row.globalStudentCode ?? '—'}</span> },
-    { key: 'indexNumber', header: 'Index Number',  render: (row) => <span className="text-gray-600">{row.indexNumber ?? '—'}</span> },
+    { key: 'firstName',   header: 'Student Name',  render: (row) => <span className="font-medium text-gray-800 dark:text-gray-200">{[row.firstName, row.lastName].filter(Boolean).join(' ') || row.studentName || '—'}</span> },
+    { key: 'globalStudentCode', header: 'Student Code', render: (row) => <span className="text-gray-600 dark:text-gray-400">{row.globalStudentCode ?? '—'}</span> },
+    { key: 'indexNumber', header: 'Index Number',  render: (row) => <span className="text-gray-600 dark:text-gray-400">{row.indexNumber ?? '—'}</span> },
   ];
 
   return (
@@ -125,12 +125,12 @@ const ClassStudents = () => {
       <PageHeader title="Class Students" subtitle="View students enrolled in your classes" />
 
       {/* Selection panel */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
         {/* Section selector */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Select Section</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Section</label>
           {loadingInit ? (
-            <div className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+            <div className="h-10 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
           ) : (
             <select
               value={selectedSection}
@@ -150,7 +150,7 @@ const ClassStudents = () => {
         {/* Class selector */}
         {selectedSection && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Class</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Class</label>
             <select
               value={selectedClass}
               onChange={handleClassChange}
@@ -169,7 +169,7 @@ const ClassStudents = () => {
         {/* Subject selector */}
         {selectedClass && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Subject</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Subject</label>
             <select
               value={selectedSubject}
               onChange={handleSubjectChange}
@@ -190,7 +190,7 @@ const ClassStudents = () => {
       {(selectedClassObj || subjectName) && (
         <div className="flex flex-wrap gap-2">
           {selectedClassObj && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400">
               {selectedClassObj.name} — {selectedClassObj.academicYear ?? ''}
             </span>
           )}
@@ -198,13 +198,13 @@ const ClassStudents = () => {
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
               selectedClassObj.classType === 'SUBJECT_BASE'
                 ? 'bg-blue-50 text-blue-600'
-                : 'bg-purple-100 text-purple-700'
+                : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
             }`}>
               {selectedClassObj.classType === 'SUBJECT_BASE' ? 'Subject Base' : 'Module Base'}
             </span>
           )}
           {subjectName && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-700">
+            <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">
               {subjectName}
             </span>
           )}

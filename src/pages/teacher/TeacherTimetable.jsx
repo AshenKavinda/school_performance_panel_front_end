@@ -65,7 +65,7 @@ const TeacherTimetable = () => {
       <PageHeader title="My Timetable" subtitle="Your weekly class schedule" />
 
       {!hasAnyEntries ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-10 text-center">
           <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
               d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -75,7 +75,7 @@ const TeacherTimetable = () => {
       ) : (
         <>
           {/* ── Desktop grid view ────────────────────────────────── */}
-          <div className="hidden lg:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="hidden lg:block bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
             <div className="grid grid-cols-5 divide-x divide-gray-200">
               {DAYS.map(day => (
                 <div key={day} className="min-w-0">
@@ -108,7 +108,7 @@ const TeacherTimetable = () => {
           {/* ── Mobile stacked view ──────────────────────────────── */}
           <div className="lg:hidden space-y-4">
             {DAYS.map(day => (
-              <div key={day} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+              <div key={day} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="bg-orange-600 text-white px-4 py-2.5 text-sm font-semibold">
                   {DAY_SHORT[day]}
                 </div>
@@ -138,8 +138,8 @@ const TeacherTimetable = () => {
 
       {/* Legend */}
       {subjects.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Subjects Legend</h4>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
+          <h4 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Subjects Legend</h4>
           <div className="flex flex-wrap gap-2">
             {subjects.map(s => (
               <span key={s} className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${subjectColorMap[s]}`}>

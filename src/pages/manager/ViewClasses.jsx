@@ -21,7 +21,7 @@ const AccordionItem = ({ label, badge, accent, open, onToggle, children }) => (
     <button
       onClick={onToggle}
       className={`w-full flex items-center justify-between px-4 py-3 text-left text-sm font-medium transition ${
-        open ? `${accent} bg-opacity-10` : 'bg-gray-50 hover:bg-gray-100'
+        open ? `${accent} bg-opacity-10` : 'bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600'
       }`}
     >
       <span className="flex items-center gap-2">
@@ -32,7 +32,7 @@ const AccordionItem = ({ label, badge, accent, open, onToggle, children }) => (
       </span>
       <ChevronDown open={open} />
     </button>
-    {open && <div className="px-4 py-3 bg-white">{children}</div>}
+    {open && <div className="px-4 py-3 bg-white dark:bg-gray-800">{children}</div>}
   </div>
 );
 
@@ -130,7 +130,7 @@ const ViewClasses = () => {
       ) : error ? (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm">{error}</div>
       ) : tree.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center text-sm text-gray-400">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-8 text-center text-sm text-gray-400">
           No clusters or classes found.
         </div>
       ) : (
@@ -163,7 +163,7 @@ const ViewClasses = () => {
                         <div className="overflow-x-auto">
                           <table className="min-w-full text-sm">
                             <thead>
-                              <tr className="border-b border-gray-200 text-left text-gray-500">
+                              <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                                 <th className="py-2 pr-3 font-medium">#</th>
                                 <th className="py-2 pr-3 font-medium">Class Name</th>
                                 <th className="py-2 pr-3 font-medium">Academic Year</th>
@@ -174,13 +174,13 @@ const ViewClasses = () => {
                               {classes.map((cls, idx) => (
                                 <tr key={cls.id} className="border-b border-gray-100 hover:bg-purple-50/40">
                                   <td className="py-2 pr-3 text-gray-400">{idx + 1}</td>
-                                  <td className="py-2 pr-3 font-medium text-gray-800">{cls.name ?? cls.className ?? '—'}</td>
+                                  <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{cls.name ?? cls.className ?? '—'}</td>
                                   <td className="py-2 pr-3 text-gray-600">{cls.academicYear ?? '—'}</td>
                                   <td className="py-2 pr-3">
                                     <span className={`px-2 py-0.5 rounded text-xs font-medium ${
                                       cls.classType === 'MODULE_BASE'
-                                        ? 'bg-purple-100 text-purple-700'
-                                        : 'bg-blue-100 text-blue-700'
+                                        ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                                        : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                                     }`}>
                                       {cls.classType === 'MODULE_BASE' ? 'Module' : 'Subject'}
                                     </span>

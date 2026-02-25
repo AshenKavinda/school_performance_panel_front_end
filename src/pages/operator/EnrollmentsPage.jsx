@@ -21,8 +21,8 @@ const Tab = ({ label, active, onClick }) => (
     onClick={onClick}
     className={`px-4 py-2 text-sm font-medium rounded-lg transition ${
       active
-        ? 'bg-teal-600 text-white shadow-sm'
-        : 'text-gray-600 hover:text-gray-800 hover:bg-gray-100'
+        ? 'bg-teal-600 dark:bg-teal-700 text-white shadow-sm'
+        : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
     }`}
   >
     {label}
@@ -31,7 +31,7 @@ const Tab = ({ label, active, onClick }) => (
 
 // ── Class selector ────────────────────────────────────────────────────────────
 const ClassSelector = ({ classes, selectedId, onChange, loading }) => (
-  <div className="bg-white rounded-xl border border-gray-200 p-4">
+  <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-4">
     <label className="block text-sm font-medium text-gray-700 mb-2">Select Class</label>
     <select
       value={selectedId}
@@ -500,7 +500,7 @@ const EnrollmentsPage = () => {
       />
 
       {/* Tab switcher */}
-      <div className="flex gap-2 bg-white rounded-xl border border-gray-200 p-2 w-fit">
+      <div className="flex gap-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-2 w-fit">
         <Tab label="Class Enrollments"   active={tab === 'class'}      onClick={() => setTab('class')} />
         <Tab label="Subject Enrollments" active={tab === 'subject'}    onClick={() => setTab('subject')} />
         <Tab label="Student Enrolled Subjects" active={tab === 'curriculum'} onClick={() => setTab('curriculum')} />
@@ -514,7 +514,7 @@ const EnrollmentsPage = () => {
           {classId && (
             <>
               {/* Add single student */}
-              <div className="bg-white rounded-xl border border-gray-200 p-5">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5">
                 <h3 className="text-sm font-semibold text-gray-700 mb-3">Enroll a Student</h3>
                 <div className="flex flex-wrap gap-3 items-end">
                   <div className="flex-1 min-w-[220px]">
@@ -542,7 +542,7 @@ const EnrollmentsPage = () => {
               </div>
 
               {/* Bulk enroll students */}
-              <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
                 <div>
                   <h3 className="text-sm font-semibold text-gray-700">Bulk Enroll Students</h3>
                   <p className="text-xs text-gray-400 mt-0.5">Search and select multiple students to enroll at once.</p>
@@ -589,7 +589,7 @@ const EnrollmentsPage = () => {
                     <div className="overflow-x-auto max-h-72 overflow-y-auto border border-gray-200 rounded-lg">
                       <table className="w-full text-sm border-collapse">
                         <thead className="sticky top-0 z-10">
-                          <tr className="bg-gray-50 border-b border-gray-200">
+                          <tr className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
                             <th className="px-3 py-2 w-10">
                               <input
                                 type="checkbox"
@@ -599,10 +599,10 @@ const EnrollmentsPage = () => {
                                 title="Select all visible students"
                               />
                             </th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student Code</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index No.</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Name</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-8">#</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student Code</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Index No.</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Name</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -614,7 +614,7 @@ const EnrollmentsPage = () => {
                                 key={sid}
                                 onClick={() => toggleBulkStudent(sid)}
                                 className={`border-b border-gray-100 cursor-pointer transition ${
-                                  checked ? 'bg-teal-50' : 'hover:bg-gray-50'
+                                  checked ? 'bg-teal-50 dark:bg-teal-900/30' : 'hover:bg-gray-50 dark:hover:bg-gray-700'
                                 }`}
                               >
                                 <td className="px-3 py-2">
@@ -627,7 +627,7 @@ const EnrollmentsPage = () => {
                                   />
                                 </td>
                                 <td className="px-3 py-2 text-xs text-gray-400">{idx + 1}</td>
-                                <td className="px-3 py-2 text-sm font-medium text-gray-800">{stu.globalStudentCode ?? '—'}</td>
+                                <td className="px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200">{stu.globalStudentCode ?? '—'}</td>
                                 <td className="px-3 py-2 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
                                 <td className="px-3 py-2 text-sm text-gray-700">
                                   {[stu.firstName, stu.lastName].filter(Boolean).join(' ') || '—'}
@@ -651,8 +651,8 @@ const EnrollmentsPage = () => {
               </div>
 
               {/* Enrolled list */}
-              <div className="bg-white rounded-xl border border-gray-200">
-                <div className="px-5 py-4 border-b border-gray-100">
+              <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                <div className="px-5 py-4 border-b border-gray-100 dark:border-gray-700">
                   <h3 className="text-sm font-semibold text-gray-700">
                     Enrolled Students
                     {!classLoading && <span className="ml-2 text-xs text-gray-400 font-normal">({enrolled.length})</span>}
@@ -663,18 +663,18 @@ const EnrollmentsPage = () => {
                 ) : enrolled.length === 0 ? (
                   <div className="text-center py-10 text-sm text-gray-400">No students enrolled in this class yet.</div>
                 ) : (
-                  <ul className="divide-y divide-gray-100">
+                  <ul className="divide-y divide-gray-100 dark:divide-gray-700">
                     {enrolled.map((stu) => {
                       const stuId = stu.studentId ?? stu.id;
                       return (
-                        <li key={stuId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 transition">
+                        <li key={stuId} className="flex items-center justify-between px-5 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                           <div>
                             <span className="font-medium text-sm text-gray-800">{stu.studentName ?? stuId}</span>
                             {stu.indexNumber && <span className="ml-2 text-xs text-gray-400">({stu.indexNumber})</span>}
                           </div>
                           <button
                             onClick={() => handleRemoveFromClass(stuId)}
-                            className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+                            className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
                           >
                             Remove
                           </button>
@@ -688,7 +688,7 @@ const EnrollmentsPage = () => {
           )}
 
           {!classId && (
-            <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-10 text-center text-sm text-gray-400">
+            <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 py-10 text-center text-sm text-gray-400">
               Select a class above to manage enrollments.
             </div>
           )}
@@ -699,9 +699,9 @@ const EnrollmentsPage = () => {
       {tab === 'subject' && (
         <div className="space-y-6">
           {/* Common subjects */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-800">Sync Common Subjects</h3>
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Sync Common Subjects</h3>
               <p className="text-xs text-gray-400 mt-0.5">Select all subjects that should be common for this class, then sync. Students will be added to new subjects and removed from deselected ones.</p>
             </div>
             <div className="flex flex-wrap gap-3 items-end">
@@ -715,9 +715,9 @@ const EnrollmentsPage = () => {
             {/* Currently enrolled subjects for chosen class */}
             {subjClassId && (
               <>
-                <div className="bg-gray-50 rounded-lg border border-gray-100 p-3">
+                <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 p-3">
                   <div className="flex items-center justify-between mb-2">
-                    <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">Currently Enrolled Subjects</p>
+                    <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Currently Enrolled Subjects</p>
                     {currentClassSubjects.length > 0 && rmvCommonSubjIds.size > 0 && (
                       <button
                         onClick={handleRemoveCommonSubjects}
@@ -762,7 +762,7 @@ const EnrollmentsPage = () => {
                 </div>
 
                 <div>
-                  <p className="text-xs font-medium text-gray-600 mb-2">Select subjects to sync as common:</p>
+                  <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Select subjects to sync as common:</p>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
                     {subjects.map((sub) => (
                       <label key={sub.id} className="flex items-center gap-2 p-2 rounded-lg border border-gray-100 hover:bg-teal-50 cursor-pointer transition">
@@ -790,16 +790,16 @@ const EnrollmentsPage = () => {
           </div>
 
           {/* Elective subject – bulk enroll */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-800">Enroll Students to Elective Subject</h3>
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Enroll Students to Elective Subject</h3>
               <p className="text-xs text-gray-400 mt-0.5">Select a class and subject, then pick students to bulk-enroll into the elective.</p>
             </div>
 
             {/* Class & Subject selectors */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Class</label>
                 <select value={electClassId} onChange={(e) => { setElectClassId(e.target.value); setElectSubjectId(''); setElectSelectedStudentIds(new Set()); }}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent">
                   <option value="">Select class…</option>
@@ -807,7 +807,7 @@ const EnrollmentsPage = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Elective Subject</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Elective Subject</label>
                 <select value={electSubjectId} onChange={(e) => { setElectSubjectId(e.target.value); setElectSelectedStudentIds(new Set()); }}
                   disabled={!electClassId}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent disabled:opacity-50">
@@ -819,9 +819,9 @@ const EnrollmentsPage = () => {
 
             {/* Student selection table with checkboxes */}
             {electClassId && electSubjectId && (
-              <div className="bg-gray-50 rounded-lg border border-gray-100 p-3">
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 p-3">
                 <div className="flex items-center justify-between mb-3">
-                  <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide">
+                  <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                     Select Students to Enroll
                   </p>
                   {electSelectedStudentIds.size > 0 && (
@@ -845,7 +845,7 @@ const EnrollmentsPage = () => {
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm border-collapse">
                         <thead>
-                          <tr className="border-b border-gray-200 bg-white">
+                          <tr className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
                             <th className="px-3 py-2 w-10">
                               <input
                                 type="checkbox"
@@ -856,10 +856,10 @@ const EnrollmentsPage = () => {
                                 title="Select all eligible students"
                               />
                             </th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Status</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-8">#</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Index</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Status</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -868,7 +868,7 @@ const EnrollmentsPage = () => {
                             const stuSubs = electStudentSubjects[sid] ?? [];
                             const alreadyEnrolled = stuSubs.some(s => s.subjectId === electSubjectId);
                             return (
-                              <tr key={sid} className={`border-b border-gray-100 transition ${alreadyEnrolled ? 'bg-teal-50/40' : 'hover:bg-white'}`}>
+                              <tr key={sid} className={`border-b border-gray-100 transition ${alreadyEnrolled ? 'bg-teal-50/40 dark:bg-teal-900/20' : 'hover:bg-white dark:hover:bg-gray-700'}`}>
                                 <td className="px-3 py-2">
                                   <input
                                     type="checkbox"
@@ -879,11 +879,11 @@ const EnrollmentsPage = () => {
                                   />
                                 </td>
                                 <td className="px-3 py-2 text-xs text-gray-400">{idx + 1}</td>
-                                <td className="px-3 py-2 text-sm font-medium text-gray-800">{stu.studentName ?? stu.globalStudentCode ?? sid}</td>
+                                <td className="px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200">{stu.studentName ?? stu.globalStudentCode ?? sid}</td>
                                 <td className="px-3 py-2 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
                                 <td className="px-3 py-2">
                                   {alreadyEnrolled ? (
-                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 text-[11px] font-medium border border-teal-200">
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 text-[11px] font-medium border border-teal-200">
                                       <span className="w-1.5 h-1.5 rounded-full bg-teal-500" />
                                       Enrolled
                                     </span>
@@ -912,7 +912,7 @@ const EnrollmentsPage = () => {
 
             {/* Student & Elective Subjects Table (overview) */}
             {electClassId && (
-              <div className="bg-gray-50 rounded-lg border border-gray-100 p-3 mt-2">
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 p-3 mt-2">
                 <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
                   Students & Their Subjects
                 </p>
@@ -924,11 +924,11 @@ const EnrollmentsPage = () => {
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm border-collapse">
                       <thead>
-                        <tr className="border-b border-gray-200 bg-white">
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Subjects</th>
+                        <tr className="border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-8">#</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Index</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subjects</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -936,9 +936,9 @@ const EnrollmentsPage = () => {
                           const sid = stu.studentId ?? stu.id;
                           const stuSubs = electStudentSubjects[sid] ?? [];
                           return (
-                            <tr key={sid} className="border-b border-gray-100 hover:bg-white transition">
+                            <tr key={sid} className="border-b border-gray-100 hover:bg-white dark:hover:bg-gray-700 transition">
                               <td className="px-3 py-2 text-xs text-gray-400">{idx + 1}</td>
-                              <td className="px-3 py-2 text-sm font-medium text-gray-800">{stu.studentName ?? stu.globalStudentCode ?? sid}</td>
+                              <td className="px-3 py-2 text-sm font-medium text-gray-800 dark:text-gray-200">{stu.studentName ?? stu.globalStudentCode ?? sid}</td>
                               <td className="px-3 py-2 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
                               <td className="px-3 py-2">
                                 {loadingElectSubjects ? (
@@ -954,8 +954,8 @@ const EnrollmentsPage = () => {
                                           key={sub.subjectId}
                                           className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-medium border ${
                                             isCommon
-                                              ? 'bg-gray-100 text-gray-600 border-gray-200'
-                                              : 'bg-indigo-100 text-indigo-700 border-indigo-200'
+                                              ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600'
+                                              : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-400 border-indigo-200'
                                           }`}
                                         >
                                           {sub.subjectName}
@@ -978,15 +978,15 @@ const EnrollmentsPage = () => {
           </div>
 
           {/* ─── Remove Subject from Student ──────────────────────────────────── */}
-          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-800">Remove Subject from Student</h3>
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Remove Subject from Student</h3>
               <p className="text-xs text-gray-400 mt-0.5">Select a class and subject to view enrolled students, then remove a subject assignment.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Class</label>
                 <select
                   value={rmvClassId}
                   onChange={(e) => { setRmvClassId(e.target.value); setRmvSubjectId(''); }}
@@ -997,7 +997,7 @@ const EnrollmentsPage = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Subject</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Subject</label>
                 <select
                   value={rmvSubjectId}
                   onChange={(e) => setRmvSubjectId(e.target.value)}
@@ -1011,7 +1011,7 @@ const EnrollmentsPage = () => {
             </div>
 
             {rmvClassId && rmvSubjectId && (
-              <div className="bg-gray-50 rounded-lg border border-gray-100 p-3">
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-100 dark:border-gray-700 p-3">
                 <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">
                   Students Enrolled in This Subject
                   {!rmvLoading && <span className="ml-1 font-normal text-gray-400">({rmvStudents.length})</span>}
@@ -1024,11 +1024,11 @@ const EnrollmentsPage = () => {
                   <div className="overflow-x-auto max-h-80 overflow-y-auto">
                     <table className="w-full text-sm border-collapse">
                       <thead className="sticky top-0 z-10">
-                        <tr className="bg-white border-b border-gray-200">
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Student</th>
-                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Index No.</th>
-                          <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Action</th>
+                        <tr className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-8">#</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student</th>
+                          <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Index No.</th>
+                          <th className="text-right px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -1038,14 +1038,14 @@ const EnrollmentsPage = () => {
                             ?? [stu.firstName, stu.lastName].filter(Boolean).join(' ')
                             ?? stuId;
                           return (
-                            <tr key={stuId} className="border-b border-gray-100 hover:bg-white transition">
+                            <tr key={stuId} className="border-b border-gray-100 hover:bg-white dark:hover:bg-gray-700 transition">
                               <td className="px-3 py-2.5 text-xs text-gray-400">{idx + 1}</td>
-                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800">{name}</td>
-                              <td className="px-3 py-2.5 text-xs text-gray-500">{stu.indexNumber ?? '—'}</td>
+                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800 dark:text-gray-200">{name}</td>
+                              <td className="px-3 py-2.5 text-xs text-gray-500 dark:text-gray-400">{stu.indexNumber ?? '—'}</td>
                               <td className="px-3 py-2.5 text-right">
                                 <button
                                   onClick={() => handleRmvStudent(stuId)}
-                                  className="text-xs text-red-600 hover:text-red-800 font-medium px-2 py-1 rounded hover:bg-red-50 transition"
+                                  className="text-xs text-red-600 dark:text-red-400 hover:text-red-800 dark:hover:text-red-300 font-medium px-2 py-1 rounded hover:bg-red-50 dark:hover:bg-red-900/30 transition"
                                 >
                                   Remove
                                 </button>
@@ -1065,16 +1065,16 @@ const EnrollmentsPage = () => {
       {/* ── STUDENT ENROLLED SUBJECTS (CURRICULUM) ────────────────────────── */}
       {tab === 'curriculum' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+          <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
             <div>
-              <h3 className="text-sm font-semibold text-gray-800">Student Enrolled Subjects</h3>
+              <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">Student Enrolled Subjects</h3>
               <p className="text-xs text-gray-400 mt-0.5">Select a class and student to view all subjects the student is enrolled in.</p>
             </div>
 
             {/* Class & Student selectors */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Class</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Class</label>
                 <select
                   value={curClassId}
                   onChange={(e) => { setCurClassId(e.target.value); setCurStudentId(''); setCurData(null); }}
@@ -1085,7 +1085,7 @@ const EnrollmentsPage = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Student</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Student</label>
                 <select
                   value={curStudentId}
                   onChange={(e) => { setCurStudentId(e.target.value); setCurData(null); }}
@@ -1107,27 +1107,27 @@ const EnrollmentsPage = () => {
             ) : curData ? (
               <div className="space-y-4">
                 {/* Info header */}
-                <div className="bg-gray-50 rounded-lg border border-gray-100 p-4">
+                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-100 dark:border-gray-600 p-4">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
                     <div>
-                      <span className="text-xs text-gray-500">Student</span>
-                      <p className="font-medium text-gray-800">{curData.studentName ?? '—'}</p>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Student</span>
+                      <p className="font-medium text-gray-800 dark:text-gray-200">{curData.studentName ?? '—'}</p>
                     </div>
                     <div>
-                      <span className="text-xs text-gray-500">Index No.</span>
-                      <p className="font-medium text-gray-800">{curData.indexNumber ?? '—'}</p>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Index No.</span>
+                      <p className="font-medium text-gray-800 dark:text-gray-200">{curData.indexNumber ?? '—'}</p>
                     </div>
                     <div>
-                      <span className="text-xs text-gray-500">Class</span>
-                      <p className="font-medium text-gray-800">{curData.className ?? '—'}</p>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Class</span>
+                      <p className="font-medium text-gray-800 dark:text-gray-200">{curData.className ?? '—'}</p>
                     </div>
                     <div>
-                      <span className="text-xs text-gray-500">Type</span>
-                      <p className="font-medium text-gray-800">
+                      <span className="text-xs text-gray-500 dark:text-gray-400">Type</span>
+                      <p className="font-medium text-gray-800 dark:text-gray-200">
                         <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
                           curData.classType === 'MODULE_BASE'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-blue-100 text-blue-700'
+                            ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                         }`}>
                           {curData.classType === 'MODULE_BASE' ? 'Module Based' : 'Subject Based'}
                         </span>
@@ -1138,29 +1138,29 @@ const EnrollmentsPage = () => {
 
                 {/* Enrolled subjects */}
                 {curData.enrolledSubjects && curData.enrolledSubjects.length > 0 && (
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
                     <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">Enrolled Subjects</p>
                     <div className="overflow-x-auto">
                       <table className="w-full text-sm border-collapse">
                         <thead>
-                          <tr className="border-b border-gray-200 bg-gray-50">
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase w-8">#</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                            <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Credits</th>
-                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 uppercase">Enrolled At</th>
+                          <tr className="border-b border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-8">#</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Subject</th>
+                            <th className="text-center px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Credits</th>
+                            <th className="text-left px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Enrolled At</th>
                           </tr>
                         </thead>
                         <tbody>
                           {curData.enrolledSubjects.map((sub, idx) => (
-                            <tr key={sub.subjectId} className="border-b border-gray-100 hover:bg-gray-50 transition">
+                            <tr key={sub.subjectId} className="border-b border-gray-100 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
                               <td className="px-3 py-2.5 text-xs text-gray-400">{idx + 1}</td>
-                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800">{sub.subjectName ?? '—'}</td>
+                              <td className="px-3 py-2.5 text-sm font-medium text-gray-800 dark:text-gray-200">{sub.subjectName ?? '—'}</td>
                               <td className="px-3 py-2.5 text-center">
-                                <span className="inline-block px-2 py-0.5 rounded-full bg-teal-100 text-teal-700 text-[11px] font-medium">
+                                <span className="inline-block px-2 py-0.5 rounded-full bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-400 text-[11px] font-medium">
                                   {sub.creditValue}cr
                                 </span>
                               </td>
-                              <td className="px-3 py-2.5 text-xs text-gray-500">
+                              <td className="px-3 py-2.5 text-xs text-gray-500 dark:text-gray-400">
                                 {sub.enrolledAt ? new Date(sub.enrolledAt).toLocaleDateString() : '—'}
                               </td>
                             </tr>
@@ -1173,14 +1173,14 @@ const EnrollmentsPage = () => {
 
                 {/* Subjects with modules (for MODULE_BASE classes) */}
                 {curData.subjectsWithModules && curData.subjectsWithModules.length > 0 && (
-                  <div className="bg-white rounded-lg border border-gray-200 p-4">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
                     <p className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">Subjects &amp; Modules</p>
                     <div className="space-y-3">
                       {curData.subjectsWithModules.map((swm) => (
                         <div key={swm.subjectId} className="rounded-lg border border-gray-100 p-3">
                           <div className="flex items-center gap-2 mb-2">
-                            <span className="text-sm font-semibold text-gray-800">{swm.subjectName ?? '—'}</span>
-                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-700 font-medium">
+                            <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{swm.subjectName ?? '—'}</span>
+                            <span className="text-[11px] px-2 py-0.5 rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-medium">
                               {swm.creditValue}cr
                             </span>
                           </div>
@@ -1216,7 +1216,7 @@ const EnrollmentsPage = () => {
             ) : curClassId && curStudentId ? (
               <div className="text-center py-8 text-sm text-gray-400">No curriculum data found.</div>
             ) : (
-              <div className="bg-gray-50 rounded-xl border border-dashed border-gray-300 py-8 text-center text-sm text-gray-400">
+              <div className="bg-gray-50 dark:bg-gray-800 rounded-xl border border-dashed border-gray-300 dark:border-gray-600 py-8 text-center text-sm text-gray-400">
                 Select a class and student above to view enrolled subjects.
               </div>
             )}

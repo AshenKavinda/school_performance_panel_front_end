@@ -325,12 +325,12 @@ const MarkEntry = () => {
       <PageHeader title="Mark Entry" subtitle="Enter or update exam marks for your classes" />
 
       {/* ── Selection Panel ──────────────────────────────────────────────── */}
-      <div className="bg-white rounded-xl border border-gray-200 p-5 space-y-4">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 space-y-4">
         {/* Row 1: Class */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Select Class</label>
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Class</label>
           {loadingClasses ? (
-            <div className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+            <div className="h-10 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
           ) : (
             <select
               value={selectedClass}
@@ -352,8 +352,8 @@ const MarkEntry = () => {
           <div className="flex items-center gap-2">
             <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
               classType === 'SUBJECT_BASE'
-                ? 'bg-blue-100 text-blue-700'
-                : 'bg-purple-100 text-purple-700'
+                ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
+                : 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
             }`}>
               {classType === 'SUBJECT_BASE' ? 'Subject-Based Marks' : 'Module-Based Marks'}
             </span>
@@ -363,7 +363,7 @@ const MarkEntry = () => {
         {/* Row 2: Subject */}
         {selectedClass && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Subject</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Subject</label>
             <select
               value={selectedSubject}
               onChange={handleSubjectChange}
@@ -382,7 +382,7 @@ const MarkEntry = () => {
         {/* Row 3: Term (SUBJECT_BASE) or Module (MODULE_BASE) */}
         {selectedSubject && classType === 'SUBJECT_BASE' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Term</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Term</label>
             <select
               value={selectedTerm}
               onChange={(e) => { setSelectedTerm(e.target.value); setStudents([]); setMarks({}); setExistingMarks([]); }}
@@ -398,9 +398,9 @@ const MarkEntry = () => {
 
         {selectedSubject && classType === 'MODULE_BASE' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Module</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Module</label>
             {loadingModules ? (
-              <div className="h-10 bg-gray-100 rounded-lg animate-pulse" />
+              <div className="h-10 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse" />
             ) : (
               <select
                 value={selectedModule}
@@ -424,9 +424,9 @@ const MarkEntry = () => {
 
       {/* ── Mark Entry Table ─────────────────────────────────────────────── */}
       {canLoadMarks && (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <h3 className="text-sm font-semibold text-gray-800">
+            <h3 className="text-sm font-semibold text-gray-800 dark:text-gray-200">
               Student Marks
               <span className="text-gray-400 font-normal ml-2">
                 ({filledMarkCount}/{students.length} entered)
@@ -451,25 +451,25 @@ const MarkEntry = () => {
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
+                <thead className="bg-gray-50 dark:bg-gray-700">
                   <tr>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase w-12">#</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Student</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Index</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase w-32">Mark (0-100)</th>
-                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
-                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 uppercase w-28">Actions</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-12">#</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Student</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Index</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-32">Mark (0-100)</th>
+                    <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Status</th>
+                    <th className="px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase w-28">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100">
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
                   {students.map((stu, i) => {
                     const sid = getStudentId(stu);
                     const hasExisting = hasExistingMark(stu);
                     return (
                       <tr key={sid} className="hover:bg-orange-50/30 transition">
                         <td className="px-4 py-3 text-xs text-gray-400">{i + 1}</td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-800">{getStudentName(stu)}</td>
-                        <td className="px-4 py-3 text-sm text-gray-600">{stu.indexNumber ?? '—'}</td>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-800 dark:text-gray-200">{getStudentName(stu)}</td>
+                        <td className="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">{stu.indexNumber ?? '—'}</td>
                         <td className="px-4 py-3">
                           <input
                             type="number"
@@ -483,15 +483,15 @@ const MarkEntry = () => {
                         </td>
                         <td className="px-4 py-3">
                           {hasExisting ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400">
                               Saved
                             </span>
                           ) : marks[sid] ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400">
                               New
                             </span>
                           ) : (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400">
                               Empty
                             </span>
                           )}

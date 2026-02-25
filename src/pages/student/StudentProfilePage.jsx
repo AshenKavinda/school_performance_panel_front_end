@@ -5,8 +5,8 @@ import { PageHeader, LoadingSpinner } from '../../components/common';
 import { useToast } from '../../context/ToastContext';
 
 const InfoRow = ({ label, value }) => (
-  <div className="flex flex-col sm:flex-row sm:items-center py-3 border-b border-gray-50 last:border-0">
-    <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide sm:w-40 mb-1 sm:mb-0">{label}</span>
+  <div className="flex flex-col sm:flex-row sm:items-center py-3 border-b border-gray-50 dark:border-gray-700 last:border-0">
+    <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide sm:w-40 mb-1 sm:mb-0">{label}</span>
     <span className="text-sm text-gray-800">{value || <span className="text-gray-300 italic">Not set</span>}</span>
   </div>
 );
@@ -65,9 +65,9 @@ const StudentProfilePage = () => {
       <PageHeader title="My Profile" subtitle="View and update your personal information" />
 
       {/* Global Info Card */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-base font-semibold text-gray-800">Personal Information</h3>
+          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">Personal Information</h3>
           {!editing && (
             <button onClick={openEdit}
               className="px-3 py-1.5 text-xs font-medium text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-lg hover:bg-emerald-100 transition">
@@ -80,22 +80,22 @@ const StudentProfilePage = () => {
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">First Name</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">First Name</label>
                 <input type="text" value={form.firstName} onChange={e => setForm(f => ({ ...f, firstName: e.target.value }))}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Last Name</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Last Name</label>
                 <input type="text" value={form.lastName} onChange={e => setForm(f => ({ ...f, lastName: e.target.value }))}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Phone</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Phone</label>
                 <input type="text" value={form.phone} onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-600 mb-1">Date of Birth</label>
+                <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1">Date of Birth</label>
                 <input type="date" value={form.dateOfBirth} onChange={e => setForm(f => ({ ...f, dateOfBirth: e.target.value }))}
                   className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-400" />
               </div>
@@ -106,7 +106,7 @@ const StudentProfilePage = () => {
                 {saving ? 'Saving…' : 'Save Changes'}
               </button>
               <button onClick={() => setEditing(false)}
-                className="px-4 py-2 text-sm font-medium text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+                className="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 dark:hover:bg-gray-700/50 transition">
                 Cancel
               </button>
             </div>
@@ -125,8 +125,8 @@ const StudentProfilePage = () => {
 
       {/* School Info Card */}
       {studentProfile && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="text-base font-semibold text-gray-800 mb-4">School Information</h3>
+        <div className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-4">School Information</h3>
           <InfoRow label="Index Number" value={studentProfile.indexNumber} />
           <InfoRow label="Address" value={studentProfile.address} />
           <InfoRow label="Enrolled Since" value={studentProfile.createdAt ? new Date(studentProfile.createdAt).toLocaleDateString() : null} />

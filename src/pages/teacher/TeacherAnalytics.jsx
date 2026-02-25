@@ -33,13 +33,13 @@ const BAR_RED    = '#ef4444';
 
 // ── tiny reusable components ──────────────────────────────────────────────────
 const Card = ({ children, className = '' }) => (
-  <div className={`bg-white rounded-xl border border-gray-200 p-6 ${className}`}>
+  <div className={`bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-6 ${className}`}>
     {children}
   </div>
 );
 
 const SectionTitle = ({ children }) => (
-  <h3 className="text-base font-semibold text-gray-800 mb-4">{children}</h3>
+  <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-4">{children}</h3>
 );
 
 const Select = ({ value, onChange, options, placeholder, className = '' }) => (
@@ -59,9 +59,9 @@ const EmptyState = ({ text }) => (
   <p className="text-sm text-gray-400 py-8 text-center">{text}</p>
 );
 
-const StatMini = ({ label, value, accent = 'text-gray-800' }) => (
+const StatMini = ({ label, value, accent = 'text-gray-800 dark:text-gray-200' }) => (
   <div className="text-center">
-    <p className="text-xs text-gray-500 mb-0.5">{label}</p>
+    <p className="text-xs text-gray-500 dark:text-gray-400 mb-0.5">{label}</p>
     <p className={`text-lg font-bold ${accent}`}>{value ?? '—'}</p>
   </div>
 );
@@ -199,7 +199,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
     <div className="space-y-6">
       {/* ── Term selector ── */}
       <div className="flex items-center gap-3">
-        <span className="text-sm font-medium text-gray-600">Term:</span>
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Term:</span>
         {TERMS.map(t => (
           <button
             key={t.value}
@@ -207,7 +207,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
             className={`px-4 py-1.5 rounded-full text-sm font-medium transition ${
               term === t.value
                 ? 'bg-orange-500 text-white shadow-sm'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-600'
             }`}
           >
             {t.label}
@@ -244,7 +244,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                 <div className="overflow-x-auto">
                   <table className="min-w-full text-sm">
                     <thead>
-                      <tr className="border-b border-gray-200 text-left text-gray-500">
+                      <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                         <th className="py-2 pr-4 font-medium">Subject</th>
                         <th className="py-2 pr-4 font-medium text-right">Average</th>
                         <th className="py-2 pr-4 font-medium text-right">Highest</th>
@@ -321,7 +321,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                       {gradeDistribution.map((g, i) => (
                         <div key={g.grade ?? i} className="flex items-center gap-2 text-sm">
                           <span className="w-3 h-3 rounded-full inline-block flex-shrink-0" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length] }} />
-                          <span className="font-medium text-gray-700">{g.grade ?? '—'}</span>
+                          <span className="font-medium text-gray-700 dark:text-gray-300">{g.grade ?? '—'}</span>
                           <span className="text-gray-400 ml-auto">{g.studentCount} ({g.percentage?.toFixed(1)}%)</span>
                         </div>
                       ))}
@@ -337,8 +337,8 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                   ) : (
                     <div className="overflow-y-auto max-h-96">
                       <table className="min-w-full text-sm">
-                        <thead className="sticky top-0 bg-white">
-                          <tr className="border-b border-gray-200 text-left text-gray-500">
+                        <thead className="sticky top-0 bg-white dark:bg-gray-800">
+                          <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                             <th className="py-2 pr-3 font-medium">Rank</th>
                             <th className="py-2 pr-3 font-medium">Student</th>
                             <th className="py-2 pr-3 font-medium">Index</th>
@@ -351,19 +351,19 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                             <tr key={s.studentId} className="border-b border-gray-100 hover:bg-orange-50/40">
                               <td className="py-2 pr-3">
                                 <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                                  s.rank === 1 ? 'bg-yellow-100 text-yellow-700'
-                                  : s.rank === 2 ? 'bg-gray-100 text-gray-600'
+                                  s.rank === 1 ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
+                                  : s.rank === 2 ? 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400'
                                   : s.rank === 3 ? 'bg-orange-100 text-orange-600'
-                                  : 'bg-gray-50 text-gray-500'
+                                  : 'bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
                                 }`}>
                                   {s.rank}
                                 </span>
                               </td>
-                              <td className="py-2 pr-3 font-medium text-gray-800">{s.studentName ?? '—'}</td>
+                              <td className="py-2 pr-3 font-medium text-gray-800 dark:text-gray-200">{s.studentName ?? '—'}</td>
                               <td className="py-2 pr-3 text-gray-500">{s.indexNumber ?? '—'}</td>
                               <td className="py-2 pr-3 text-right font-semibold">{s.mark ?? '—'}</td>
                               <td className="py-2">
-                                <span className="px-2 py-0.5 rounded text-xs font-medium bg-orange-100 text-orange-700">{s.grade ?? '—'}</span>
+                                <span className="px-2 py-0.5 rounded text-xs font-medium bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400">{s.grade ?? '—'}</span>
                               </td>
                             </tr>
                           ))}
@@ -391,7 +391,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 text-left text-gray-500">
+                    <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                       <th className="py-2 pr-4 font-medium">#</th>
                       <th className="py-2 pr-4 font-medium">Student</th>
                       <th className="py-2 pr-4 font-medium">Index</th>
@@ -404,7 +404,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                     {filteredAtRisk.map((s, i) => (
                       <tr key={`${s.studentId}-${s.subjectName}-${i}`} className="border-b border-gray-100 hover:bg-red-50/40">
                         <td className="py-2 pr-4 text-gray-400">{i + 1}</td>
-                        <td className="py-2 pr-4 font-medium text-gray-800">{s.studentName ?? '—'}</td>
+                        <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{s.studentName ?? '—'}</td>
                         <td className="py-2 pr-4 text-gray-500">{s.indexNumber ?? '—'}</td>
                         <td className="py-2 pr-4">{s.subjectName ?? '—'}</td>
                         <td className="py-2 pr-4 text-right font-semibold text-red-600">{s.mark ?? '—'}</td>
@@ -455,7 +455,7 @@ const SubjectBaseAnalytics = ({ selectedClass, myClasses }) => {
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   {classComparison.map(c => (
                     <div key={c.classId} className="rounded-lg border border-gray-200 p-3 text-center">
-                      <p className="text-xs font-semibold text-gray-500 mb-2 truncate">{c.className ?? '—'}</p>
+                      <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 truncate">{c.className ?? '—'}</p>
                       <div className="flex justify-around">
                         <StatMini label="Avg"  value={c.averageMark?.toFixed(1)} accent="text-orange-600" />
                         <StatMini label="Pass" value={`${c.passRate?.toFixed(0)}%`} accent="text-green-600" />
@@ -550,7 +550,7 @@ const ModuleBaseAnalytics = ({ selectedClass }) => {
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 text-left text-gray-500">
+                  <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                     <th className="py-2 pr-4 font-medium">#</th>
                     <th className="py-2 pr-4 font-medium">Module</th>
                     <th className="py-2 pr-4 font-medium">Subject</th>
@@ -565,7 +565,7 @@ const ModuleBaseAnalytics = ({ selectedClass }) => {
                   {modulePerformance.map((m, i) => (
                     <tr key={m.moduleId} className="border-b border-gray-100 hover:bg-purple-50/40">
                       <td className="py-2 pr-4 text-gray-400">{i + 1}</td>
-                      <td className="py-2 pr-4 font-medium text-gray-800">{m.moduleName ?? '—'}</td>
+                      <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{m.moduleName ?? '—'}</td>
                       <td className="py-2 pr-4">{m.subjectName ?? '—'}</td>
                       <td className="py-2 pr-4 text-right">{m.moduleWeight ?? '—'}%</td>
                       <td className="py-2 pr-4 text-right font-semibold text-orange-600">{m.averageMark?.toFixed(1) ?? '—'}</td>
@@ -665,7 +665,7 @@ const TeacherAnalytics = () => {
       <Card>
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">Select Class</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Class</label>
             <Select
               value={selectedId}
               onChange={setSelectedId}
@@ -679,12 +679,12 @@ const TeacherAnalytics = () => {
             <div className="flex items-center gap-4 mt-2 sm:mt-6">
               <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${
                 isModuleBase
-                  ? 'bg-purple-100 text-purple-700'
-                  : 'bg-blue-100 text-blue-700'
+                  ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                  : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
               }`}>
                 {isModuleBase ? 'Module Based' : 'Subject Based'}
               </span>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-gray-500 dark:text-gray-400">
                 {selectedClass.sectionName ?? ''} &middot; {selectedClass.totalStudents ?? 0} students
               </span>
             </div>
@@ -701,7 +701,7 @@ const TeacherAnalytics = () => {
           <div className="overflow-x-auto">
             <table className="min-w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200 text-left text-gray-500">
+                <tr className="border-b border-gray-200 dark:border-gray-700 text-left text-gray-500 dark:text-gray-400">
                   <th className="py-2 pr-4 font-medium">#</th>
                   <th className="py-2 pr-4 font-medium">Class</th>
                   <th className="py-2 pr-4 font-medium">Section</th>
@@ -722,14 +722,14 @@ const TeacherAnalytics = () => {
                       }`}
                     >
                       <td className="py-2 pr-4 text-gray-400">{i + 1}</td>
-                      <td className="py-2 pr-4 font-medium text-gray-800">{c.className ?? '—'}</td>
+                      <td className="py-2 pr-4 font-medium text-gray-800 dark:text-gray-200">{c.className ?? '—'}</td>
                       <td className="py-2 pr-4">{c.sectionName ?? '—'}</td>
                       <td className="py-2 pr-4">{c.subjectName ?? '—'}</td>
                       <td className="py-2 pr-4">
                         <span className={`inline-block px-2 py-0.5 rounded text-xs font-medium ${
                           c.classType === 'MODULE_BASE'
-                            ? 'bg-purple-100 text-purple-700'
-                            : 'bg-blue-100 text-blue-700'
+                            ? 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400'
+                            : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400'
                         }`}>
                           {c.classType === 'MODULE_BASE' ? 'Module' : 'Subject'}
                         </span>
