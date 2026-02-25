@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState, useMemo } from 'react';
-import { getTeacherAssignments, getSubjectStudents } from '../../services/enrollmentService';
-import { getClassesBySection, getModulesBySectionSubject } from '../../services/managementService';
+import { getTeacherAssignments } from '../../services/enrollmentService';
+import { getClassesBySection, getModulesBySectionSubject, getStudentsByClassAndSubject } from '../../services/managementService';
 import {
   bulkCreateSubjectMarks, getSubjectMarksByClassSubjectTerm,
   updateSubjectMark, deleteSubjectMark,
@@ -152,9 +152,9 @@ const MarkEntry = () => {
     setLoadingStudents(true);
     setLoadingMarks(true);
     try {
-      // Fetch enrolled students via subject+section (teachers lack class-student access)
-      const studentData = await getSubjectStudents(selectedSubject, sectionId);
-      const stuList = Array.isArray(studentData?.students) ? studentData.students : [];
+      // Fetch enrolled students by class + subject
+      const studentData = await getStudentsByClassAndSubject(selectedClass, selectedSubject);
+      const stuList = Array.isArray(studentData) ? studentData : [];
       setStudents(stuList);
 
       // Fetch existing marks
@@ -175,8 +175,9 @@ const MarkEntry = () => {
       // Pre-fill marks from existing data
       const prefilled = {};
       stuList.forEach(stu => {
-        const existing = existingData.find(m => m.studentId === stu.studentId);
-        prefilled[stu.studentId] = existing ? String(existing.mark) : '';
+        const sid = stu.id ?? stu.studentId;
+        const existing = existingData.find(m => m.studentId === sid);
+        prefilled[sid] = existing ? String(existing.mark) : '';
       });
       setMarks(prefilled);
     } catch (e) {
@@ -186,7 +187,7 @@ const MarkEntry = () => {
       setLoadingStudents(false);
       setLoadingMarks(false);
     }
-  }, [canLoadMarks, selectedClass, selectedSubject, selectedTerm, selectedModule, classType, sectionId, toastError]);
+  }, [canLoadMarks, selectedClass, selectedSubject, selectedTerm, selectedModule, classType, toastError]);
 
   useEffect(() => { if (canLoadMarks) loadStudentsAndMarks(); }, [canLoadMarks, loadStudentsAndMarks]);
 
@@ -202,8 +203,14 @@ const MarkEntry = () => {
   const handleSubmit = async () => {
     // Collect valid marks
     const markEntries = students
-      .filter(stu => marks[stu.studentId] !== '' && marks[stu.studentId] != null)
-      .map(stu => ({ studentId: stu.studentId, mark: parseInt(marks[stu.studentId], 10) }));
+      .filter(stu => {
+        const sid = stu.id ?? stu.studentId;
+        return marks[sid] !== '' && marks[sid] != null;
+      })
+      .map(stu => {
+        const sid = stu.id ?? stu.studentId;
+        return { studentId: sid, mark: parseInt(marks[sid], 10) };
+      });
 
     if (markEntries.length === 0) {
       toastError('Please enter at least one mark.');
@@ -247,16 +254,18 @@ const MarkEntry = () => {
 
   // ── Edit individual mark ────────────────────────────────────────────────────
   const openEdit = (student) => {
-    const existing = existingMarks.find(m => m.studentId === student.studentId);
+    const sid = student.id ?? student.studentId;
+    const existing = existingMarks.find(m => m.studentId === sid);
     setEditModal({
       open: true,
       student,
-      mark: existing ? String(existing.mark) : marks[student.studentId] ?? '',
+      mark: existing ? String(existing.mark) : marks[sid] ?? '',
     });
   };
 
   const handleEditSave = async () => {
     const { student, mark } = editModal;
+    const sid = student.id ?? student.studentId;
     if (mark === '' || isNaN(mark) || parseInt(mark) < 0 || parseInt(mark) > 100) {
       toastError('Mark must be between 0 and 100.');
       return;
@@ -264,9 +273,9 @@ const MarkEntry = () => {
     setActionLoading(true);
     try {
       if (classType === 'SUBJECT_BASE') {
-        await updateSubjectMark(student.studentId, selectedClass, selectedSubject, selectedTerm, { mark: parseInt(mark) });
+        await updateSubjectMark(sid, selectedClass, selectedSubject, selectedTerm, { mark: parseInt(mark) });
       } else {
-        await updateModuleMark(student.studentId, selectedModule, { mark: parseInt(mark) });
+        await updateModuleMark(sid, selectedModule, { mark: parseInt(mark) });
       }
       toastSuccess('Mark updated successfully.');
       setEditModal({ open: false, student: null, mark: '' });
@@ -285,12 +294,13 @@ const MarkEntry = () => {
 
   const handleDelete = async () => {
     const { student } = deleteConfirm;
+    const sid = student.id ?? student.studentId;
     setActionLoading(true);
     try {
       if (classType === 'SUBJECT_BASE') {
-        await deleteSubjectMark(student.studentId, selectedClass, selectedSubject, selectedTerm);
+        await deleteSubjectMark(sid, selectedClass, selectedSubject, selectedTerm);
       } else {
-        await deleteModuleMark(student.studentId, selectedModule);
+        await deleteModuleMark(sid, selectedModule);
       }
       toastSuccess('Mark deleted successfully.');
       setDeleteConfirm({ open: false, student: null });
@@ -303,8 +313,10 @@ const MarkEntry = () => {
   };
 
   // ── Helpers ─────────────────────────────────────────────────────────────────
-  const hasExistingMark = (studentId) => existingMarks.some(m => m.studentId === studentId);
-  const filledMarkCount = students.filter(s => marks[s.studentId] !== '' && marks[s.studentId] != null).length;
+  const getStudentId = (stu) => stu.id ?? stu.studentId;
+  const getStudentName = (stu) => (stu.studentName ?? [stu.firstName, stu.lastName].filter(Boolean).join(' ')) || stu.globalStudentCode || '—';
+  const hasExistingMark = (stu) => existingMarks.some(m => m.studentId === getStudentId(stu));
+  const filledMarkCount = students.filter(s => { const sid = getStudentId(s); return marks[sid] !== '' && marks[sid] != null; }).length;
 
   if (ctxLoading) return <div className="flex items-center justify-center py-20"><LoadingSpinner /></div>;
 
@@ -451,19 +463,20 @@ const MarkEntry = () => {
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {students.map((stu, i) => {
-                    const hasExisting = hasExistingMark(stu.studentId);
+                    const sid = getStudentId(stu);
+                    const hasExisting = hasExistingMark(stu);
                     return (
-                      <tr key={stu.studentId} className="hover:bg-orange-50/30 transition">
+                      <tr key={sid} className="hover:bg-orange-50/30 transition">
                         <td className="px-4 py-3 text-xs text-gray-400">{i + 1}</td>
-                        <td className="px-4 py-3 text-sm font-medium text-gray-800">{stu.studentName ?? '—'}</td>
+                        <td className="px-4 py-3 text-sm font-medium text-gray-800">{getStudentName(stu)}</td>
                         <td className="px-4 py-3 text-sm text-gray-600">{stu.indexNumber ?? '—'}</td>
                         <td className="px-4 py-3">
                           <input
                             type="number"
                             min="0"
                             max="100"
-                            value={marks[stu.studentId] ?? ''}
-                            onChange={(e) => handleMarkChange(stu.studentId, e.target.value)}
+                            value={marks[sid] ?? ''}
+                            onChange={(e) => handleMarkChange(sid, e.target.value)}
                             className="w-24 px-2 py-1.5 border border-gray-300 rounded-lg text-sm text-center focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                             placeholder="—"
                           />
@@ -473,7 +486,7 @@ const MarkEntry = () => {
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
                               Saved
                             </span>
-                          ) : marks[stu.studentId] ? (
+                          ) : marks[sid] ? (
                             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-700">
                               New
                             </span>
@@ -523,7 +536,7 @@ const MarkEntry = () => {
       <Modal
         open={editModal.open}
         onClose={() => setEditModal({ open: false, student: null, mark: '' })}
-        title={`Edit Mark — ${editModal.student?.studentName ?? ''}`}
+        title={`Edit Mark — ${editModal.student ? getStudentName(editModal.student) : ''}`}
         size="sm"
         footer={
           <div className="flex justify-end gap-2 px-6 py-4 border-t border-gray-100">
@@ -563,7 +576,7 @@ const MarkEntry = () => {
         onClose={() => setDeleteConfirm({ open: false, student: null })}
         onConfirm={handleDelete}
         title="Delete Mark"
-        message={`Are you sure you want to delete the mark for ${deleteConfirm.student?.studentName ?? 'this student'}? This action cannot be undone.`}
+        message={`Are you sure you want to delete the mark for ${deleteConfirm.student ? getStudentName(deleteConfirm.student) : 'this student'}? This action cannot be undone.`}
         confirmLabel="Delete"
         variant="danger"
         loading={actionLoading}
