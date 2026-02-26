@@ -68,7 +68,7 @@ const StatCard = ({ label, value, accent }) => (
 //  STUDENT ANALYTICS
 // ═══════════════════════════════════════════════════════════════════════════════
 const StudentAnalytics = () => {
-  const { studentId, loading: ctxLoading } = useStudent();
+  const { studentId, enrollment, loading: ctxLoading } = useStudent();
 
   // State
   const [dashboard, setDashboard]           = useState(null);
@@ -79,18 +79,35 @@ const StudentAnalytics = () => {
   const [vsClassAvg, setVsClassAvg]         = useState([]);
   const [loading, setLoading]               = useState(true);
   const [selectedTerm, setSelectedTerm]     = useState('FIRST_TERM');
+  const [selectedClassId, setSelectedClassId] = useState('');
+
+  const enrolledClasses = enrollment?.enrolledClasses ?? [];
+
+  // Derive selected class info
+  const selectedClass = enrolledClasses.find(c => c.classId === selectedClassId) ?? null;
+  const isModuleBased = selectedClass?.classType === 'MODULE_BASE';
+
+  // Auto-select first class when enrollment loads
+  useEffect(() => {
+    if (!selectedClassId && enrolledClasses.length > 0) {
+      setSelectedClassId(enrolledClasses[0].classId);
+    }
+  }, [enrolledClasses, selectedClassId]);
 
   // ── Fetch core data ─────────────────────────────────────────────────────────
   const fetchCoreData = useCallback(async () => {
     if (!studentId) { setLoading(false); return; }
     setLoading(true);
+    const classId = selectedClassId || undefined;
     try {
-      const results = await Promise.allSettled([
-        getStudentDashboard(),
-        getStudentTermTrend(),
-        getStudentGPAReport(),
-        getStudentModulePerformance(),
-      ]);
+      // For module-based: skip term trend; for subject-based: skip module performance
+      const promises = [
+        getStudentDashboard(classId),
+        isModuleBased ? Promise.resolve(null) : getStudentTermTrend(classId),
+        getStudentGPAReport(classId),
+        isModuleBased ? getStudentModulePerformance(classId) : Promise.resolve(null),
+      ];
+      const results = await Promise.allSettled(promises);
       setDashboard(results[0].status === 'fulfilled' ? results[0].value : null);
       setTermTrend(results[1].status === 'fulfilled' ? (results[1].value || []) : []);
       setGPAReport(results[2].status === 'fulfilled' ? results[2].value : null);
@@ -100,24 +117,29 @@ const StudentAnalytics = () => {
     } finally {
       setLoading(false);
     }
-  }, [studentId]);
+  }, [studentId, selectedClassId, isModuleBased]);
 
   useEffect(() => { fetchCoreData(); }, [fetchCoreData]);
 
-  // ── Fetch term-dependent data ───────────────────────────────────────────────
+  // ── Fetch term-dependent data (subject-based only) ──────────────────────────
   const fetchTermData = useCallback(async () => {
-    if (!studentId) return;
+    if (!studentId || isModuleBased) {
+      setClassRanks([]);
+      setVsClassAvg([]);
+      return;
+    }
+    const classId = selectedClassId || undefined;
     try {
       const results = await Promise.allSettled([
-        getStudentClassRanks(selectedTerm),
-        getStudentVsClassAverage(selectedTerm),
+        getStudentClassRanks(selectedTerm, classId),
+        getStudentVsClassAverage(selectedTerm, classId),
       ]);
       setClassRanks(results[0].status === 'fulfilled' ? (results[0].value || []) : []);
       setVsClassAvg(results[1].status === 'fulfilled' ? (results[1].value || []) : []);
     } catch {
       // silently handle
     }
-  }, [studentId, selectedTerm]);
+  }, [studentId, selectedTerm, selectedClassId, isModuleBased]);
 
   useEffect(() => { fetchTermData(); }, [fetchTermData]);
 
@@ -126,6 +148,26 @@ const StudentAnalytics = () => {
   return (
     <div className="space-y-6">
       <PageHeader title="My Analytics" subtitle="Performance insights and academic trends" />
+
+      {/* Class Selector */}
+      {enrolledClasses.length > 1 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-sm text-gray-600 font-medium mr-1">Class:</span>
+          {enrolledClasses.map(cls => (
+            <button
+              key={cls.classId}
+              onClick={() => setSelectedClassId(cls.classId)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                selectedClassId === cls.classId
+                  ? 'bg-emerald-600 text-white shadow-sm'
+                  : 'bg-white text-gray-600 border border-gray-200 hover:border-emerald-300 hover:text-emerald-700'
+              }`}
+            >
+              {cls.className}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -151,41 +193,45 @@ const StudentAnalytics = () => {
         />
       </div>
 
-      {/* Term selector for rank/comparison views */}
-      <div className="flex items-center gap-3">
-        <span className="text-sm text-gray-600 font-medium">Term:</span>
-        <Select
-          value={selectedTerm}
-          onChange={setSelectedTerm}
-          options={TERMS}
-        />
-      </div>
+      {/* Term selector for rank/comparison views (subject-based only) */}
+      {!isModuleBased && (
+        <div className="flex items-center gap-3">
+          <span className="text-sm text-gray-600 font-medium">Term:</span>
+          <Select
+            value={selectedTerm}
+            onChange={setSelectedTerm}
+            options={TERMS}
+          />
+        </div>
+      )}
 
-      {/* Row 1: Term Trend + GPA by Subject */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Term Trend Line Chart */}
-        <Card>
-          <SectionTitle>Term Trend</SectionTitle>
-          {termTrend.length > 0 ? (
-            <ResponsiveContainer width="100%" height={280}>
-              <LineChart data={termTrend.map(t => ({
-                ...t,
-                label: TERMS.find(tt => tt.value === t.term)?.label ?? t.term,
-              }))}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="label" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
-                <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Line type="monotone" dataKey="averageMark" name="Average %" stroke={LINE_PRIMARY} strokeWidth={2} dot={{ r: 5 }} activeDot={{ r: 7 }} />
-                <Line type="monotone" dataKey="gpa" name="GPA" stroke={LINE_SECONDARY} strokeWidth={2} dot={{ r: 5 }} yAxisId="right" />
-                <YAxis yAxisId="right" orientation="right" domain={[0, 4.5]} tick={{ fontSize: 12 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          ) : (
-            <EmptyState text="No term trend data available" />
-          )}
-        </Card>
+      {/* Row 1: Term Trend (subject-based) + GPA by Subject */}
+      <div className={`grid grid-cols-1 ${!isModuleBased ? 'lg:grid-cols-2' : ''} gap-6`}>
+        {/* Term Trend Line Chart - subject-based only */}
+        {!isModuleBased && (
+          <Card>
+            <SectionTitle>Term Trend</SectionTitle>
+            {termTrend.length > 0 ? (
+              <ResponsiveContainer width="100%" height={280}>
+                <LineChart data={termTrend.map(t => ({
+                  ...t,
+                  label: TERMS.find(tt => tt.value === t.term)?.label ?? t.term,
+                }))}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="label" tick={{ fontSize: 12 }} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                  <Tooltip contentStyle={{ fontSize: 12, borderRadius: 8 }} />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Line type="monotone" dataKey="averageMark" name="Average %" stroke={LINE_PRIMARY} strokeWidth={2} dot={{ r: 5 }} activeDot={{ r: 7 }} />
+                  <Line type="monotone" dataKey="gpa" name="GPA" stroke={LINE_SECONDARY} strokeWidth={2} dot={{ r: 5 }} yAxisId="right" />
+                  <YAxis yAxisId="right" orientation="right" domain={[0, 4.5]} tick={{ fontSize: 12 }} />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyState text="No term trend data available" />
+            )}
+          </Card>
+        )}
 
         {/* GPA Report - Subject breakdown */}
         <Card>
@@ -215,87 +261,89 @@ const StudentAnalytics = () => {
         </Card>
       </div>
 
-      {/* Row 2: Vs Class Average + Class Ranks */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Student vs Class Average */}
-        <Card>
-          <SectionTitle>Your Marks vs Class Average ({TERMS.find(t => t.value === selectedTerm)?.label})</SectionTitle>
-          {vsClassAvg.length > 0 ? (
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={vsClassAvg.map(v => ({
-                name: v.subjectName?.length > 10 ? v.subjectName.substring(0, 10) + '…' : v.subjectName,
-                fullName: v.subjectName,
-                'Your Mark': v.studentMark,
-                'Class Avg': Math.round(v.classAverage * 10) / 10,
-              }))}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={60} />
-                <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
-                <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8 }}
-                  labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName ?? ''}
-                />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="Your Mark" fill={BAR_PRIMARY} radius={[4, 4, 0, 0]} />
-                <Bar dataKey="Class Avg" fill={BAR_SECONDARY} radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          ) : (
-            <EmptyState text="No comparison data for this term" />
-          )}
-        </Card>
+      {/* Row 2: Vs Class Average + Class Ranks (subject-based only) */}
+      {!isModuleBased && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Student vs Class Average */}
+          <Card>
+            <SectionTitle>Your Marks vs Class Average ({TERMS.find(t => t.value === selectedTerm)?.label})</SectionTitle>
+            {vsClassAvg.length > 0 ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <BarChart data={vsClassAvg.map(v => ({
+                  name: v.subjectName?.length > 10 ? v.subjectName.substring(0, 10) + '…' : v.subjectName,
+                  fullName: v.subjectName,
+                  'Your Mark': v.studentMark,
+                  'Class Avg': Math.round(v.classAverage * 10) / 10,
+                }))}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="name" tick={{ fontSize: 11 }} interval={0} angle={-20} textAnchor="end" height={60} />
+                  <YAxis domain={[0, 100]} tick={{ fontSize: 12 }} />
+                  <Tooltip
+                    contentStyle={{ fontSize: 12, borderRadius: 8 }}
+                    labelFormatter={(_, payload) => payload?.[0]?.payload?.fullName ?? ''}
+                  />
+                  <Legend wrapperStyle={{ fontSize: 12 }} />
+                  <Bar dataKey="Your Mark" fill={BAR_PRIMARY} radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="Class Avg" fill={BAR_SECONDARY} radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <EmptyState text="No comparison data for this term" />
+            )}
+          </Card>
 
-        {/* Class Ranks Table */}
-        <Card>
-          <SectionTitle>Class Rankings ({TERMS.find(t => t.value === selectedTerm)?.label})</SectionTitle>
-          {classRanks.length > 0 ? (
-            <div className="overflow-x-auto max-h-[300px] overflow-y-auto">
-              <table className="w-full text-sm">
-                <thead className="sticky top-0 bg-white">
-                  <tr className="border-b border-gray-200">
-                    <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Mark</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Class Avg</th>
-                    <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Rank</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {classRanks.map(r => (
-                    <tr key={`${r.subjectId}-${r.term}`} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="py-2 px-3 font-medium text-gray-800">{r.subjectName}</td>
-                      <td className="py-2 px-3 text-center">
-                        <span className={`font-medium ${r.mark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>{r.mark}</span>
-                      </td>
-                      <td className="py-2 px-3 text-center text-gray-500">
-                        {r.classAverage != null ? r.classAverage.toFixed(1) : '—'}
-                      </td>
-                      <td className="py-2 px-3 text-center">
-                        <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
-                          r.rankInClass === 1
-                            ? 'bg-yellow-100 text-yellow-700'
-                            : r.rankInClass <= 3
-                            ? 'bg-emerald-100 text-emerald-700'
-                            : 'bg-gray-100 text-gray-600'
-                        }`}>
-                          {r.rankInClass}
-                        </span>
-                        <span className="text-[10px] text-gray-400 ml-1">/{r.totalInClass}</span>
-                      </td>
+          {/* Class Ranks Table */}
+          <Card>
+            <SectionTitle>Class Rankings ({TERMS.find(t => t.value === selectedTerm)?.label})</SectionTitle>
+            {classRanks.length > 0 ? (
+              <div className="overflow-x-auto max-h-[300px] overflow-y-auto">
+                <table className="w-full text-sm">
+                  <thead className="sticky top-0 bg-white">
+                    <tr className="border-b border-gray-200">
+                      <th className="text-left py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Subject</th>
+                      <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Mark</th>
+                      <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Class Avg</th>
+                      <th className="text-center py-2 px-3 text-xs font-semibold text-gray-500 uppercase">Rank</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ) : (
-            <EmptyState text="No ranking data for this term" />
-          )}
-        </Card>
-      </div>
+                  </thead>
+                  <tbody>
+                    {classRanks.map(r => (
+                      <tr key={`${r.subjectId}-${r.term}`} className="border-b border-gray-50 hover:bg-gray-50">
+                        <td className="py-2 px-3 font-medium text-gray-800">{r.subjectName}</td>
+                        <td className="py-2 px-3 text-center">
+                          <span className={`font-medium ${r.mark >= 50 ? 'text-gray-800' : 'text-red-600'}`}>{r.mark}</span>
+                        </td>
+                        <td className="py-2 px-3 text-center text-gray-500">
+                          {r.classAverage != null ? r.classAverage.toFixed(1) : '—'}
+                        </td>
+                        <td className="py-2 px-3 text-center">
+                          <span className={`inline-flex items-center justify-center w-7 h-7 rounded-full text-xs font-bold ${
+                            r.rankInClass === 1
+                              ? 'bg-yellow-100 text-yellow-700'
+                              : r.rankInClass <= 3
+                              ? 'bg-emerald-100 text-emerald-700'
+                              : 'bg-gray-100 text-gray-600'
+                          }`}>
+                            {r.rankInClass}
+                          </span>
+                          <span className="text-[10px] text-gray-400 ml-1">/{r.totalInClass}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : (
+              <EmptyState text="No ranking data for this term" />
+            )}
+          </Card>
+        </div>
+      )}
 
-      {/* Row 3: Module Performance (if available) + Radar Chart */}
+      {/* Row 3: Module Performance (module-based only) + Radar Chart */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Module Performance */}
-        {modulePerf.length > 0 && (
+        {/* Module Performance - module-based only */}
+        {isModuleBased && modulePerf.length > 0 && (
           <Card>
             <SectionTitle>Module Performance</SectionTitle>
             <ResponsiveContainer width="100%" height={300}>
@@ -346,8 +394,8 @@ const StudentAnalytics = () => {
         )}
       </div>
 
-      {/* Subject Performance Detail Table */}
-      {dashboard?.subjectMarks?.length > 0 && (
+      {/* Subject Performance Detail Table - subject-based only */}
+      {!isModuleBased && dashboard?.subjectMarks?.length > 0 && (
         <Card>
           <SectionTitle>Detailed Subject Performance</SectionTitle>
           <div className="overflow-x-auto">

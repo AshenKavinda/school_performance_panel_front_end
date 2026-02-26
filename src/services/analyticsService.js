@@ -14,12 +14,12 @@ export const getTeacherClassComparison = (subjectId, term)               => api.
 export const getTeacherModulePerformance = (classId)                     => api.get(`/api/analytics/teacher/module-performance/${classId}`).then(r => r.data);
 
 // ── Student Analytics ─────────────────────────────────────────────────────────
-export const getStudentDashboard         = ()                            => api.get('/api/analytics/student/dashboard').then(r => r.data);
-export const getStudentTermTrend         = ()                            => api.get('/api/analytics/student/term-trend').then(r => r.data);
-export const getStudentGPAReport         = ()                            => api.get('/api/analytics/student/gpa-report').then(r => r.data);
-export const getStudentModulePerformance = ()                            => api.get('/api/analytics/student/module-performance').then(r => r.data);
-export const getStudentClassRanks        = (term)                        => api.get('/api/analytics/student/class-ranks', { params: { term } }).then(r => r.data);
-export const getStudentVsClassAverage    = (term)                        => api.get('/api/analytics/student/vs-class-average', { params: { term } }).then(r => r.data);
+export const getStudentDashboard         = (classId)                     => api.get('/api/analytics/student/dashboard', { params: { classId } }).then(r => r.data);
+export const getStudentTermTrend         = (classId)                     => api.get('/api/analytics/student/term-trend', { params: { classId } }).then(r => r.data);
+export const getStudentGPAReport         = (classId)                     => api.get('/api/analytics/student/gpa-report', { params: { classId } }).then(r => r.data);
+export const getStudentModulePerformance = (classId)                     => api.get('/api/analytics/student/module-performance', { params: { classId } }).then(r => r.data);
+export const getStudentClassRanks        = (term, classId)               => api.get('/api/analytics/student/class-ranks', { params: { term, classId } }).then(r => r.data);
+export const getStudentVsClassAverage    = (term, classId)               => api.get('/api/analytics/student/vs-class-average', { params: { term, classId } }).then(r => r.data);
 
 // ── Manager Analytics ─────────────────────────────────────────────────────────
 export const getManagerSchoolOverview        = ()                            => api.get('/api/analytics/manager/school-overview').then(r => r.data);

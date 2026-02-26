@@ -3,29 +3,20 @@ import { useStudent } from '../../context/StudentContext';
 import { getStudentWeeklySchedule } from '../../services/timetableService';
 import { PageHeader, LoadingSpinner } from '../../components/common';
 
-const DAYS = [
-  { key: 'MONDAY',    label: 'Monday' },
-  { key: 'TUESDAY',   label: 'Tuesday' },
-  { key: 'WEDNESDAY', label: 'Wednesday' },
-  { key: 'THURSDAY',  label: 'Thursday' },
-  { key: 'FRIDAY',    label: 'Friday' },
+const DAYS = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY'];
+const DAY_SHORT = { MONDAY: 'Mon', TUESDAY: 'Tue', WEDNESDAY: 'Wed', THURSDAY: 'Thu', FRIDAY: 'Fri' };
+
+// ── Colour palette for subject entries ────────────────────────────────────────
+const COLORS = [
+  'bg-emerald-50 border-emerald-200 text-emerald-800',
+  'bg-teal-50 border-teal-200 text-teal-800',
+  'bg-cyan-50 border-cyan-200 text-cyan-800',
+  'bg-sky-50 border-sky-200 text-sky-800',
+  'bg-green-50 border-green-200 text-green-800',
+  'bg-lime-50 border-lime-200 text-lime-800',
+  'bg-amber-50 border-amber-200 text-amber-800',
+  'bg-violet-50 border-violet-200 text-violet-800',
 ];
-
-const DAY_COLORS = {
-  MONDAY:    'bg-emerald-50 border-emerald-100',
-  TUESDAY:   'bg-teal-50 border-teal-100',
-  WEDNESDAY: 'bg-cyan-50 border-cyan-100',
-  THURSDAY:  'bg-sky-50 border-sky-100',
-  FRIDAY:    'bg-green-50 border-green-100',
-};
-
-const SLOT_COLORS = {
-  MONDAY:    'bg-emerald-200 text-emerald-700',
-  TUESDAY:   'bg-teal-200 text-teal-700',
-  WEDNESDAY: 'bg-cyan-200 text-cyan-700',
-  THURSDAY:  'bg-sky-200 text-sky-700',
-  FRIDAY:    'bg-green-200 text-green-700',
-};
 
 const StudentTimetable = () => {
   const { studentId, enrollment, loading: ctxLoading } = useStudent();
@@ -62,9 +53,22 @@ const StudentTimetable = () => {
 
   const selectedClass = classes.find(c => c.classId === selectedClassId);
 
-  // Highlight today
-  const jsDay = new Date().getDay();
-  const todayKey = jsDay >= 1 && jsDay <= 5 ? DAYS[jsDay - 1].key : null;
+  // Build day -> entries lookup
+  const dayMap = {};
+  DAYS.forEach(d => { dayMap[d] = []; });
+  if (schedule?.weekSchedule) {
+    DAYS.forEach(d => {
+      const entries = schedule.weekSchedule[d] ?? [];
+      dayMap[d] = [...entries].sort((a, b) => (a.startTime || '').localeCompare(b.startTime || ''));
+    });
+  }
+
+  // Collect unique subjects for color mapping
+  const subjects = [...new Set(Object.values(dayMap).flat().map(e => e.subjectName).filter(Boolean))];
+  const subjectColorMap = {};
+  subjects.forEach((s, i) => { subjectColorMap[s] = COLORS[i % COLORS.length]; });
+
+  const hasAnyEntries = Object.values(dayMap).some(e => e.length > 0);
 
   return (
     <div className="space-y-6">
@@ -89,63 +93,99 @@ const StudentTimetable = () => {
         </div>
       )}
 
-      {/* Schedule Grid */}
       {loading ? (
         <div className="flex items-center justify-center py-12"><LoadingSpinner /></div>
-      ) : schedule?.weekSchedule ? (
-        <div className="space-y-3">
-          {DAYS.map(({ key, label }) => {
-            const entries = schedule.weekSchedule[key] ?? [];
-            const isToday = key === todayKey;
-
-            return (
-              <div key={key}
-                className={`rounded-xl border p-4 ${DAY_COLORS[key]} ${isToday ? 'ring-2 ring-emerald-400 ring-offset-1' : ''}`}>
-                <div className="flex items-center gap-2 mb-3">
-                  <h4 className="text-sm font-semibold text-gray-700">{label}</h4>
-                  {isToday && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500 text-white font-medium">Today</span>
-                  )}
-                  <span className="ml-auto text-xs text-gray-400">
-                    {entries.length} class{entries.length !== 1 ? 'es' : ''}
-                  </span>
+      ) : !selectedClassId ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+          <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p className="text-sm text-gray-400">Select a class to view its timetable.</p>
+        </div>
+      ) : !hasAnyEntries ? (
+        <div className="bg-white rounded-xl border border-gray-200 p-10 text-center">
+          <svg className="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <p className="text-sm text-gray-400">No timetable entries found for this class.</p>
+        </div>
+      ) : (
+        <>
+          {/* ── Desktop grid view ────────────────────────────────── */}
+          <div className="hidden lg:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="grid grid-cols-5 divide-x divide-gray-200">
+              {DAYS.map(day => (
+                <div key={day} className="min-w-0">
+                  {/* Day header */}
+                  <div className="bg-emerald-600 text-white text-center py-3 text-sm font-semibold tracking-wide">
+                    {DAY_SHORT[day]}
+                  </div>
+                  {/* Entries */}
+                  <div className="p-2 space-y-2 min-h-[200px]">
+                    {dayMap[day].length === 0 ? (
+                      <p className="text-xs text-gray-300 text-center mt-8">No classes</p>
+                    ) : (
+                      dayMap[day].map((entry, idx) => (
+                        <div key={entry.timetableId ?? idx}
+                          className={`rounded-lg border p-2.5 ${subjectColorMap[entry.subjectName] ?? COLORS[0]}`}>
+                          <p className="text-xs font-semibold truncate">{entry.subjectName ?? '—'}</p>
+                          <p className="text-[11px] opacity-70 truncate">{entry.teacherName ?? '—'}</p>
+                          <p className="text-[11px] opacity-60 mt-1">
+                            {entry.startTime ?? ''} – {entry.endTime ?? ''}
+                          </p>
+                        </div>
+                      ))
+                    )}
+                  </div>
                 </div>
+              ))}
+            </div>
+          </div>
 
-                {entries.length === 0 ? (
-                  <p className="text-xs text-gray-400 italic py-1">No classes</p>
-                ) : (
-                  <div className="space-y-1.5">
-                    {entries.map((entry, i) => (
-                      <div key={entry.timetableId ?? i}
-                        className="flex items-center gap-3 p-2.5 rounded-lg bg-white/80 border border-white">
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold flex-shrink-0 ${SLOT_COLORS[key]}`}>
-                          {entry.timeSlotName ?? (i + 1)}
-                        </div>
+          {/* ── Mobile stacked view ──────────────────────────────── */}
+          <div className="lg:hidden space-y-4">
+            {DAYS.map(day => (
+              <div key={day} className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="bg-emerald-600 text-white px-4 py-2.5 text-sm font-semibold">
+                  {DAY_SHORT[day]}
+                </div>
+                <div className="p-3 space-y-2">
+                  {dayMap[day].length === 0 ? (
+                    <p className="text-xs text-gray-300 text-center py-4">No classes</p>
+                  ) : (
+                    dayMap[day].map((entry, idx) => (
+                      <div key={entry.timetableId ?? idx}
+                        className={`rounded-lg border p-3 flex items-center gap-3 ${subjectColorMap[entry.subjectName] ?? COLORS[0]}`}>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-gray-800">{entry.subjectName ?? '—'}</p>
-                          <p className="text-xs text-gray-500">{entry.teacherName ?? '—'}</p>
+                          <p className="text-sm font-semibold truncate">{entry.subjectName ?? '—'}</p>
+                          <p className="text-xs opacity-70 truncate">{entry.teacherName ?? '—'}</p>
                         </div>
-                        <span className="text-xs text-gray-400 flex-shrink-0 font-mono">
+                        <span className="text-xs opacity-60 flex-shrink-0 whitespace-nowrap">
                           {entry.startTime ?? ''} – {entry.endTime ?? ''}
                         </span>
                       </div>
-                    ))}
-                  </div>
-                )}
+                    ))
+                  )}
+                </div>
               </div>
-            );
-          })}
-        </div>
-      ) : selectedClassId ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <p className="text-sm text-gray-500">No timetable available for this class.</p>
-        </div>
-      ) : (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-          <p className="text-sm text-gray-500">Select a class to view its timetable.</p>
+            ))}
+          </div>
+        </>
+      )}
+
+      {/* Legend */}
+      {subjects.length > 0 && (
+        <div className="bg-white rounded-xl border border-gray-200 p-4">
+          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Subjects Legend</h4>
+          <div className="flex flex-wrap gap-2">
+            {subjects.map(s => (
+              <span key={s} className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border ${subjectColorMap[s]}`}>
+                {s}
+              </span>
+            ))}
+          </div>
         </div>
       )}
 

@@ -102,7 +102,7 @@ const StudentOverview = () => {
       />
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <StatCard
           label="Enrolled Classes"
           value={enrolledClassCount}
@@ -111,25 +111,11 @@ const StudentOverview = () => {
           icon={<AcademicIcon />}
         />
         <StatCard
-          label="Total Subjects"
-          value={totalSubjects}
+          label="Class"
+          value={dashboard?.className ?? '—'}
           loading={loading}
           accent="bg-green-50 text-green-700 border-green-200"
           icon={<BookIcon />}
-        />
-        <StatCard
-          label="Overall Average"
-          value={dashboard?.overallAverage != null ? `${dashboard.overallAverage.toFixed(1)}%` : '—'}
-          loading={loading}
-          accent="bg-teal-50 text-teal-700 border-teal-200"
-          icon={<TrendUpIcon />}
-        />
-        <StatCard
-          label="GPA"
-          value={dashboard?.gpa != null ? dashboard.gpa.toFixed(2) : '—'}
-          loading={loading}
-          accent="bg-cyan-50 text-cyan-700 border-cyan-200"
-          icon={<ChartIcon />}
         />
       </div>
 
